@@ -399,6 +399,8 @@ p {
     margin-top: 10px;
     padding: 22px 0;
     background-color: #fff;
+    
+   
 }
 
 .header .menu-bg .nav-main {
@@ -1378,7 +1380,8 @@ p {
 }
 
 .header-two .menu-bg {
-    background-color: rgba(255, 255, 255, 0);
+    /*background-color: rgba(255, 255, 255, 0);*/
+    background-color: #05090c;
 }
 
 .header-two .menu-bg .nav-main .nav-main .menu ul li a {
@@ -7008,6 +7011,12 @@ bottom: 246PX;
 .inner-banner {
     padding: 270px 0 128px 0;
     background: url('../../../components/Frontend/images/inner-bg.png') no-repeat center/cover;
+
+    
+}
+
+.inner-banner .container{
+    
 }
 
 .inner-banner .inner-banner-head {
