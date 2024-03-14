@@ -1,0 +1,42 @@
+.banner-two {
+  background: url('./components/Frontend/images/banner.jpg') no-repeat center / cover;
+
+}
+
+
+.category-item {
+  padding-left: 10px;
+  padding-right: 10px;
+
+
+
+}
+
+.category-item .container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+}
+
+.category-item img {
+  width: 100px;
+  margin-left: 15px;
+
+
+}
+
+.category-item .text {
+  font-weight: bold;
+  font-size: 22px;
+  margin-left: 15px;
+}
+
+.category-item:hover .container {
+  background-color: #dc3545;
+  border-radius: 20px;
+  color: white;
+}
