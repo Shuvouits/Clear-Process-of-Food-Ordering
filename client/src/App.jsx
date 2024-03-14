@@ -8,6 +8,7 @@ import Menu from './Pages/Frontend/Menu'
 import Layout from './Pages/Frontend/Layout'
 import About from './Pages/Frontend/About'
 import Contact from './Pages/Frontend/Contact'
+import Blog from './Pages/Frontend/Blog'
 
 function App() {
 
@@ -23,6 +24,7 @@ function App() {
           <Route path='/menu' element={<Menu />} />
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
+          <Route path='/blog' element={<Blog />} />
 
         </Route>
       </Routes>
