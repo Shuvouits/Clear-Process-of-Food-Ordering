@@ -65,7 +65,7 @@ function Header() {
                   </div>
                   <div className="text">
                     <a href="mailto:Quomodosoft@gmail.com">
-                      Quomodosoft@gmail.com
+                      shuvo21.xpertseoservice@hotmail.com
                     </a>
                   </div>
                 </div>
@@ -112,9 +112,9 @@ function Header() {
                 <div className="nav-main">
                   <div className="nav-main">
                     <div className="logo">
-                      <a href="https://reservq.minionionbd.com">
-                        <img src="https://reservq.minionionbd.com/uploads/website-images/stiky-logo-2023-10-29-09-42-50-6269.png" alt="logo" />
-                      </a>
+                      <Link to="/">
+                        <h1 style={{color: '#fe724c', fontWeight:'bold'}}>FoodOrder</h1>
+                      </Link>
                     </div>
                     <div className="menu">
                       <ul>
@@ -293,9 +293,9 @@ function Header() {
                     </div>
                   </div>
                   <div className="nav-login-btn-main">
-                    <a href="https://reservq.minionionbd.com/login" className="main-btn-four custom-btn">
+                    <Link to="/login" className="main-btn-four custom-btn">
                       Sign In
-                    </a>
+                    </Link>
                     <a href="https://reservq.minionionbd.com/register" className="main-btn">
                       Sign Up
                     </a>

@@ -15,7 +15,9 @@ function Popular() {
               </div>
             </div>
           </div>
+          
           <div className="row gap-30 popular-item-box-mt">
+
             <div className="col-lg-4 res-popular-mt-30px" data-aos="fade-up">
               <div className="popular-item-box row-card">
                 <div className="popular-item-box-img">
@@ -92,6 +94,7 @@ function Popular() {
                 </div>
               </div>
             </div>
+
             <div className="col-lg-4 res-popular-mt-30px" data-aos="fade-up">
               <div className="popular-item-box row-card">
                 <div className="popular-item-box-img">

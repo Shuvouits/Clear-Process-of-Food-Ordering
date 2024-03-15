@@ -4,13 +4,13 @@ import Footer from '../../components/Frontend/Footer'
 import { Outlet } from 'react-router-dom'
 
 import './assets/bootstrap.css'
-
 import './assets/responsive.css'
-
 import './assets/style.css'
 import './assets/toastr.css'
 import './assets/venobox.css'
+
 import MobileHeader from '../../components/Frontend/MobileHeader'
+import ScrollTop from '../../components/Frontend/ScrollTop'
 
 function Layout() {
 
@@ -20,6 +20,7 @@ function Layout() {
   }
   return (
     <div>
+        <ScrollTop />
         <Header />
         <MobileHeader handleClick={handleClick} sidebar={sidebar} />
         <Outlet />
