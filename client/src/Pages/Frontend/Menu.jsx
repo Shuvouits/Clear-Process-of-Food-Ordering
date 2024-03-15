@@ -1,14 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import InnerBanner from '../../components/Frontend/InnerBanner'
 import FAQ from '../../components/Frontend/FAQ'
 import Resturent from '../../components/Frontend/Resturent'
 
 function Menu() {
+  const [modalOpen, setModalOpen] = useState(false)
+
+  const handleModal = () => {
+    setModalOpen(!modalOpen);
+  }
+
   return (
     <>
       <main>
 
-       <InnerBanner />
+        <InnerBanner />
 
         <section className="food-details">
           <div className="container">
@@ -861,8 +867,10 @@ function Menu() {
                                   data-bs-toggle="modal"
                                   data-bs-target="#exampleModal6"
                                   className="main-btn-three"
+                                  onClick={handleModal}
                                 >
                                   <span>
+                                    Data
                                     <svg
                                       width={24}
                                       height={24}
@@ -2375,6 +2383,190 @@ function Menu() {
 
 
       </main>
+
+      <section class="shopping-cart">
+
+
+        <div
+          
+          className={`modal fade ${modalOpen ? 'show' : ''}`}
+          id="exampleModal12"
+          tabIndex={-1}
+          aria-hidden="true"
+          style={{display: `${modalOpen ? 'block' : ''}`, paddingRight: `${modalOpen ? '23px' : ''}`}}
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+                onClick={handleModal}
+              ></button>
+              <form action="https://reservq.minionionbd.com/cart/add" method="POST">
+                <input
+                  type="hidden"
+                  name="_token"
+                  defaultValue="vKsd7uvI7IdkeSiahIEZwpX30NwWuUAtOKDLmzSn"
+                />
+                <input type="hidden" defaultValue={12} name="product_id" required="" />
+                <div className="modal-body">
+                  <div className="modal-body-text">
+                    <h3>Beef Nachos</h3>
+                  </div>
+                  <div className="modal-body-item-box">
+                    <div className="together-box-text">
+                      <h5>Select Size</h5>
+                    </div>
+                    <div className="together-box-item">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="size"
+                          defaultValue="Large,200"
+                          id="size_0"
+                          data-info="Large,200"
+                        />
+                        <label className="form-check-label" htmlFor="size_0">
+                          Large
+                        </label>
+                      </div>
+                      <div className="form-check-btn">
+                        <div className="grid">$200</div>
+                      </div>
+                    </div>
+                    <div className="together-box-item">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="radio"
+                          name="size"
+                          defaultValue=","
+                          id="size_1"
+                          data-info=","
+                        />
+                        <label className="form-check-label" htmlFor="size_1"></label>
+                      </div>
+                      <div className="form-check-btn">
+                        <div className="grid">$</div>
+                      </div>
+                    </div>
+                    <div className="modal-body-item-box-text">
+                      <h5>Select Addon (Optional)</h5>
+                    </div>
+                    <div className="together-box-item">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="addons[]"
+                          defaultValue={3}
+                          id="addon_0_0"
+                        />
+                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                          Drinks
+                        </label>
+                      </div>
+                      <div className="form-check-btn">
+                        <div className="form-check-btn">
+                          <div className="grid">$25</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="together-box-item">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="addons[]"
+                          defaultValue={4}
+                          id="addon_1_0"
+                        />
+                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                          Nan
+                        </label>
+                      </div>
+                      <div className="form-check-btn">
+                        <div className="form-check-btn">
+                          <div className="grid">$10</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="together-box-item">
+                      <div className="form-check">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          name="addons[]"
+                          defaultValue={5}
+                          id="addon_2_0"
+                        />
+                        <label className="form-check-label" htmlFor="flexCheckDefault">
+                          Extra Chess
+                        </label>
+                      </div>
+                      <div className="form-check-btn">
+                        <div className="form-check-btn">
+                          <div className="grid">$5</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="together-box-inner-btn-btm">
+                      <button type="submit" className="main-btn-six" tabIndex={-1}>
+                        <span>
+                          <svg
+                            width={24}
+                            height={24}
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></path>
+                            <path
+                              d="M11 20.5C11 21.3284 10.3284 22 9.5 22C8.67157 22 8 21.3284 8 20.5C8 19.6716 8.67157 19 9.5 19C10.3284 19 11 19.6716 11 20.5Z"
+                              strokeWidth="1.5"
+                            ></path>
+                            <path
+                              d="M20 20.5C20 21.3284 19.3284 22 18.5 22C17.6716 22 17 21.3284 17 20.5C17 19.6716 17.6716 19 18.5 19C19.3284 19 20 19.6716 20 20.5Z"
+                              strokeWidth="1.5"
+                            ></path>
+                            <path
+                              d="M14 8L14 13"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></path>
+                            <path
+                              d="M16.5 10.5L11.5 10.5"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            ></path>
+                          </svg>
+                        </span>
+                        Add to Cart
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+
+
+      </section>
+
+
+
 
 
     </>

@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [cart, setCart] = useState(false)
+
+  const handleCartClick = ()=>{
+    setCart(!cart)
+  }
+
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +23,8 @@ function Header() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+
 
 
   return (
@@ -96,7 +105,7 @@ function Header() {
           </div>
         </div>
         {/* menu part start */}
-        <nav className={`menu-bg ${isScrolled ? 'nav-bg' : ''}`}>
+        <nav className={`menu-bg ${isScrolled ? 'nav-bg' : ''}`}  >
           <div className="container">
             <div className="row">
               <div className="col-lg-12">
@@ -110,13 +119,13 @@ function Header() {
                     <div className="menu">
                       <ul>
                         <li>
-                          <Link to={'/'}>
+                          <Link to={'/'} >
                             Home
                           </Link>
 
                         </li>
                         <li>
-                          <Link to={'/menu'}>
+                          <Link to={'/menu'} >
                             Menu
                           </Link>
                         </li>
@@ -130,14 +139,14 @@ function Header() {
                         </li>
                         <li>
 
-                          <Link to='/contact'>
+                          <Link to='/contact' >
                             Contact Us
                           </Link>
 
 
                         </li>
                         <li>
-                          <Link to='/blog'>
+                          <Link to='/blog' >
                             Blog
                           </Link>
 
@@ -173,7 +182,7 @@ function Header() {
                         </div>
                       </a>
                       <div className="love cart">
-                        <div className="click" data-name="cart-dropdown">
+                        <div className="click" data-name="cart-dropdown" onClick={handleCartClick}>
                         </div>
                         <span>
                           <svg width={28} height={28} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -184,35 +193,101 @@ function Header() {
                             <path d="M19.2503 12.25L13.417 12.25" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         </span>
-                        <div className="cart-dropdown header-dropdown" id="cart-dropdown">
+
+                        {/* Shopping Cart */}
+
+                        <div className={`cart-dropdown header-dropdown ${cart ? 'active-dropdown' : ''}`} id="cart-dropdown">
                           <div className="cart-dropdown-text">
                             <div className="text">
-                              <h3>
-                                My Cart
-                              </h3>
+                              <h3>My Cart</h3>
                             </div>
                             <div className="cart-dropdown-btn">
-                              <button type="button" className="close-btn" aria-label="Close">
+                              <button type="button" className="close-btn" aria-label="Close" onClick={handleCartClick}>
                                 <span>
-                                  <svg width={10} height={10} viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M9.24309 0.757865L0.757812 9.24315M9.24309 9.24309L0.757812 0.757812" stroke="#9EA3AE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                  <svg
+                                    width={10}
+                                    height={10}
+                                    viewBox="0 0 10 10"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path
+                                      d="M9.24309 0.757865L0.757812 9.24315M9.24309 9.24309L0.757812 0.757812"
+                                      stroke="#9EA3AE"
+                                      strokeWidth="1.5"
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                    />
                                   </svg>
                                 </span>
                               </button>
                             </div>
                           </div>
-                          <div className="card-body">
-                            <h5 className="card-title">
-                              Empty Cart
-                            </h5>
-                            <p className="card-text">
-                              Browse Product
-                            </p>
-                            <a href="https://reservq.minionionbd.com/menu" className="btn btn-primary">
-                              Shop Now
-                            </a>
+                          <div className="cart-dropdown-item-box">
+                            <div className="cart-dropdown-item">
+                              <div className="cart-dropdown-item-img">
+                                <img
+                                  src="https://reservq.minionionbd.com/uploads/custom-images/fish-tacos-2024-01-31-11-19-33-7126.png"
+                                  alt="img"
+                                />
+                              </div>
+                              <div className="cart-dropdown-item-text">
+                                <a href="https://reservq.minionionbd.com/menu/fish-tacos">
+                                  <h3>Fish Tacos</h3>
+                                </a>
+                                <p>$75</p>
+                              </div>
+                            </div>
+                            <div className="cart-dropdown-inner">
+                              <div className="cart-dropdown-inner-btn">
+                                <a href="https://reservq.minionionbd.com/cart/remove/13">
+                                  <span>
+                                    <svg
+                                      width={18}
+                                      height={18}
+                                      viewBox="0 0 18 18"
+                                      fill="none"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                      <path
+                                        d="M3.75 6V13.5C3.75 15.1569 5.09315 16.5 6.75 16.5H11.25C12.9069 16.5 14.25 15.1569 14.25 13.5V6M10.5 8.25V12.75M7.5 8.25L7.5 12.75M12 3.75L10.9453 2.16795C10.6671 1.75065 10.1988 1.5 9.69722 1.5H8.30278C7.80125 1.5 7.3329 1.75065 7.0547 2.16795L6 3.75M12 3.75H6M12 3.75H15.75M6 3.75H2.25"
+                                        stroke="#F01543"
+                                        strokeWidth="1.5"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                      />
+                                    </svg>
+                                  </span>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="cart-dropdown-sub-total">
+                            <div className="cart-dropdown-sub-total-item">
+                              <div className="text">
+                                <h3>Sub Total</h3>
+                              </div>
+                              <div className="text">
+                                <h3>
+                                  <a href="javascript:;">$75</a>
+                                </h3>
+                              </div>
+                            </div>
+                            <div className="cart-dropdown-sub-total-btn" onClick={handleCartClick}>
+                              <Link
+                                to="cartlist"
+                                className="main-btn-four"
+                              >
+                                Go to Cart
+                              </Link>
+                            </div>
                           </div>
                         </div>
+
+
+
+
+
                       </div>
                       {/* login korar por aita show hobe */}
                     </div>
