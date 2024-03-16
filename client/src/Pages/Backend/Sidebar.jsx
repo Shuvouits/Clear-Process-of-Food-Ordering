@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 function Sidebar() {
+    const location = useLocation();
     const [order, setOrder] = useState(false)
     const [product, setProduct] = useState(false)
     const [blog, setBlog] = useState(false)
@@ -30,13 +31,9 @@ function Sidebar() {
             <div className="admin-menu">
                 {/* Logo */}
                 <div className="logo sherah-sidebar-padding">
-                    <a href="https://reservq.minionionbd.com/admin-dashboard">
-                        <img
-                            className="sherah-logo__main"
-                            src="https://reservq.minionionbd.com/uploads/website-images/login-page-logo-2023-10-29-08-09-50-3973.png"
-                            alt="#"
-                        />
-                    </a>
+                    <Link href="/admin/dashboard" style={{fontWeight: 'bold', fontSize: '30px'}}>
+                        Food Order
+                    </Link>
                     <div className="sherah__sicon close-icon d-xl-none">
                         <svg
                             width={9}
@@ -58,9 +55,9 @@ function Sidebar() {
                             </div>
                             <ul className="menu-bar__one sherah-dashboard-menu">
                                 <li>
-                                    <a
+                                    <Link
                                         className="custom-active"
-                                        href="https://reservq.minionionbd.com/admin-dashboard"
+                                        to="/admin/dashboard"
                                     >
                                         <span className="menu-bar__text">
                                             <span className="sherah-menu-icon sherah-svg-icon__v1">
@@ -92,7 +89,7 @@ function Sidebar() {
                                             </span>
                                             <span className="menu-bar__name">Dashboard</span>
                                         </span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 {/* ************ Order ************ */}
                                 <li className={`${order ? 'active' : ''}`}>
@@ -158,28 +155,20 @@ function Sidebar() {
                                                 </Link>
                                             </li>
                                             <li className="">
-                                                <a href="https://reservq.minionionbd.com/delivery/order">
+                                                <Link to="/admin/delivery/order">
                                                     <span className="menu-bar__text">
                                                         <span className="menu-bar__name">Delivery Order</span>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li className="">
-                                                <a href="https://reservq.minionionbd.com/pickup/order">
+                                                <Link to="/admin/pickup/order">
                                                     <span className="menu-bar__text">
                                                         <span className="menu-bar__name">PickUp Order</span>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
-                                            <li className="">
-                                                <a href="https://reservq.minionionbd.com/inresturent/order">
-                                                    <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">
-                                                            InRestaurant Order
-                                                        </span>
-                                                    </span>
-                                                </a>
-                                            </li>
+                                           
                                         </ul>
                                     </div>
                                 </li>
@@ -244,60 +233,54 @@ function Sidebar() {
                                     >
                                         <ul className='menu-bar__one-dropdown'>
                                             <li>
-                                                <a href="https://reservq.minionionbd.com/product-create">
+                                                <Link to="/admin/product-create">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Create Product</span>
+                                                        <span className={location.pathname === '/admin/product-create' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Create Product</span>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li className="">
-                                                <a href="https://reservq.minionionbd.com/product-list-show">
+                                                <Link to="/admin/product-list-show">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Product</span>
+                                                        <span className={location.pathname === '/admin/product-list-show' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Product</span>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li className="">
-                                                <a href="https://reservq.minionionbd.com/category-list">
+                                                <Link to="/admin/category-list">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Categories</span>
+                                                        <span className={location.pathname === '/admin/category-list' || location.pathname === '/admin/category-create' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Categories</span>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li className="">
-                                                <a href="https://reservq.minionionbd.com/optional-item-list">
+                                                <Link to="/admin/optional-item-list">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Optional Items</span>
+                                                        <span className={location.pathname === '/admin/optional-item-list' || location.pathname === '/admin/optional-item-create' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Optional Items</span>
                                                     </span>
-                                                </a>
+                                                </Link>
+                                            </li>
+                                           
+                                            <li className="">
+                                                <Link to="/admin/coupon">
+                                                    <span className="menu-bar__text">
+                                                        <span className={location.pathname === '/admin/coupon' || location.pathname === '/admin/coupon/create' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Coupon</span>
+                                                    </span>
+                                                </Link>
                                             </li>
                                             <li className="">
-                                                <a href="https://reservq.minionionbd.com/promotion">
+                                                <Link to="/admin/delivery-area">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Promotions</span>
+                                                        <span className={location.pathname === '/admin/delivery-area' || location.pathname === '/admin/create/delivery' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Delivery Area</span>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li className="">
-                                                <a href="https://reservq.minionionbd.com/coupon">
+                                                <Link to="/admin/timeslot">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Coupon</span>
+                                                        <span className={location.pathname === '/admin/timeslot' || location.pathname === '/admin/create/timeslot' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Time Slots</span>
                                                     </span>
-                                                </a>
-                                            </li>
-                                            <li className="">
-                                                <a href="https://reservq.minionionbd.com/deliveryarea">
-                                                    <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Delivery Area</span>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li className="">
-                                                <a href="https://reservq.minionionbd.com/timeslot">
-                                                    <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Time Slots</span>
-                                                    </span>
-                                                </a>
+                                                </Link>
                                             </li>
                                         </ul>
                                     </div>

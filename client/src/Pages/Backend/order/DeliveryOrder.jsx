@@ -3,7 +3,7 @@ import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 
 
-function AllOrder() {
+function DeliveryOrder() {
 
     const columns = [
         {
@@ -120,13 +120,13 @@ function AllOrder() {
                                     <div className="col-12 sherah-flex-between">
                                         {/* Sherah Breadcrumb */}
                                         <div className="sherah-breadcrumb">
-                                            <h2 className="sherah-breadcrumb__title">Order list</h2>
+                                            <h2 className="sherah-breadcrumb__title">Delivery Order list</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
                                                     <a href="#">Home</a>
                                                 </li>
                                                 <li className="active">
-                                                    <a href="">Order List</a>
+                                                    <a href="">Delivery Order</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -154,4 +154,4 @@ function AllOrder() {
     )
 }
 
-export default AllOrder
+export default DeliveryOrder

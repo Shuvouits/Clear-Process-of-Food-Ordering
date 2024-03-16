@@ -19,6 +19,7 @@ import WishlistPage from './Pages/Frontend/user/WishlistPage'
 import ChangePasswordPage from './Pages/Frontend/user/ChangePasswordPage'
 import Login from './Pages/Frontend/Login'
 import AdminLogin from './Pages/Backend/AdminLogin'
+import PickUpOrder from './Pages/Backend/order/PickUpOrder'
 
 //frontend css import
 import './Pages/Frontend/assets/style.css'
@@ -30,13 +31,28 @@ import './Pages/Frontend/assets/venobox.css'
 import AdminLayout from './Pages/Backend/AdminLayout'
 import AdminDashboard from './Pages/Backend/AdminDashboard'
 import AllOrder from './Pages/Backend/order/AllOrder'
+import OrderDetails from './Pages/Backend/order/OrderDetails'
+import DeliveryOrder from './Pages/Backend/order/DeliveryOrder'
+import AddProduct from './Pages/Backend/product/AddProduct'
+import ProductList from './Pages/Backend/product/ProductList'
+import Category from './components/Frontend/Category'
+import CategoryList from './Pages/Backend/product/CategoryList'
+import AddCategory from './Pages/Backend/product/AddCategory'
+import OptionalItem from './Pages/Backend/product/OptionalItem'
+import AddOptional from './Pages/Backend/product/AddOptional'
+import Coupon from './Pages/Backend/product/Coupon'
+import AddCoupon from './Pages/Backend/product/AddCoupon'
+import DeliveryArea from './Pages/Backend/product/DeliveryArea'
+import AddDelivery from './Pages/Backend/product/AddDelivery'
+import Timeslot from './Pages/Backend/product/Timeslot'
+import AddTimeSlot from './Pages/Backend/product/AddTimeSlot'
 
 //backend css import
 const currentPath = window.location.pathname;
 
 if (currentPath.startsWith('/admin')) {
   import('./Pages/Backend/admin-assets/style.css');
-  import('./Pages/Backend/admin-assets/bootstrap.css');
+  
   import('./Pages/Backend/admin-assets/chart.css');
   import('./Pages/Backend/admin-assets/datatable.css');
   import('./Pages/Backend/admin-assets/fontawesome.css');
@@ -86,25 +102,25 @@ function App() {
         <Route path='/admin/' element={<AdminLayout />}>
           <Route path='dashboard' element={<AdminDashboard />} />
           <Route path='all-order' element={<AllOrder />} />
+          <Route path='order/details' element={<OrderDetails />}/>
+          <Route path='delivery/order' element={<DeliveryOrder />} />
+          <Route path='pickup/order' element={<PickUpOrder />} />
+          <Route path='product-create' element={<AddProduct />} />
+          <Route path='product-list-show' element={<ProductList />} />
+          <Route path='category-list' element={<CategoryList />} />
+          <Route path='category-create' element={<AddCategory />} />
+          <Route path='optional-item-list' element={<OptionalItem />} />
+          <Route path='optional-item-create' element={<AddOptional />} />
+          <Route path='coupon' element={<Coupon />} />
+          <Route path='coupon/create' element={<AddCoupon />} />
+          <Route path='delivery-area' element={<DeliveryArea />} />
+          <Route path='create/delivery' element={<AddDelivery />} />
+          <Route path='timeslot' element={<Timeslot />} />
+          <Route path='timeslot/create' element={<AddTimeSlot />} />
         </Route>
         
 
       </Routes>
-     
-
-      
-
-    
-
-      
-
-
-
-
-
-
-
-
 
     </>
   )

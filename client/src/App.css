@@ -40,3 +40,25 @@
   border-radius: 20px;
   color: white;
 }
+
+.order_status{
+  background: #dcf4f0;
+  color: green;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 5px;
+
+}
+
+.payment-status{
+  background: #ffebeb;
+  color: red;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 5px;
+
+}

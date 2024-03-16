@@ -65,6 +65,13 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
     padding: 10px !important;
 }
 
+.menu-bar__text .subactive{
+    color: red !important;
+    font-weight: bold;
+    
+
+}
+
 
 /* Admin Menu */
 
