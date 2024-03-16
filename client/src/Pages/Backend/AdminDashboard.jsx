@@ -3,7 +3,7 @@ import React from 'react'
 
 function AdminDashboard() {
     return (
-        <section className="sherah-adashboard sherah-show">
+        <section className="sherah-adashboard sherah-show sherah-close">
             <div className="container">
                 <div className="row">
                     <div className="col-12 sherah-main__column">

@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
-function Sidebar() {
+function Sidebar({handleSidebar, sidebar}) {
+
     const location = useLocation();
     const [order, setOrder] = useState(false)
     const [product, setProduct] = useState(false)
     const [blog, setBlog] = useState(false)
+
 
     const handleProduct = () => {
         
@@ -25,8 +27,10 @@ function Sidebar() {
         
     }
 
+    console.log(sidebar)
+
     return (
-        <div className="sherah-smenu">
+        <div className={`sherah-smenu ${sidebar ? 'sherah-close' : ''}`}>
             {/* Admin Menu */}
             <div className="admin-menu">
                 {/* Logo */}
@@ -34,7 +38,7 @@ function Sidebar() {
                     <Link href="/admin/dashboard" style={{fontWeight: 'bold', fontSize: '30px'}}>
                         Food Order
                     </Link>
-                    <div className="sherah__sicon close-icon d-xl-none">
+                    <div className="sherah__sicon close-icon d-xl-none" onClick={handleSidebar}>
                         <svg
                             width={9}
                             height={15}
@@ -50,9 +54,7 @@ function Sidebar() {
                 <div className="admin-menu__one sherah-sidebar-padding">
                     <div className="menu-bar">
                         <div id="sherahMenu">
-                            <div>
-                                <p className="menu-bar-subtaitel">Dashboard</p>
-                            </div>
+                           
                             <ul className="menu-bar__one sherah-dashboard-menu">
                                 <li>
                                     <Link

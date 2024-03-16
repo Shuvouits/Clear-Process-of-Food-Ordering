@@ -1,16 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-function Navbar() {
+function Navbar({handleSidebar}) {
     return (
-        <header className="sherah-header" id="sidebar-wrapper">
+        <header className="sherah-header sherah-close" id="sidebar-wrapper">
             <div className="container g-0">
                 <div className="row g-0">
                     <div className="col-12">
                         {/* Dashboard Header */}
                         <div className="sherah-header__inner">
                             <div className="sherah-header__middle">
-                                <div className="sherah__sicon close-icon d-xl-none">
+                                <div className="sherah__sicon close-icon d-xl-none" onClick={handleSidebar}>
                                     <svg
                                         width={9}
                                         height={15}
