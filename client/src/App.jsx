@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Router, Routes, useLocation } from 'react-router-dom'
 import Home from './Pages/Frontend/Home'
 import Menu from './Pages/Frontend/Menu'
 import Layout from './Pages/Frontend/Layout'
@@ -18,7 +18,36 @@ import OrderPage from './Pages/Frontend/user/OrderPage'
 import WishlistPage from './Pages/Frontend/user/WishlistPage'
 import ChangePasswordPage from './Pages/Frontend/user/ChangePasswordPage'
 import Login from './Pages/Frontend/Login'
-import Router from './Pages/Backend/Router'
+import AdminLogin from './Pages/Backend/AdminLogin'
+
+//frontend css import
+import './Pages/Frontend/assets/style.css'
+import './Pages/Frontend/assets/bootstrap.css'
+import './Pages/Frontend/assets/responsive.css'
+
+import './Pages/Frontend/assets/toastr.css'
+import './Pages/Frontend/assets/venobox.css'
+import AdminLayout from './Pages/Backend/AdminLayout'
+import AdminDashboard from './Pages/Backend/AdminDashboard'
+import AllOrder from './Pages/Backend/order/AllOrder'
+
+//backend css import
+const currentPath = window.location.pathname;
+
+if (currentPath.startsWith('/admin')) {
+  import('./Pages/Backend/admin-assets/style.css');
+  import('./Pages/Backend/admin-assets/bootstrap.css');
+  import('./Pages/Backend/admin-assets/chart.css');
+  import('./Pages/Backend/admin-assets/datatable.css');
+  import('./Pages/Backend/admin-assets/fontawesome.css');
+  import('./Pages/Backend/admin-assets/jquery.css');
+  import('./Pages/Backend/admin-assets/map.css');
+  import('./Pages/Backend/admin-assets/reset.css');
+  import('./Pages/Backend/admin-assets/slickslider.css');
+  import('./Pages/Backend/admin-assets/toast.css');
+ 
+}
+
 
 function App() {
 
@@ -27,6 +56,7 @@ function App() {
     <>
       
       <Routes>
+        {/* Frontend route */}
         <Route path='/' element={<Layout />}>
           <Route path='/' element={<Home />} />
           <Route path='/menu' element={<Menu />} />
@@ -39,20 +69,34 @@ function App() {
           
 
         </Route>
-        <Route path='/' element={<UserLayout/>}>
-          <Route path='/user/dashboard' element={<DashboardPage />} />
-          <Route path='/user/edit-profile' element={<ProfilePage />} />
-          <Route path='/user/address' element={<AddressPage />} />
-          <Route path='/user/order' element={<OrderPage />} />
-          <Route path='/user/wishlist' element={<WishlistPage />} />
-          <Route path='/user/change-password' element={<ChangePasswordPage />} />
+        <Route path='/user/' element={<UserLayout/>}>
+          <Route path='dashboard' element={<DashboardPage />} />
+          <Route path='edit-profile' element={<ProfilePage />} />
+          <Route path='address' element={<AddressPage />} />
+          <Route path='order' element={<OrderPage />} />
+          <Route path='wishlist' element={<WishlistPage />} />
+          <Route path='change-password' element={<ChangePasswordPage />} />
 
         </Route>
         <Route path='/login' element={<Login />} />
 
-      </Routes>
+        {/* Backend route */}
 
-      <Router />
+        <Route path='/admin/login' element={<AdminLogin />} />
+        <Route path='/admin/' element={<AdminLayout />}>
+          <Route path='dashboard' element={<AdminDashboard />} />
+          <Route path='all-order' element={<AllOrder />} />
+        </Route>
+        
+
+      </Routes>
+     
+
+      
+
+    
+
+      
 
 
 

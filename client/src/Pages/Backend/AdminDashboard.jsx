@@ -1,7 +1,7 @@
 import React from 'react'
 
 
-function Dashboard() {
+function AdminDashboard() {
     return (
         <section className="sherah-adashboard sherah-show">
             <div className="container">
@@ -916,4 +916,4 @@ function Dashboard() {
     )
 }
 
-export default Dashboard
+export default AdminDashboard

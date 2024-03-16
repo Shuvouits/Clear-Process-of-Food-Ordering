@@ -4,7 +4,7 @@ import Navbar from './Navbar'
 import { Outlet } from 'react-router-dom'
 
 
-function Layout() {
+function AdminLayout() {
   return (
     <div class="sherah-body-area">
         <Sidebar />
@@ -14,4 +14,4 @@ function Layout() {
   )
 }
 
-export default Layout
+export default AdminLayout

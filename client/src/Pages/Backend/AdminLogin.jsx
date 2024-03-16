@@ -1,5 +1,6 @@
 import React from 'react'
-import './assets/style.css'
+
+/*import './assets/style.css'
 import './assets/bootstrap.css'
 import './assets/fontawesome.css'
 import './assets/chart.css'
@@ -8,9 +9,9 @@ import './assets/jquery.css'
 import './assets/map.css'
 import './assets/reset.css'
 import './assets/slickslider.css'
-import './assets/toast.css'
+import './assets/toast.css' */
 
-function Login() {
+function AdminLogin() {
   return (
     <section className="sherah-wc sherah-wc__full sherah-bg-cover">
       <div className="container-fluid p-0">
@@ -124,4 +125,4 @@ function Login() {
   )
 }
 
-export default Login
+export default AdminLogin
