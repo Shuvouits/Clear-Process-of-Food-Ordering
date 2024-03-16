@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function Navbar() {
     return (
@@ -70,6 +71,7 @@ function Navbar() {
                                                 </div>
                                                 {/* End Header Zoom */}
                                                 {/* Header Author */}
+
                                                 <div className="sherah-header__author sherah-flex__center--top">
                                                     <div className="sherah-header__author-img">
                                                         <img
@@ -159,9 +161,9 @@ function Navbar() {
                                                                         </svg>
                                                                     </div>
                                                                     <h4 className="sherah-dropdown-card-name">
-                                                                        <a href="https://reservq.minionionbd.com/AdminProfile">
+                                                                        <Link to="/admin/profile">
                                                                             My Profile
-                                                                        </a>
+                                                                        </Link>
                                                                     </h4>
                                                                 </div>
                                                             </li>

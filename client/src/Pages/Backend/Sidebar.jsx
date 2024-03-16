@@ -56,7 +56,7 @@ function Sidebar() {
                             <ul className="menu-bar__one sherah-dashboard-menu">
                                 <li>
                                     <Link
-                                        className="custom-active"
+                                        className={location.pathname === '/admin/dashboard' ? 'custom-active' : 'custom'}
                                         to="/admin/dashboard"
                                     >
                                         <span className="menu-bar__text">
@@ -287,9 +287,9 @@ function Sidebar() {
                                 </li>
                                 {/* ************ Customer List *************** */}
                                 <li>
-                                    <a
+                                    <Link
                                         className=""
-                                        href="https://reservq.minionionbd.com/customer-list"
+                                        to="/admin/customer-list"
                                     >
                                         <span className="menu-bar__text">
                                             <span className="sherah-menu-icon sherah-svg-icon__v1">
@@ -322,9 +322,9 @@ function Sidebar() {
                                                     </g>
                                                 </svg>
                                             </span>
-                                            <span className="menu-bar__name">Customer List</span>
+                                            <span className={location.pathname === '/admin/customer-list'  ? 'menu-bar__name subactive' : 'menu-bar__name'}>Customer List</span>
                                         </span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 {/* ************ Product Reviews ************ */}
 
@@ -380,26 +380,20 @@ function Sidebar() {
                                     >
                                         <ul className="menu-bar__one-dropdown">
                                             <li>
-                                                <a href="https://reservq.minionionbd.com/blogs">
+                                                <Link to="/admin/blogs">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Blogs</span>
+                                                        <span className={location.pathname === '/admin/blogs'  ? 'menu-bar__name subactive' : 'menu-bar__name'}>Blogs</span>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
                                             <li>
-                                                <a href="https://reservq.minionionbd.com/blog-categories">
+                                                <Link to="/admin/blog-categories">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Blog Categories</span>
+                                                        <span className={location.pathname === '/admin/blog-categories' || location.pathname === '/admin/blog-category-create'  ? 'menu-bar__name subactive' : 'menu-bar__name'}>Blog Categories</span>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </li>
-                                            <li>
-                                                <a href="https://reservq.minionionbd.com/blog-comment">
-                                                    <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Blog Comments</span>
-                                                    </span>
-                                                </a>
-                                            </li>
+                                            
                                         </ul>
                                     </div>
                                 </li>

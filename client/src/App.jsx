@@ -46,6 +46,12 @@ import DeliveryArea from './Pages/Backend/product/DeliveryArea'
 import AddDelivery from './Pages/Backend/product/AddDelivery'
 import Timeslot from './Pages/Backend/product/Timeslot'
 import AddTimeSlot from './Pages/Backend/product/AddTimeSlot'
+import CustomerList from './Pages/Backend/CustomerList'
+import AdminProfile from './Pages/Backend/profile/AdminProfile'
+import Blogs from './Pages/Backend/Blog/Blogs'
+import AddBlog from './Pages/Backend/Blog/AddBlog'
+import BlogCategory from './Pages/Backend/Blog/BlogCategory'
+import AddBlogCategory from './Pages/Backend/Blog/AddBlogCategory'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -117,6 +123,12 @@ function App() {
           <Route path='create/delivery' element={<AddDelivery />} />
           <Route path='timeslot' element={<Timeslot />} />
           <Route path='timeslot/create' element={<AddTimeSlot />} />
+          <Route path='customer-list' element={<CustomerList />} />
+          <Route path='profile' element={<AdminProfile />} />
+          <Route path='blogs' element={<Blogs />} />
+          <Route path='blog-create' element={<AddBlog />} />
+          <Route path='blog-categories' element={<BlogCategory />} />
+          <Route path='blog-category-create' element={<AddBlogCategory />} />
         </Route>
         
 
