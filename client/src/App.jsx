@@ -60,15 +60,16 @@ const currentPath = window.location.pathname;
 
 if (currentPath.startsWith('/admin')) {
   import('./Pages/Backend/admin-assets/style.css');
+  import('./Pages/Backend/admin-assets/reset.css');
 
-  import('./Pages/Backend/admin-assets/chart.css');
+ /* import('./Pages/Backend/admin-assets/chart.css');
   import('./Pages/Backend/admin-assets/datatable.css');
   import('./Pages/Backend/admin-assets/fontawesome.css');
   import('./Pages/Backend/admin-assets/jquery.css');
   import('./Pages/Backend/admin-assets/map.css');
   import('./Pages/Backend/admin-assets/reset.css');
-  import('./Pages/Backend/admin-assets/slickslider.css');
-  import('./Pages/Backend/admin-assets/toast.css');
+  import('./Pages/Backend/admin-assets/slickslider.css'); */
+ /* import('./Pages/Backend/admin-assets/toast.css'); */
 
 }
 

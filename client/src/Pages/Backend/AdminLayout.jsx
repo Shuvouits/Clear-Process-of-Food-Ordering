@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Sidebar from './Sidebar'
 import Navbar from './Navbar'
 import { Outlet } from 'react-router-dom'
+import ScrollTop from '../../components/Frontend/ScrollTop';
 
 
 function AdminLayout() {
@@ -12,6 +13,7 @@ function AdminLayout() {
 
   return (
     <div class="sherah-body-area">
+      <ScrollTop />
         <Sidebar handleSidebar={handleSidebar} sidebar={sidebar} />
         <Navbar handleSidebar={handleSidebar} />
         <Outlet />

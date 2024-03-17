@@ -62,3 +62,11 @@
   border-radius: 5px;
 
 }
+
+.custom-toast-popup {
+  /* Container styles */
+  background-color: purple !important;
+  color: white !important;
+  /* Change the background color */
+  z-index: 9999999;
+}

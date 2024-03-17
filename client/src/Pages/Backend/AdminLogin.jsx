@@ -1,17 +1,78 @@
-import React from 'react'
-
-/*import './assets/style.css'
-import './assets/bootstrap.css'
-import './assets/fontawesome.css'
-import './assets/chart.css'
-import './assets/datatable.css'
-import './assets/jquery.css'
-import './assets/map.css'
-import './assets/reset.css'
-import './assets/slickslider.css'
-import './assets/toast.css' */
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux";
+import Cookies from "js-cookie";
+import Swal from 'sweetalert2'
 
 function AdminLogin() {
+  const [formData, setFormData] = useState({})
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    })
+
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+
+      // Make the API request with updated formData
+      const res = await fetch('http://localhost:8000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+
+        Swal.fire({
+          toast: false,
+          animation: true,
+          text: `Welocme to ${data.email} `,
+          icon: 'success',
+          showConfirmButton: true,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            container: 'custom-toast-container',
+            popup: 'custom-toast-popup',
+            title: 'custom-toast-title',
+            icon: 'custom-toast-icon',
+        },
+        })
+
+        dispatch({ type: "LOGIN", payload: data });
+        Cookies.set("user", JSON.stringify(data));
+        navigate('/admin/dashboard')
+
+
+      }
+
+      if (res.status === 400) {
+        setError(data.message)
+        console.log(data.message)
+      }
+
+
+
+    } catch (error) {
+
+      console.log(error)
+
+    }
+
+  }
   return (
     <section className="sherah-wc sherah-wc__full sherah-bg-cover">
       <div className="container-fluid p-0">
@@ -55,23 +116,25 @@ function AdminLogin() {
                 {/* Sign in Form */}
                 <form
                   className="sherah-wc__form-main p-0"
-                  action="https://reservq.minionionbd.com/admin/login"
-                  method="post"
+                  onSubmit={handleSubmit}
                 >
-                  <input
-                    type="hidden"
-                    name="_token"
-                    defaultValue="0nESN4TswQgYIPJXzw5a7bqo0wUAlwhKx5fT3VX3"
-                  />{" "}
+
+                  {
+                    error && (
+                      <span style={{ color: "red", fontWeight: "bold" }}>{error}</span>
+
+                    )
+                  }
+
                   <div className="form-group">
                     <label className="sherah-wc__form-label">Email Address</label>
                     <div className="form-group__input">
                       <input
                         className="sherah-wc__form-input"
                         type="email"
-                        name="email"
+                        id="email"
                         required="required"
-                        defaultValue="admin@gmail.com"
+                        onChange={handleChange}
                       />
                     </div>
                   </div>
@@ -81,12 +144,13 @@ function AdminLogin() {
                     <div className="form-group__input">
                       <input
                         className="sherah-wc__form-input"
-                        id="password-field"
+
                         type="password"
-                        name="password"
-                        maxLength={8}
+                        id="password"
+                        maxLength={12}
                         required="required"
-                        defaultValue={1234}
+                        onChange={handleChange}
+
                       />
                     </div>
                   </div>
