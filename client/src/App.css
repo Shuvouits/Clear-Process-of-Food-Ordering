@@ -65,8 +65,29 @@
 
 .custom-toast-popup {
   /* Container styles */
-  background-color: purple !important;
-  color: white !important;
+  background-color: white !important;
+  color: black !important;
   /* Change the background color */
   z-index: 9999999;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.swal2-success-circular-line-left{
+  background: white !important;
+}
+
+.swal2-success-circular-line-right{
+  background: white !important;
+}
+
+.swal2-confirm{
+ 
+  padding-left: 40px;
+  padding-right: 40px;
+  border: none !important;
+
 }

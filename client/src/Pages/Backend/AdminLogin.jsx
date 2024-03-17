@@ -39,10 +39,10 @@ function AdminLogin() {
         Swal.fire({
           toast: false,
           animation: true,
-          text: `Welocme to ${data.email} `,
+          text: `Welcome to ${data.email} `,
           icon: 'success',
           showConfirmButton: true,
-          timer: 3000,
+         
           timerProgressBar: true,
           customClass: {
             container: 'custom-toast-container',
