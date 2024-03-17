@@ -66,7 +66,7 @@ if (currentPath.startsWith('/admin')) {
   import('./Pages/Backend/admin-assets/map.css');
   import('./Pages/Backend/admin-assets/reset.css');
   import('./Pages/Backend/admin-assets/slickslider.css');
-  import('./Pages/Backend/admin-assets/toast.css');
+  import('./Pages/Backend/admin-assets/toast.css'); 
  
 }
 
@@ -129,6 +129,7 @@ function App() {
           <Route path='blog-create' element={<AddBlog />} />
           <Route path='blog-categories' element={<BlogCategory />} />
           <Route path='blog-category-create' element={<AddBlogCategory />} />
+         
         </Route>
         
 
