@@ -52,13 +52,15 @@ import Blogs from './Pages/Backend/Blog/Blogs'
 import AddBlog from './Pages/Backend/Blog/AddBlog'
 import BlogCategory from './Pages/Backend/Blog/BlogCategory'
 import AddBlogCategory from './Pages/Backend/Blog/AddBlogCategory'
+import AdminPrivate from './Pages/Backend/AdminPrivate'
+import NotFound from './Pages/NotFound'
 
 //backend css import
 const currentPath = window.location.pathname;
 
 if (currentPath.startsWith('/admin')) {
   import('./Pages/Backend/admin-assets/style.css');
-  
+
   import('./Pages/Backend/admin-assets/chart.css');
   import('./Pages/Backend/admin-assets/datatable.css');
   import('./Pages/Backend/admin-assets/fontawesome.css');
@@ -66,8 +68,8 @@ if (currentPath.startsWith('/admin')) {
   import('./Pages/Backend/admin-assets/map.css');
   import('./Pages/Backend/admin-assets/reset.css');
   import('./Pages/Backend/admin-assets/slickslider.css');
-  import('./Pages/Backend/admin-assets/toast.css'); 
- 
+  import('./Pages/Backend/admin-assets/toast.css');
+
 }
 
 
@@ -76,7 +78,7 @@ function App() {
 
   return (
     <>
-      
+
       <Routes>
         {/* Frontend route */}
         <Route path='/' element={<Layout />}>
@@ -88,10 +90,10 @@ function App() {
           <Route path='/blog/:title' element={<BlogDetails />} />
           <Route path='/cartlist' element={<Cart />} />
           <Route path='/checkout' element={<CheckOut />} />
-          
+
 
         </Route>
-        <Route path='/user/' element={<UserLayout/>}>
+        <Route path='/user/' element={<UserLayout />}>
           <Route path='dashboard' element={<DashboardPage />} />
           <Route path='edit-profile' element={<ProfilePage />} />
           <Route path='address' element={<AddressPage />} />
@@ -102,36 +104,42 @@ function App() {
         </Route>
         <Route path='/login' element={<Login />} />
 
-        {/* Backend route */}
-
         <Route path='/admin/login' element={<AdminLogin />} />
-        <Route path='/admin/' element={<AdminLayout />}>
-          <Route path='dashboard' element={<AdminDashboard />} />
-          <Route path='all-order' element={<AllOrder />} />
-          <Route path='order/details' element={<OrderDetails />}/>
-          <Route path='delivery/order' element={<DeliveryOrder />} />
-          <Route path='pickup/order' element={<PickUpOrder />} />
-          <Route path='product-create' element={<AddProduct />} />
-          <Route path='product-list-show' element={<ProductList />} />
-          <Route path='category-list' element={<CategoryList />} />
-          <Route path='category-create' element={<AddCategory />} />
-          <Route path='optional-item-list' element={<OptionalItem />} />
-          <Route path='optional-item-create' element={<AddOptional />} />
-          <Route path='coupon' element={<Coupon />} />
-          <Route path='coupon/create' element={<AddCoupon />} />
-          <Route path='delivery-area' element={<DeliveryArea />} />
-          <Route path='create/delivery' element={<AddDelivery />} />
-          <Route path='timeslot' element={<Timeslot />} />
-          <Route path='timeslot/create' element={<AddTimeSlot />} />
-          <Route path='customer-list' element={<CustomerList />} />
-          <Route path='profile' element={<AdminProfile />} />
-          <Route path='blogs' element={<Blogs />} />
-          <Route path='blog-create' element={<AddBlog />} />
-          <Route path='blog-categories' element={<BlogCategory />} />
-          <Route path='blog-category-create' element={<AddBlogCategory />} />
-         
+        <Route element={<AdminPrivate />}>
+
+          <Route path='/admin/' element={<AdminLayout />}>
+            <Route path='dashboard' element={<AdminDashboard />} />
+            <Route path='all-order' element={<AllOrder />} />
+            <Route path='order/details' element={<OrderDetails />} />
+            <Route path='delivery/order' element={<DeliveryOrder />} />
+            <Route path='pickup/order' element={<PickUpOrder />} />
+            <Route path='product-create' element={<AddProduct />} />
+            <Route path='product-list-show' element={<ProductList />} />
+            <Route path='category-list' element={<CategoryList />} />
+            <Route path='category-create' element={<AddCategory />} />
+            <Route path='optional-item-list' element={<OptionalItem />} />
+            <Route path='optional-item-create' element={<AddOptional />} />
+            <Route path='coupon' element={<Coupon />} />
+            <Route path='coupon/create' element={<AddCoupon />} />
+            <Route path='delivery-area' element={<DeliveryArea />} />
+            <Route path='create/delivery' element={<AddDelivery />} />
+            <Route path='timeslot' element={<Timeslot />} />
+            <Route path='timeslot/create' element={<AddTimeSlot />} />
+            <Route path='customer-list' element={<CustomerList />} />
+            <Route path='profile' element={<AdminProfile />} />
+            <Route path='blogs' element={<Blogs />} />
+            <Route path='blog-create' element={<AddBlog />} />
+            <Route path='blog-categories' element={<BlogCategory />} />
+            <Route path='blog-category-create' element={<AddBlogCategory />} />
+
+          </Route>
+
+
         </Route>
-        
+
+        <Route path='*' element={<NotFound />} />
+
+
 
       </Routes>
 
