@@ -1,17 +1,109 @@
 import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { format } from 'date-fns';
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom';
 
 function AdminProfile() {
+
+    const { user } = useSelector((state) => ({ ...state }))
     const [personal, setPersonal] = useState(true)
     const [changePassword, setChangePassword] = useState(false)
+    const [formData, setFormData] = useState({})
+    const navigate = useNavigate();
 
     const handlePersonal = () => {
         setPersonal(!personal);
         setChangePassword(false)
     }
 
-    const handleChangePassword = ()=>{
+    const handleChangePassword = () => {
         setChangePassword(!changePassword)
         setPersonal(false);
+    }
+
+    const handleChange = (e) => {
+
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value,
+        })
+
+    }
+
+    const handleSubmit = async(e) => {
+        e.preventDefault();
+        console.log(formData)
+        try {
+
+            // Make the API request with updated formData
+            const res = await fetch('http://localhost:8000/password-change', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`,
+              },
+              body: JSON.stringify(formData),
+            });
+
+            console.log(res.status);
+      
+            const data = await res.json();
+      
+         
+      
+            if (res.status === 400) {
+              
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: `${data.message}`,
+                    icon: 'error',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                      container: 'custom-toast-container',
+                      popup: 'custom-toast-popup',
+                      title: 'custom-toast-title',
+                      icon: 'custom-toast-icon',
+                  },
+                  })
+
+
+            }
+
+            if (res.status === 200) {
+      
+                Swal.fire({
+                  toast: false,
+                  animation: true,
+                  text: `Your Password Updated Successfully`,
+                  icon: 'success',
+                  showConfirmButton: true,
+                  timer: 3000,
+                  timerProgressBar: true,
+                  customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+                })
+      
+                navigate('/admin/dashboard')
+        
+        
+            }
+      
+      
+      
+          } catch (error) {
+      
+            console.log(error)
+      
+          }
+
     }
     return (
         <section className="sherah-adashboard sherah-show">
@@ -144,7 +236,7 @@ function AdminProfile() {
                                                                                         </div>
                                                                                         <div className="sherah-profile-cover__content">
                                                                                             <h3 className="sherah-profile-cover__title">
-                                                                                                John Doe
+                                                                                                {user.fullName}
                                                                                             </h3>
                                                                                             <span className="sherah-profile-cover__text sherah-color1"></span>
                                                                                         </div>
@@ -205,7 +297,7 @@ function AdminProfile() {
                                                                                                     Full Name :
                                                                                                 </h4>
                                                                                                 <p className="sherah-profile-info__text">
-                                                                                                    John Doe
+                                                                                                    {user.fullName}
                                                                                                 </p>
                                                                                             </li>
                                                                                             <li className="sherah-dflex">
@@ -213,7 +305,7 @@ function AdminProfile() {
                                                                                                     Email :
                                                                                                 </h4>
                                                                                                 <p className="sherah-profile-info__text">
-                                                                                                    admin@gmail.com
+                                                                                                    {user.email}
                                                                                                 </p>
                                                                                             </li>
                                                                                             <li className="sherah-dflex">
@@ -221,7 +313,7 @@ function AdminProfile() {
                                                                                                     Joining Date :
                                                                                                 </h4>
                                                                                                 <p className="sherah-profile-info__text">
-                                                                                                    2022-11-24
+                                                                                                    {format(user.createdAt, 'MMMM-yyyy-dd')}
                                                                                                 </p>
                                                                                             </li>
                                                                                             <li className="sherah-dflex">
@@ -252,14 +344,10 @@ function AdminProfile() {
                                                                         {/* Sign in Form */}
                                                                         <form
                                                                             className="sherah-wc__form-main sherah-form-main--v2 p-0"
-                                                                            action="https://reservq.minionionbd.com/admin-chnage-password"
-                                                                            method="post"
+                                                                            onSubmit={handleSubmit}
+
                                                                         >
-                                                                            <input
-                                                                                type="hidden"
-                                                                                name="_token"
-                                                                                defaultValue="QbunGZqg8VhXTZvm9qzI00RWf9a7wExq9aRuc4zP"
-                                                                            />
+
                                                                             <div className="form-group">
                                                                                 <label className="sherah-wc__form-label">
                                                                                     Old Password *
@@ -267,11 +355,11 @@ function AdminProfile() {
                                                                                 <div className="form-group__input">
                                                                                     <input
                                                                                         className="sherah-wc__form-input"
-                                                                                        placeholder="●●●●●●"
-                                                                                        id="password-field"
+                                                                                        placeholder=""
+                                                                                        id="oldPassword"
                                                                                         type="password"
-                                                                                        name="old_password"
-                                                                                        maxLength={8}
+                                                                                        onChange={handleChange}
+
                                                                                         required="required"
                                                                                     />
                                                                                 </div>
@@ -283,11 +371,12 @@ function AdminProfile() {
                                                                                 <div className="form-group__input">
                                                                                     <input
                                                                                         className="sherah-wc__form-input"
-                                                                                        placeholder="●●●●●●"
-                                                                                        id="password-field"
+                                                                                        placeholder=""
+                                                                                        id="newPassword"
                                                                                         type="password"
-                                                                                        name="password"
-                                                                                        maxLength={8}
+                                                                                        onChange={handleChange}
+
+
                                                                                         required="required"
                                                                                     />
                                                                                 </div>
@@ -299,11 +388,12 @@ function AdminProfile() {
                                                                                 <div className="form-group__input">
                                                                                     <input
                                                                                         className="sherah-wc__form-input"
-                                                                                        placeholder="●●●●●●"
-                                                                                        id="password-field"
+                                                                                        placeholder=""
+                                                                                        id="confirmPassword"
                                                                                         type="password"
-                                                                                        name="password_confirmation"
-                                                                                        maxLength={8}
+                                                                                        onChange={handleChange}
+
+
                                                                                         required="required"
                                                                                     />
                                                                                 </div>

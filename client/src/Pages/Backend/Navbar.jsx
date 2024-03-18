@@ -1,12 +1,63 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import Cookies from "js-cookie"
 
-function Navbar({handleSidebar}) {
+function Navbar({ handleSidebar }) {
 
-    const logOut = () => {
+    const { user } = useSelector((state) => ({ ...state }))
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleLogOut = async () => {
+        alert('Are you sure?')
+        try {
+
+            const res = await fetch('http://localhost:8000/logout', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                }
+            });
+
+            const data = await res.json();
+
+            if (res.status === 200) {
+                dispatch({ type: "LOGOUT", payload: null });
+                Cookies.set("user", null);
+
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: 'You Have Successfully Logged Out',
+                    icon: 'success',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        container: 'custom-toast-container',
+                        popup: 'custom-toast-popup',
+                        title: 'custom-toast-title',
+                        icon: 'custom-toast-icon',
+                    },
+                })
+
+
+                navigate('/admin/login')
+            }
+
+        } catch (error) {
+            console.log(error)
+
+        }
 
     }
-    
+
+
+
+
     return (
         <header className="sherah-header sherah-close" id="sidebar-wrapper">
             <div className="container g-0">
@@ -190,7 +241,7 @@ function Navbar({handleSidebar}) {
                                                                         </svg>
                                                                     </div>
                                                                     <h4 className="sherah-dropdown-card-name">
-                                                                        <Link to="#" onClick={logOut}>
+                                                                        <Link to="#" onClick={handleLogOut}>
                                                                             Logout
                                                                         </Link>
                                                                     </h4>

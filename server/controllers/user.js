@@ -26,6 +26,7 @@ exports.login = async (req, res) => {
 
         return res.status(200).json({
             id: validUser._id,
+            fullName: validUser.fullName,
             email: validUser.email,
             token: token,
             avater: validUser.avater,
@@ -58,5 +59,60 @@ exports.logout = async (req, res) => {
 
     }
 
+}
+
+exports.passwordChange = async (req,res) => {
+    try{
+
+        const userId = req.user.id;
+        const {oldPassword, newPassword, confirmPassword} = req.body;
+
+        if(newPassword.length < 7){
+            return res.status(400).json({
+                message: 'Password length must be 8 or above character'
+            })
+        }
+
+        if(newPassword !== confirmPassword){
+            return res.status(400).json({
+                message: 'Confirm password not matched'
+            })
+
+        }
+
+       
+
+        const user = await User.findById(userId);
+
+        const checkPassword = bcrypt.compareSync(oldPassword, user.password);
+
+        if(!checkPassword){
+            return res.status(400).json({
+                message : 'Your old password not matched'
+            })
+        }
+
+       
+
+        let cryptedPassword;
+        if (newPassword) {
+            cryptedPassword = await bcrypt.hash(newPassword, 12)
+        }  
+
+        const updateUser = await User.findByIdAndUpdate(userId, { password: cryptedPassword}, { new: true })
+
+       
+
+        if (!updateUser) {
+            return res.status(400).json({ message: 'User not found' });
+        }  
+
+        return res.status(200).json({
+            message: 'Password Updated Successfully'
+        })
+
+    }catch(error){
+        console.log(error)
+    }
 }
 
