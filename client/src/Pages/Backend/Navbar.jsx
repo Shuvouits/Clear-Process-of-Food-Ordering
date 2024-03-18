@@ -2,6 +2,11 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 function Navbar({handleSidebar}) {
+
+    const logOut = () => {
+
+    }
+    
     return (
         <header className="sherah-header sherah-close" id="sidebar-wrapper">
             <div className="container g-0">
@@ -185,9 +190,9 @@ function Navbar({handleSidebar}) {
                                                                         </svg>
                                                                     </div>
                                                                     <h4 className="sherah-dropdown-card-name">
-                                                                        <a href="https://reservq.minionionbd.com/login-out">
+                                                                        <Link to="#" onClick={logOut}>
                                                                             Logout
-                                                                        </a>
+                                                                        </Link>
                                                                     </h4>
                                                                 </div>
                                                             </li>

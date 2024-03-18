@@ -42,7 +42,7 @@ function AdminLogin() {
           text: `Welcome to ${data.email} `,
           icon: 'success',
           showConfirmButton: true,
-         
+          timer: 3000,
           timerProgressBar: true,
           customClass: {
             container: 'custom-toast-container',

@@ -1,6 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function AdminProfile() {
+    const [personal, setPersonal] = useState(true)
+    const [changePassword, setChangePassword] = useState(false)
+
+    const handlePersonal = () => {
+        setPersonal(!personal);
+        setChangePassword(false)
+    }
+
+    const handleChangePassword = ()=>{
+        setChangePassword(!changePassword)
+        setPersonal(false);
+    }
     return (
         <section className="sherah-adashboard sherah-show">
             <div className="container">
@@ -33,10 +45,11 @@ function AdminProfile() {
                                                     role="tablist"
                                                 >
                                                     <a
-                                                        className="list-group-item active"
+                                                        className={`list-group-item ${personal ? 'active' : ''}`}
                                                         data-bs-toggle="list"
                                                         href="#id1"
                                                         role="tab"
+                                                        onClick={handlePersonal}
                                                     >
                                                         <span className="sherah-psidebar__icon">
                                                             <svg
@@ -69,10 +82,11 @@ function AdminProfile() {
                                                         </span>
                                                     </a>
                                                     <a
-                                                        className="list-group-item"
+                                                        className={`list-group-item ${changePassword ? 'active' : ''}`}
                                                         data-bs-toggle="list"
                                                         href="#id5"
                                                         role="tab"
+                                                        onClick={handleChangePassword}
                                                     >
                                                         <span className="sherah-psidebar__icon">
                                                             <svg
@@ -110,7 +124,7 @@ function AdminProfile() {
                                                     <div className="tab-content" id="nav-tabContent">
                                                         {/* Features Single Tab */}
                                                         <div
-                                                            className="tab-pane fade show active"
+                                                            className={`tab-pane fade ${personal ? 'show active' : ''}`}
                                                             id="id1"
                                                             role="tabpanel"
                                                         >
@@ -227,7 +241,8 @@ function AdminProfile() {
                                                                 </div>
                                                             </form>
                                                         </div>
-                                                        <div className="tab-pane fade" id="id5" role="tabpanel">
+
+                                                        <div className={`tab-pane fade ${changePassword ? 'show active' : ''}`} id="id5" role="tabpanel">
                                                             <div className="sherah-paymentm sherah__item-group sherah-default-bg sherah-border ">
                                                                 <h4 className="sherah__item-group sherah-default-bg sherah-border__title">
                                                                     Change Password

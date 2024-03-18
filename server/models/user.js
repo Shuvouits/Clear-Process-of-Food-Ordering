@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
 
     avater: {
         type: String,
+        default: 'https://uxwing.com/wp-content/themes/uxwing/download/peoples-avatars/corporate-user-icon.png',
 
     },
 

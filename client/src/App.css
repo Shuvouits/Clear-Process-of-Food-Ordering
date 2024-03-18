@@ -74,6 +74,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  border: 1px solid gainsboro;
 }
 
 .swal2-success-circular-line-left{
