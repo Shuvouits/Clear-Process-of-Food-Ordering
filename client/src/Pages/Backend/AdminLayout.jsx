@@ -12,12 +12,19 @@ function AdminLayout() {
   }
 
   return (
-    <div class="sherah-body-area">
-      <ScrollTop />
+    <>
+
+      <div class="sherah-body-area">
+        <ScrollTop />
         <Sidebar handleSidebar={handleSidebar} sidebar={sidebar} />
         <Navbar handleSidebar={handleSidebar} />
         <Outlet />
-    </div>
+      </div>
+
+     
+
+    </>
+
   )
 }
 

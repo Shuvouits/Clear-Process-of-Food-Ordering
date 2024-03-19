@@ -92,3 +92,12 @@
   border: none !important;
 
 }
+
+.profile-modal{
+  border: 1px solid gainsboro !important;
+  z-index: 9999;
+  top: -10% !important;
+  left: -50px;
+ 
+
+}
