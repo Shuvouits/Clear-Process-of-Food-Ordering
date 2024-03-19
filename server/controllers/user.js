@@ -29,7 +29,7 @@ exports.login = async (req, res) => {
             fullName: validUser.fullName,
             email: validUser.email,
             token: token,
-            avater: validUser.avater,
+            avatar: validUser.avatar,
             createdAt: validUser.createdAt
         })
 
@@ -114,5 +114,39 @@ exports.passwordChange = async (req,res) => {
     }catch(error){
         console.log(error)
     }
+}  
+
+exports.profileUpdate = async(req,res)=>{
+    try{
+
+        let tmp = req.header("Authorization");
+        const token = tmp ? tmp.slice(7, tmp.length) : "";
+        const userId = req.user.id;
+        const { fullName, email,avatar} = req.body;
+
+      
+
+        const updateUser = await User.findByIdAndUpdate(userId, { fullName, email, avatar}, { new: true })
+
+
+        if (!updateUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.status(200).json({
+            id: updateUser._id,
+            email: updateUser.email,
+            fullName: updateUser.fullName,
+            avatar: updateUser.avatar,
+            token: token,
+            message: 'User information updated',
+            createdAt: updateUser.createdAt
+        })
+
+
+    }catch(error){
+        return res.status(500).json(error)
+    }
 }
+
 
