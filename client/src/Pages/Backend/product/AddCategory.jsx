@@ -1,6 +1,155 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
+import { app, storage } from '../../firebase.js'
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 function AddCategory() {
+    const { user } = useSelector((state) => ({ ...state }))
+    const [formData, setFormData] = useState({})
+
+    const navigate = useNavigate();
+
+    const [file, setFile] = useState(undefined)
+    const [filePerc, setFilePerc] = useState(0);
+    const [fileUploadError, setFileUploadError] = useState(false)
+    const [imagePreview, setImagePreview] = useState(null);
+    const [imageLoading, setImageLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+
+
+    const handleFileUpload = (file) => {
+        setImageLoading(true)
+        const storage = getStorage(app);
+        const fileName = new Date().getTime() + file.name;
+        const storageRef = ref(storage, fileName);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on('state_changed', (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setFilePerc(Math.round(progress));
+        }, (error) => {
+            setFileUploadError(true);
+        }, () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setFormData({ ...formData, avatar: downloadURL });
+                setImagePreview(downloadURL);
+                setImageLoading(false)
+            });
+        });
+    };
+
+    useEffect(() => {
+
+        if (file) {
+            handleFileUpload(file)
+        }
+
+    }, [file]);
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value,
+        })
+
+    }
+
+
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true)
+        console.log(formData)
+
+        try {
+
+            if (file) {
+
+                const storageRef = ref(storage, `/files/${file.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                // Wait for both upload and download URL retrieval
+                const [snapshot] = await Promise.all([
+                    new Promise((resolve, reject) => {
+                        uploadTask.on(
+                            "state_changed",
+                            (snapshot) => {
+                                // Handle upload state changes if needed
+                            },
+                            (err) => {
+                                console.log(err);
+                                reject(err);
+                            },
+                            () => {
+                                resolve(uploadTask.snapshot);
+                            }
+                        );
+                    }),
+                ]);
+
+                // Get the download URL
+                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
+                // Update formData with the download URL
+                setFormData((prevData) => ({
+                    ...prevData,
+                    avatar: downloadURL,
+                }));
+
+            }
+
+
+            // Make the API request with updated formData
+            const res = await fetch('http://localhost:8000/add-category', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await res.json();
+            setLoading(false)
+
+            if (res.status === 200) {
+
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: `Added New Category `,
+                    icon: 'success',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        container: 'custom-toast-container',
+                        popup: 'custom-toast-popup',
+                        title: 'custom-toast-title',
+                        icon: 'custom-toast-icon',
+                    },
+                })
+
+             
+                navigate('/admin/category-list')
+
+
+            }
+
+           
+
+        } catch (error) {
+           console.log(error)
+        }
+    };
+
+
+
     return (
         <section className="sherah-adashboard sherah-show">
             <div className="container">
@@ -31,17 +180,9 @@ function AddCategory() {
                                 <div className="sherah-page-inner sherah-border sherah-basic-page sherah-default-bg mg-top-25 p-0">
                                     <form
                                         className="sherah-wc__form-main"
-                                        action="https://reservq.minionionbd.com/category-add"
-                                        method="POST"
-                                        encType="m"
-                                        ultipart=""
-                                        form-data=""
+                                        onSubmit={handleSubmit}
                                     >
-                                        <input
-                                            type="hidden"
-                                            name="_token"
-                                            defaultValue="QbunGZqg8VhXTZvm9qzI00RWf9a7wExq9aRuc4zP"
-                                        />
+                                       
                                         <div className="row">
                                             <div className="col-12">
                                                 {/* Product Info */}
@@ -59,27 +200,13 @@ function AddCategory() {
                                                                         placeholder="Type here"
                                                                         type="text"
                                                                         id="name"
-                                                                        name="name"
+                                                                        onChange={handleChange}
+
                                                                     />
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="col-lg-6 col-md-6 col-12">
-                                                            <div className="form-group">
-                                                                <label className="sherah-wc__form-label">
-                                                                    Slug
-                                                                </label>
-                                                                <div className="form-group__input">
-                                                                    <input
-                                                                        className="sherah-wc__form-input"
-                                                                        placeholder="Type here"
-                                                                        type="text"
-                                                                        name="slug"
-                                                                        id="slug"
-                                                                    />
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
                                                         <div className="col-lg-6 col-md-6 col-12">
                                                             <div className="form-group">
                                                                 <label className="sherah-wc__form-label">
@@ -88,10 +215,11 @@ function AddCategory() {
                                                                 <select
                                                                     className="form-group__input"
                                                                     aria-label="Default select example"
-                                                                    name="status"
+                                                                    id="status"
+                                                                    onChange={handleChange}
                                                                 >
-                                                                    <option value="active">Active</option>
-                                                                    <option value="inactive">Inactive</option>
+                                                                    <option value="Active">Active</option>
+                                                                    <option value="Inactive">Inactive</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -100,25 +228,41 @@ function AddCategory() {
                                                 {/* End Product Info */}
                                             </div>
                                         </div>
+
                                         <div className="product-form-box sherah-border mg-top-30">
                                             <div className="form-group">
                                                 <div className="image-upload-group">
                                                     <div className="image-upload-group__single">
-                                                        <img id="preview-img" src="" />
+                                                        {imagePreview &&
+                                                            (
+                                                                <img className='admin_avatar' src={imagePreview} />
+
+                                                            )
+                                                        }
+
+                                                        <span style={{ fontWeight: 'bold', color: 'red', fontSize: '30px' }}>
+
+                                                            {
+                                                                imageLoading && (
+
+                                                                    <span>{filePerc}% </span>
+
+                                                                )
+                                                            }
+                                                        </span>
+
+
                                                     </div>
                                                     <div className="image-upload-group__single image-upload-group__single--upload">
                                                         <input
                                                             type="file"
                                                             className="btn-check"
-                                                            name="image"
-                                                            id="input-img1"
-                                                            onchange="previewThumnailImage(event)"
+
+                                                            id="avatar"
+                                                            onChange={(e) => setFile(e.target.files[0])}
                                                             autoComplete="off"
                                                         />
-                                                        <label
-                                                            className="image-upload-label"
-                                                            htmlFor="input-img1"
-                                                        >
+                                                        <label className="image-upload-label" htmlFor="avatar">
                                                             <svg
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                                 width="91.787"
@@ -155,6 +299,9 @@ function AddCategory() {
                                                 </div>
                                             </div>
                                         </div>
+
+
+
                                         <div className=" mg-top-40 sherah-dflex sherah-dflex-gap-30 justify-content-end">
                                             <button
                                                 type="submit"

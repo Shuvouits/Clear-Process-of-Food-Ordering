@@ -1,6 +1,8 @@
 const User = require('../models/user.js')
+const Category = require('../models/category.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const slugify = require('slugify');
 
 
 
@@ -146,6 +148,37 @@ exports.profileUpdate = async(req,res)=>{
 
     }catch(error){
         return res.status(500).json(error)
+    }
+}  
+
+exports.addCategory = async(req,res)=> {
+    try{
+
+        const{name, avatar, status} = req.body
+
+        const string = req.body.name;
+        const slug = slugify(string);
+
+        const customSlug = slugify(string, {
+            replacement: '-',  // replace spaces with '-'
+            lower: true        // convert to lowercase
+          });
+
+
+        const category = await new Category({
+           
+            name,
+            avatar,
+            status,
+            slug: customSlug
+           
+        }).save();
+
+        res.status(200).json(category)
+
+
+    }catch(error){
+        console.log(error)
     }
 }
 

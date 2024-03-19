@@ -23,10 +23,10 @@ function ProfileModal({ handleProfile }) {
         fullName: user.fullName || '',
         email: user.email || '',
         avatar: user.avatar || ''
-      })
+    })
 
 
-      console.log(formData)
+    console.log(formData)
 
 
 
@@ -211,15 +211,15 @@ function ProfileModal({ handleProfile }) {
 
                                                             {
                                                                 imagePreview ? (
-                                                                    <img className='admin_avatar' src={imagePreview}  />
+                                                                    <img className='admin_avatar' src={imagePreview} />
 
                                                                 ) : (
-                                                                    <img className='admin_avatar' src={formData.avatar}  />
+                                                                    <img className='admin_avatar' src={formData.avatar} />
 
                                                                 )
                                                             }
 
-                                                            <span style={{fontWeight: 'bold', color: 'red', fontSize: '30px'}}>
+                                                            <span style={{ fontWeight: 'bold', color: 'red', fontSize: '30px' }}>
 
                                                                 {
                                                                     imageLoading && (
@@ -254,7 +254,7 @@ function ProfileModal({ handleProfile }) {
                                                 <div className="col-lg-6 col-12" id="item_name">
                                                     <div className="form-group">
                                                         <label className="sherah-wc__form-label">Name *</label>
-                                                       
+
                                                         <div className="form-group__input">
                                                             <input
                                                                 className="sherah-wc__form-input"
