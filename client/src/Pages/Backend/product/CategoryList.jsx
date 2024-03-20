@@ -35,7 +35,6 @@ function CategoryList() {
         allCategory();
     }, []);
 
-    console.log(category)
  
 
     //End
@@ -195,7 +194,7 @@ function CategoryList() {
     ] */
 
    
-   
+    const [record, setRecord] = useState(category);
 
     const handleFilter = (event) => {
         const newData = category.filter(row => {
@@ -249,7 +248,7 @@ function CategoryList() {
                                         <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
                                     </div>
 
-                                    <DataTable columns={columns} data={category} pagination>
+                                    <DataTable columns={columns} data={record} pagination>
 
                                     </DataTable>
 
