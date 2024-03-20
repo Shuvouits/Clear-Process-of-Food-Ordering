@@ -275,7 +275,7 @@ function EditCategory() {
                                                                             className="sherah-wc__form-input"
                                                                             placeholder="Type here"
                                                                             type="text"
-                                                                            id="name"
+                                                                            id="slug"
                                                                             onChange={handleChange}
                                                                             value={formData.slug}
 

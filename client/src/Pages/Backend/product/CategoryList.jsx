@@ -165,10 +165,7 @@ function CategoryList() {
             )
         },
 
-        {
-            id: 'Id',
-            selector: row => row.id
-        },
+     
 
         {
             name: 'Name',
