@@ -99,6 +99,7 @@ function AllOrder() {
     ]
 
     const [record, setRecord] = useState(data);
+    console.log(record)
 
     const handleFilter = (event) => {
         const newData = data.filter(row => {

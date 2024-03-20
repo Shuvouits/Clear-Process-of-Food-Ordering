@@ -182,7 +182,8 @@ function CategoryList() {
 
     ]
 
-   /*const data = [
+   /* const data = [
+      
         {
             avatar: 'https://reservq.minionionbd.com/uploads/custom-images/baked-chicken-wings-and-legs-2024-01-25-10-02-43-3199.jpg',
             name: 'Baked Chicken Wings and Legs',
@@ -192,17 +193,44 @@ function CategoryList() {
 
         }
     ] */
-
    
-    const [record, setRecord] = useState(category);
+    const [record, setRecord] = useState({})
+
+     useEffect(() => {
+        const data = category.map((item, index) => ({
+            avatar: item.avatar,
+            name: item.name,
+            status: item.status,
+            action: item._id
+        }));
+        setRecord(data);
+    }, [category]);
+
+    
+
+    console.log(record)
+   
+   
 
     const handleFilter = (event) => {
+        const searchQuery = event.target.value.toLowerCase();
         const newData = category.filter(row => {
-            return row.name.toLowerCase().includes(event.target.value.toLowerCase())
+            return row.name.toLowerCase().includes(searchQuery);
         });
-        setRecord(newData);
+    
+        // Update the record state if search query is present, else reset it to display all data
+        if (searchQuery) {
+            setRecord(newData);
+        } else {
+            setRecord(category);
+        }
     };
+    
 
+   
+
+   
+    
     //EndData table
 
 
@@ -247,10 +275,11 @@ function CategoryList() {
                                      <div className='form-group col-md-3 offset-md-9'>
                                         <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
                                     </div>
+                                    <br></br>
 
-                                    <DataTable columns={columns} data={record} pagination>
-
-                                    </DataTable>
+                                    {category.length > 0 && (
+                                    <DataTable columns={columns} data={record} pagination />
+                                )}
 
                                 </div>
                             </div>
