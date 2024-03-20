@@ -195,4 +195,38 @@ exports.allCategory = async(req, res) => {
     
 }
 
+exports.editCategory = async(req,res)=> {
+    try{
+        const categoryId = req.params.id;
+       
+
+        const data = await Category.findById(categoryId);
+        return res.status(200).json(data)
+
+        
+
+    }catch(error){
+        return (error)
+    }
+}
+
+exports.updateCategory = async(req,res)=> {
+    try{
+        const categoryId = req.params.id;
+        const {name, avatar, status, slug} = req.body;
+
+        const updateData = await Category.findByIdAndUpdate(categoryId, { name, avatar, status, slug }, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
 

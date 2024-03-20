@@ -64,6 +64,12 @@ function CategoryList() {
             selector: row => row.name
         },
 
+        {
+            name: 'Slug',
+            selector: row => row.slug
+        },
+
+
 
 
         {
@@ -76,7 +82,8 @@ function CategoryList() {
                                 id="status"
                                 onclick="changeCategoryStatus(2)"
                                 type="checkbox"
-                                defaultChecked=""
+                                checked = {row.status === 'Active' ? 'checked' : ''}
+                               
                             />
                             <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
                         </label>
@@ -89,8 +96,8 @@ function CategoryList() {
             name: 'Action',
             selector: row => (
                 <div className="sherah-table__status__group">
-                    <a
-                        href="https://reservq.minionionbd.com/edit-product-item/2"
+                    <Link
+                        to={`/admin/edit-category-item/${row.id}`}
                         className="sherah-table__action sherah-color2 sherah-color3__bg--opactity"
                     >
                         <svg
@@ -128,9 +135,9 @@ function CategoryList() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    <a
-                        href="https://reservq.minionionbd.com/product-item-destroy/2"
+                    </Link>
+                    <Link
+                        to={`/product-item-destroy/${row.id}`}
                         onclick="confirmation(event)"
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >
@@ -168,7 +175,7 @@ function CategoryList() {
                                 />
                             </g>
                         </svg>
-                    </a>
+                    </Link>
 
                 </div>
 
@@ -200,15 +207,12 @@ function CategoryList() {
         const data = category.map((item, index) => ({
             avatar: item.avatar,
             name: item.name,
+            slug: item.slug,
             status: item.status,
-            action: item._id
+            id: item._id
         }));
         setRecord(data);
     }, [category]);
-
-    
-
-    console.log(record)
    
    
 

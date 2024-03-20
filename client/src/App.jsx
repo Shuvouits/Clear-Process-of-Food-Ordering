@@ -54,6 +54,7 @@ import BlogCategory from './Pages/Backend/Blog/BlogCategory'
 import AddBlogCategory from './Pages/Backend/Blog/AddBlogCategory'
 import AdminPrivate from './Pages/Backend/AdminPrivate'
 import NotFound from './Pages/NotFound'
+import EditCategory from './Pages/Backend/product/EditCategory'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -116,8 +117,13 @@ function App() {
             <Route path='pickup/order' element={<PickUpOrder />} />
             <Route path='product-create' element={<AddProduct />} />
             <Route path='product-list-show' element={<ProductList />} />
+
             <Route path='category-list' element={<CategoryList />} />
             <Route path='category-create' element={<AddCategory />} />
+            <Route path='edit-category-item/:id' element={<EditCategory />} />
+
+
+
             <Route path='optional-item-list' element={<OptionalItem />} />
             <Route path='optional-item-create' element={<AddOptional />} />
             <Route path='coupon' element={<Coupon />} />
