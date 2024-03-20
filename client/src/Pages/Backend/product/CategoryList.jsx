@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 
 function CategoryList() {
@@ -35,7 +36,52 @@ function CategoryList() {
         allCategory();
     }, []);
 
- 
+    //End
+
+    //Delete Data
+
+    const handleClick = async(id) => {
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Category?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-category/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    allCategory();
+                }
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
 
     //End
 
@@ -82,8 +128,8 @@ function CategoryList() {
                                 id="status"
                                 onclick="changeCategoryStatus(2)"
                                 type="checkbox"
-                                checked = {row.status === 'Active' ? 'checked' : ''}
-                               
+                                checked={row.status === 'Active' ? 'checked' : ''}
+
                             />
                             <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
                         </label>
@@ -137,8 +183,8 @@ function CategoryList() {
                         </svg>
                     </Link>
                     <Link
-                        to={`/product-item-destroy/${row.id}`}
-                        onclick="confirmation(event)"
+                        to='#'
+                        onClick={() => handleClick(row.id)}
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >
                         <svg
@@ -189,21 +235,10 @@ function CategoryList() {
 
     ]
 
-   /* const data = [
-      
-        {
-            avatar: 'https://reservq.minionionbd.com/uploads/custom-images/baked-chicken-wings-and-legs-2024-01-25-10-02-43-3199.jpg',
-            name: 'Baked Chicken Wings and Legs',
 
-            status: 'on',
-            action: 'action'
-
-        }
-    ] */
-   
     const [record, setRecord] = useState({})
 
-     useEffect(() => {
+    useEffect(() => {
         const data = category.map((item, index) => ({
             avatar: item.avatar,
             name: item.name,
@@ -213,15 +248,15 @@ function CategoryList() {
         }));
         setRecord(data);
     }, [category]);
-   
-   
+
+
 
     const handleFilter = (event) => {
         const searchQuery = event.target.value.toLowerCase();
         const newData = category.filter(row => {
             return row.name.toLowerCase().includes(searchQuery);
         });
-    
+
         // Update the record state if search query is present, else reset it to display all data
         if (searchQuery) {
             setRecord(newData);
@@ -229,16 +264,16 @@ function CategoryList() {
             setRecord(category);
         }
     };
-    
 
-   
 
-   
-    
+
+
+
+
     //EndData table
 
 
-  
+
 
 
 
@@ -253,15 +288,15 @@ function CategoryList() {
                                 <div className="row mg-top-30">
                                     <div className="col-12 sherah-flex-between">
                                         <div className="sherah-breadcrumb">
-                                            <h2 className="sherah-breadcrumb__title">Product</h2>
+                                            <h2 className="sherah-breadcrumb__title">Category</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
-                                                    <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                    <Link href="/admin-dashboard">
                                                         Home
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                                 <li className="active">
-                                                    <a href="">Product</a>
+                                                    <Link href="">Category</Link>
                                                 </li>
                                             </ul>
                                         </div>
@@ -276,14 +311,14 @@ function CategoryList() {
                                 </div>
                                 <div className="sherah-table sherah-page-inner sherah-border sherah-default-bg mg-top-25">
 
-                                     <div className='form-group col-md-3 offset-md-9'>
+                                    <div className='form-group col-md-3 offset-md-9'>
                                         <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
                                     </div>
                                     <br></br>
 
                                     {category.length > 0 && (
-                                    <DataTable columns={columns} data={record} pagination />
-                                )}
+                                        <DataTable columns={columns} data={record} pagination />
+                                    )}
 
                                 </div>
                             </div>

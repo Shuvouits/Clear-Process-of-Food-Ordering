@@ -229,4 +229,26 @@ exports.updateCategory = async(req,res)=> {
     }
 }
 
+exports. deleteCategory = async(req, res)=> {
+    try{
+       
+        const categoryId = req.params.id;
+
+        const data = await Category.findOneAndDelete(categoryId)
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+}
+
 

@@ -111,4 +111,8 @@
 .sc-eTNRI {
   font-weight: bold;
   font-size: 18px;
+}  
+
+div:where(.swal2-container).swal2-backdrop-show, div:where(.swal2-container).swal2-noanimation {
+   background: none !important;
 }
