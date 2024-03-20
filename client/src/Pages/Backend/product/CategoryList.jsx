@@ -1,8 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
+
 function CategoryList() {
+    const { user } = useSelector((state) => ({ ...state }))
+
+    //Category Data
+    const [category, setCategory] = useState([])
+    const allCategory = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-category`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setCategory(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allCategory();
+    }, []);
+
+    console.log(category)
+ 
+
+    //End
+
+    //Data Table
 
     const columns = [
         {
@@ -13,7 +51,7 @@ function CategoryList() {
                     <div className="">
                         <img
                             className="product_list_thumb"
-                            src={row.image}
+                            src={row.avatar}
                             alt="#"
                         />
                     </div>
@@ -27,24 +65,24 @@ function CategoryList() {
             selector: row => row.name
         },
 
-        
+
 
         {
             name: 'Status',
             selector: row => (
                 <td className="sherah-table__column-6 sherah-table__data-6">
-                <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
-                    <label className="sherah__item-switch">
-                        <input
-                            id="status"
-                            onclick="changeCategoryStatus(2)"
-                            type="checkbox"
-                            defaultChecked=""
-                        />
-                        <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
-                    </label>
-                </div>
-            </td>
+                    <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
+                        <label className="sherah__item-switch">
+                            <input
+                                id="status"
+                                onclick="changeCategoryStatus(2)"
+                                type="checkbox"
+                                defaultChecked=""
+                            />
+                            <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
+                        </label>
+                    </div>
+                </td>
             )
         },
 
@@ -132,7 +170,7 @@ function CategoryList() {
                             </g>
                         </svg>
                     </a>
-                    
+
                 </div>
 
             )
@@ -145,25 +183,32 @@ function CategoryList() {
 
     ]
 
-    const data = [
+   /*const data = [
         {
-            image: 'https://reservq.minionionbd.com/uploads/custom-images/baked-chicken-wings-and-legs-2024-01-25-10-02-43-3199.jpg',
+            avatar: 'https://reservq.minionionbd.com/uploads/custom-images/baked-chicken-wings-and-legs-2024-01-25-10-02-43-3199.jpg',
             name: 'Baked Chicken Wings and Legs',
-          
+
             status: 'on',
             action: 'action'
 
         }
-    ]
+    ] */
 
-    const [record, setRecord] = useState(data);
+   
+   
 
     const handleFilter = (event) => {
-        const newData = data.filter(row => {
-            return row.customer_name.toLowerCase().includes(event.target.value.toLowerCase())
+        const newData = category.filter(row => {
+            return row.name.toLowerCase().includes(event.target.value.toLowerCase())
         });
         setRecord(newData);
     };
+
+    //EndData table
+
+
+  
+
 
 
     return (
@@ -200,7 +245,11 @@ function CategoryList() {
                                 </div>
                                 <div className="sherah-table sherah-page-inner sherah-border sherah-default-bg mg-top-25">
 
-                                    <DataTable columns={columns} data={record} pagination>
+                                     <div className='form-group col-md-3 offset-md-9'>
+                                        <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
+                                    </div>
+
+                                    <DataTable columns={columns} data={category} pagination>
 
                                     </DataTable>
 
