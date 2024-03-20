@@ -233,8 +233,9 @@ exports. deleteCategory = async(req, res)=> {
     try{
        
         const categoryId = req.params.id;
+        
 
-        const data = await Category.findOneAndDelete(categoryId)
+        const data = await Category.findOneAndDelete({_id : categoryId})
 
         if(!data){
             return res.status(401).json({

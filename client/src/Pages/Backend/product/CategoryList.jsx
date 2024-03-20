@@ -41,6 +41,7 @@ function CategoryList() {
     //Delete Data
 
     const handleClick = async(id) => {
+        
         try {
 
             const result = await Swal.fire({
@@ -71,6 +72,21 @@ function CategoryList() {
                 const data = await res.json();
 
                 if (res.status === 200) {
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Category Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
                     allCategory();
                 }
             }
@@ -141,11 +157,17 @@ function CategoryList() {
                             className="product_list_thumb"
                             src={row.avatar}
                             alt="#"
+                            style={{width: '80px', height: '80px'}}
                         />
                     </div>
                 </td>
 
             )
+        },
+
+        {
+            id: 'Id',
+            selector: row => row.id
         },
 
         {

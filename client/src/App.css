@@ -106,7 +106,9 @@
 
   padding-top: 20px;
   padding-bottom: 20px;
+  font-size: 17px;
 }
+
 
 .sc-eTNRI {
   font-weight: bold;
@@ -118,5 +120,14 @@ div:where(.swal2-container).swal2-backdrop-show, div:where(.swal2-container).swa
 }
 
 .sherah__item-switch--slide::after {
-  top: 3px !important;
+  top: 2px !important;
+}
+
+.loader{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  
 }
