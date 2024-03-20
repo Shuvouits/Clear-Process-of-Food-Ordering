@@ -116,3 +116,7 @@
 div:where(.swal2-container).swal2-backdrop-show, div:where(.swal2-container).swal2-noanimation {
    background: none !important;
 }
+
+.sherah__item-switch--slide::after {
+  top: 3px !important;
+}

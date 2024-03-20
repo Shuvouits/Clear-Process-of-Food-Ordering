@@ -85,6 +85,49 @@ function CategoryList() {
 
     //End
 
+    //status control
+
+    const handleStatus = async(id)=>{
+        try{
+
+            const res = await fetch(`http://localhost:8000/category-status/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Category Updated`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allCategory();
+                }
+
+        }catch(error){
+            console.log(error)
+        }
+
+    }
+
+    //end
+
     //Data Table
 
     const columns = [
@@ -126,7 +169,7 @@ function CategoryList() {
                         <label className="sherah__item-switch">
                             <input
                                 id="status"
-                                onclick="changeCategoryStatus(2)"
+                                onClick={() =>handleStatus(row.id)}
                                 type="checkbox"
                                 checked={row.status === 'Active' ? 'checked' : ''}
 
