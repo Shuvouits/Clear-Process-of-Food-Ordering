@@ -55,6 +55,7 @@ import AddBlogCategory from './Pages/Backend/Blog/AddBlogCategory'
 import AdminPrivate from './Pages/Backend/AdminPrivate'
 import NotFound from './Pages/NotFound'
 import EditCategory from './Pages/Backend/product/EditCategory'
+import EditOptional from './Pages/Backend/product/EditOptional'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -126,6 +127,9 @@ function App() {
 
             <Route path='optional-item-list' element={<OptionalItem />} />
             <Route path='optional-item-create' element={<AddOptional />} />
+            <Route path='edit-optional-item/:id' element={<EditOptional />} />
+
+
             <Route path='coupon' element={<Coupon />} />
             <Route path='coupon/create' element={<AddCoupon />} />
             <Route path='delivery-area' element={<DeliveryArea />} />

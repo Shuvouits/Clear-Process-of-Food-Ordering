@@ -1,13 +1,51 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom'
 import Swal from 'sweetalert2'
 
-function AddOptional() {
+function EditOptional() {
     const { user } = useSelector((state) => ({ ...state }))
+    const { id } = useParams()
     const [formData, setFormData] = useState({})
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
+
+    const [option, setOption] = useState({})
+    const specificOption = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/edit-optional/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setOption(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+    useEffect(() => {
+        specificOption();
+    }, []);
+
+
+
+
+    useEffect(() => {
+        setFormData({
+            name: option.name || '',
+            price: option.price || '',
+            status: option.status || ''
+        });
+    }, [option]);
 
     const handleChange = (e) => {
         setFormData({
@@ -25,7 +63,7 @@ function AddOptional() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-optional-item', {
+            const res = await fetch(`http://localhost:8000/update-optional/${option._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +80,7 @@ function AddOptional() {
                 Swal.fire({
                     toast: false,
                     animation: true,
-                    text: `Optional Item Inserted `,
+                    text: `Data Updated Successfully`,
                     icon: 'success',
                     showConfirmButton: true,
                     timer: 3000,
@@ -118,6 +156,7 @@ function AddOptional() {
                                                                         type="text"
                                                                         id="name"
                                                                         onChange={handleChange}
+                                                                        value={formData.name}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -133,6 +172,7 @@ function AddOptional() {
                                                                         placeholder="Type here"
                                                                         type="text"
                                                                         id="price"
+                                                                        value={formData.price}
                                                                         onChange={handleChange}
                                                                     />
                                                                 </div>
@@ -149,8 +189,8 @@ function AddOptional() {
                                                                     id="status"
                                                                     onChange={handleChange}
                                                                 >
-                                                                    <option value="active">Active</option>
-                                                                    <option value="inactive">Inactive</option>
+                                                                    <option value="active" selected={formData.status === 'Active'} >Active</option>
+                                                                    <option value="inactive" selected={formData.status === 'Inactive'} >Inactive</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -179,4 +219,4 @@ function AddOptional() {
     )
 }
 
-export default AddOptional
+export default EditOptional

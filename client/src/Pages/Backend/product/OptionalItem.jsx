@@ -1,11 +1,147 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function OptionalItem() {
+    const { user } = useSelector((state) => ({ ...state }))
 
+
+    const [option, setOption] = useState([])
+    const allOption = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-optional`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setOption(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allOption();
+    }, []);
+
+
+    //status control
+
+    const handleStatus = async (id) => {
+        try {
+
+            const res = await fetch(`http://localhost:8000/optional-status/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+            });
+
+            const data = await res.json();
+
+            if (res.status === 200) {
+
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: `Data Updated`,
+                    icon: 'success',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        container: 'custom-toast-container',
+                        popup: 'custom-toast-popup',
+                        title: 'custom-toast-title',
+                        icon: 'custom-toast-icon',
+                    },
+                })
+                allOption();
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+
+     //Delete Data
+
+     const handleClick = async(id) => {
+        
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Data?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-optional/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Data Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allOption();
+                }
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
+
+    //Data Table
     const columns = [
-      
+
 
         {
             name: 'Name',
@@ -17,24 +153,24 @@ function OptionalItem() {
             selector: row => row.price
         },
 
-        
+
 
         {
             name: 'Status',
             selector: row => (
                 <td className="sherah-table__column-6 sherah-table__data-6">
-                <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
-                    <label className="sherah__item-switch">
-                        <input
-                            id="status"
-                            onclick="changeCategoryStatus(2)"
-                            type="checkbox"
-                            defaultChecked=""
-                        />
-                        <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
-                    </label>
-                </div>
-            </td>
+                    <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
+                        <label className="sherah__item-switch">
+                            <input
+                                id="status"
+                                onClick={() => handleStatus(row.id)}
+                                type="checkbox"
+                                checked={row.status === 'Active' ? 'checked' : ''}
+                            />
+                            <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
+                        </label>
+                    </div>
+                </td>
             )
         },
 
@@ -42,8 +178,8 @@ function OptionalItem() {
             name: 'Action',
             selector: row => (
                 <div className="sherah-table__status__group">
-                    <a
-                        href="https://reservq.minionionbd.com/edit-product-item/2"
+                    <Link
+                        to={`/admin/edit-optional-item/${row.id}`}
                         className="sherah-table__action sherah-color2 sherah-color3__bg--opactity"
                     >
                         <svg
@@ -81,10 +217,10 @@ function OptionalItem() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    <a
-                        href="https://reservq.minionionbd.com/product-item-destroy/2"
-                        onclick="confirmation(event)"
+                    </Link>
+                    <Link
+                        onClick={() => handleClick(row.id)}
+                      
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >
                         <svg
@@ -121,8 +257,8 @@ function OptionalItem() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    
+                    </Link>
+
                 </div>
 
             )
@@ -135,25 +271,40 @@ function OptionalItem() {
 
     ]
 
-    const data = [
-        {
-          
-            name: 'Baked Chicken Wings and Legs',
-            price: '$50',
-            status: 'on',
-           
+    const [record, setRecord] = useState([])
 
-        }
-    ]
+    useEffect(() => {
+        const data = option.map((item, index) => ({
 
-    const [record, setRecord] = useState(data);
+            name: item.name,
+            price: item.price,
+            status: item.status,
+            id: item._id
+
+        }));
+
+        setRecord(data);
+
+    }, [option]);
+
 
     const handleFilter = (event) => {
-        const newData = data.filter(row => {
-            return row.customer_name.toLowerCase().includes(event.target.value.toLowerCase())
+        const searchQuery = event.target.value.toLowerCase();
+        const newData = option.filter(row => {
+            return row.name.toLowerCase().includes(searchQuery);
         });
-        setRecord(newData);
+
+        // Update the record state if search query is present, else reset it to display all data
+        if (searchQuery) {
+            setRecord(newData);
+        } else {
+            setRecord(option);
+        }
     };
+
+
+
+
 
 
     return (
@@ -167,15 +318,15 @@ function OptionalItem() {
                                 <div className="row mg-top-30">
                                     <div className="col-12 sherah-flex-between">
                                         <div className="sherah-breadcrumb">
-                                            <h2 className="sherah-breadcrumb__title">Product</h2>
+                                            <h2 className="sherah-breadcrumb__title">Edit Optional Item</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
-                                                    <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                    <a href="/admin/admin-dashboard">
                                                         Home
                                                     </a>
                                                 </li>
                                                 <li className="active">
-                                                    <a href="">Product</a>
+                                                    <Link to="#">Edit Optional</Link>
                                                 </li>
                                             </ul>
                                         </div>
@@ -189,6 +340,11 @@ function OptionalItem() {
                                     </div>
                                 </div>
                                 <div className="sherah-table sherah-page-inner sherah-border sherah-default-bg mg-top-25">
+
+                                    <div className='form-group col-md-3 offset-md-9'>
+                                        <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
+                                    </div>
+                                    <br></br>
 
                                     <DataTable columns={columns} data={record} pagination>
 

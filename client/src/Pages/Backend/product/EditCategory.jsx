@@ -20,6 +20,7 @@ function EditCategory() {
     const [loading, setLoading] = useState(false)
 
     const [formData, setFormData] = useState({})
+    
     const [category, setCategory] = useState({})
     const specificCategory = async () => {
 
@@ -56,8 +57,6 @@ function EditCategory() {
             status: category.status || ''
         });
     }, [category]);
-
-    console.log(category)
 
 
 

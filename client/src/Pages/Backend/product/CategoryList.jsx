@@ -298,7 +298,7 @@ function CategoryList() {
     ]
 
 
-    const [record, setRecord] = useState({})
+    const [record, setRecord] = useState([])
 
     useEffect(() => {
         const data = category.map((item, index) => ({

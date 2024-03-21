@@ -3,6 +3,7 @@ const Category = require('../models/category.js')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const slugify = require('slugify');
+const Optional = require('../models/optional.js');
 
 
 
@@ -278,6 +279,124 @@ exports.categoryStatus = async(req,res)=> {
     }catch(error){
         console.log(error)
     }
+}  
+
+
+exports.addOptionalItem = async(req,res)=> {
+    try{
+
+        const{name, price, status} = req.body
+
+        const optional = await new Optional({
+           
+            name,
+            price,
+            status,
+           
+        }).save();
+
+        res.status(200).json(optional)
+
+
+    }catch(error){
+        console.log(error)
+    }
 }
+
+exports.allOptional = async(req, res) => {
+
+    try{
+
+        const optional = await Optional.find();
+        return res.status(200).json(optional)
+
+    }catch(error){
+        return res.status(500).json(error)
+    }
+    
+}  
+
+exports.editOptional = async(req,res)=> {
+    try{
+        const optionId = req.params.id;
+        const data = await Optional.findById(optionId);
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+
+exports.updateOptional = async(req,res)=> {
+    try{
+        const optionId = req.params.id;
+        const {name, price, status} = req.body;
+
+        const updateData = await Optional.findByIdAndUpdate(optionId, { name, price, status}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+} 
+
+
+exports.optionalStatus = async(req,res)=> {
+    try{
+        const optionId = req.params.id;
+
+        const data = await Optional.findById({_id : optionId});
+
+        let status = data.status;
+
+        if(status === 'Active'){
+            status = 'Inactive'
+        }else{
+            status = 'Active'
+        }
+
+        const updateData = await Optional.findByIdAndUpdate(optionId, {status:status}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}   
+
+exports. deleteOptional = async(req, res)=> {
+    try{
+       
+        const optionId = req.params.id;
+        
+
+        const data = await Optional.findOneAndDelete({_id : optionId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+} 
 
 
