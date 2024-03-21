@@ -1,14 +1,52 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 
-function AddCoupon() {
+function EditCoupon() {
 
     const { user } = useSelector((state) => ({ ...state }))
-    const [formData, setFormData] = useState({})
+    const { id } = useParams()
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
+
+    const [coupon, setCoupon] = useState({})
+    const specificCoupon = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/edit-coupon/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setCoupon(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+    useEffect(() => {
+        specificCoupon();
+    }, []);
+
+    const [formData, setFormData] = useState({})
+
+    useEffect(() => {
+        setFormData({
+            name: coupon.name || '',
+            code: coupon.code || '',
+            expireDate: coupon.expireDate || '',
+            discount: coupon.discount || '',
+            status: coupon.status || ''
+        });
+    }, [coupon]);
 
     const handleChange = (e) => {
         setFormData({
@@ -18,6 +56,7 @@ function AddCoupon() {
 
     }
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true)
@@ -26,7 +65,7 @@ function AddCoupon() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-coupon', {
+            const res = await fetch(`http://localhost:8000/update-coupon/${coupon._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,7 +82,7 @@ function AddCoupon() {
                 Swal.fire({
                     toast: false,
                     animation: true,
-                    text: `Added New Category `,
+                    text: `Data Updated Successfully`,
                     icon: 'success',
                     showConfirmButton: true,
                     timer: 3000,
@@ -69,6 +108,9 @@ function AddCoupon() {
         }
     };
 
+    console.log(formData)
+
+
     return (
         <section className="sherah-adashboard sherah-show">
             <div className="container">
@@ -80,17 +122,17 @@ function AddCoupon() {
                                 <div className="row">
                                     <div className="col-12">
                                         <div className="sherah-breadcrumb mg-top-30">
-                                            <h2 className="sherah-breadcrumb__title">Create Coupon</h2>
+                                            <h2 className="sherah-breadcrumb__title">Edit Coupon</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
-                                                    <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                    <Link to="/admin/admin-dashboard">
                                                         Dashboard
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                                 <li className="active">
-                                                    <a href="https://reservq.minionionbd.com/coupon/create">
-                                                        Create Coupon
-                                                    </a>
+                                                    <Link href="#">
+                                                        Edit Coupon
+                                                    </Link>
                                                 </li>
                                             </ul>
                                         </div>
@@ -101,11 +143,7 @@ function AddCoupon() {
                                         className="sherah-wc__form-main"
                                         onSubmit={handleSubmit}
                                     >
-                                        <input
-                                            type="hidden"
-                                            name="_token"
-                                            defaultValue="QbunGZqg8VhXTZvm9qzI00RWf9a7wExq9aRuc4zP"
-                                        />
+
                                         <div className="row">
                                             <div className="col-12">
                                                 {/* Product Info */}
@@ -120,10 +158,11 @@ function AddCoupon() {
                                                                 <div className="form-group__input">
                                                                     <input
                                                                         className="sherah-wc__form-input"
-                                                                        
+
                                                                         placeholder="Type here"
                                                                         type="text"
                                                                         id="name"
+                                                                        value={formData.name}
                                                                         onChange={handleChange}
                                                                     />
                                                                 </div>
@@ -137,16 +176,17 @@ function AddCoupon() {
                                                                 <div className="form-group__input">
                                                                     <input
                                                                         className="sherah-wc__form-input"
-                                                                        
+
                                                                         placeholder="Type here"
                                                                         type="text"
                                                                         id="code"
+                                                                        value={formData.code}
                                                                         onChange={handleChange}
                                                                     />
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                       
+
                                                         <div className="col-lg-6 col-md-6 col-12">
                                                             <div className="form-group">
                                                                 <label className="sherah-wc__form-label">
@@ -158,15 +198,16 @@ function AddCoupon() {
                                                                         defaultValue=""
                                                                         placeholder="Type here"
                                                                         type="date"
-                                                                        
+
                                                                         id="expireDate"
+                                                                        value={formData.expireDate}
                                                                         onChange={handleChange}
                                                                     />
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                       
-                                                      
+
+
                                                         <div className="col-lg-6 col-md-6 col-12">
                                                             <div className="form-group">
                                                                 <label className="sherah-wc__form-label">
@@ -176,30 +217,40 @@ function AddCoupon() {
                                                                     <input
                                                                         className="sherah-wc__form-input"
                                                                         placeholder="Type here"
-                                                                        type="number"
+                                                                        type='number'
                                                                         id="discount"
+                                                                        value={formData.discount}
                                                                         onChange={handleChange}
                                                                     />
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
                                                         <div className="col-lg-6 col-md-6 col-12">
-                                                            <div className="form-group">
-                                                                <label className="sherah-wc__form-label">
-                                                                    Status *
-                                                                </label>
-                                                                <select
-                                                                    className="form-group__input"
-                                                                    aria-label="Default select example"
-                                                                    id="status"
-                                                                    onChange={handleChange}
+                                                                <div className="form-group">
+                                                                    <label className="sherah-wc__form-label">
+                                                                        Status *
+                                                                    </label>
+                                                                    <select
+                                                                        className="form-group__input"
+                                                                        aria-label="Default select example"
+                                                                        id="status"
+                                                                        onChange={handleChange}
+                                                                    >
 
-                                                                >
-                                                                    <option value="active">Active</option>
-                                                                    <option value="inactive">Inactive</option>
-                                                                </select>
+                                                                        <option value="Active" selected={formData.status === 'Active'} >Active</option>
+                                                                        <option value="Inactive" selected={formData.status === 'Inactive'}>Inactive</option>
+
+
+
+
+
+
+                                                                    </select>
+                                                                </div>
                                                             </div>
-                                                        </div>
+
+
                                                     </div>
                                                 </div>
                                                 {/* End Product Info */}
@@ -225,4 +276,4 @@ function AddCoupon() {
     )
 }
 
-export default AddCoupon
+export default EditCoupon

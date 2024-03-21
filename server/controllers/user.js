@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const slugify = require('slugify');
 const Optional = require('../models/optional.js');
+const Coupon = require('../models/coupon.js');
 
 
 
@@ -397,6 +398,131 @@ exports. deleteOptional = async(req, res)=> {
     }catch(error){
         return (error)
     }
+}   
+
+
+exports.addCoupon = async(req,res)=> {
+    try{
+
+        const{name, code, expireDate, discount, status} = req.body
+
+        const coupon = await new Coupon({
+           
+            name,
+            code,
+            expireDate,
+            discount,
+            status
+           
+        }).save();
+
+        res.status(200).json(coupon)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}  
+
+
+
+exports.allCoupon = async(req, res) => {
+
+    try{
+
+        const coupon = await Coupon.find();
+        return res.status(200).json(coupon)
+
+    }catch(error){
+        return res.status(500).json(error)
+    }
+    
 } 
+
+exports.editCoupon = async(req,res)=> {
+    try{
+        const couponId = req.params.id;
+        const data = await Coupon.findById(couponId);
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+
+exports.updateCoupon = async(req,res)=> {
+    try{
+        const couponId = req.params.id;
+        const {name, code, status, discount, expireDate} = req.body;
+
+        const updateData = await Coupon.findByIdAndUpdate(couponId, { name, code, status, discount, expireDate}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}   
+
+exports.couponStatus = async(req,res)=> {
+    try{
+        const couponId = req.params.id;
+
+        const data = await Coupon.findById({_id : couponId});
+
+        let status = data.status;
+
+        if(status === 'Active'){
+            status = 'Inactive'
+        }else{
+            status = 'Active'
+        }
+
+        const updateData = await Coupon.findByIdAndUpdate(couponId, {status:status}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}  
+
+
+exports. deleteCoupon = async(req, res)=> {
+    try{
+       
+        const couponId = req.params.id;
+        
+
+        const data = await Coupon.findOneAndDelete({_id : couponId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+
+  
 
 

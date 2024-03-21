@@ -56,6 +56,7 @@ import AdminPrivate from './Pages/Backend/AdminPrivate'
 import NotFound from './Pages/NotFound'
 import EditCategory from './Pages/Backend/product/EditCategory'
 import EditOptional from './Pages/Backend/product/EditOptional'
+import EditCoupon from './Pages/Backend/product/EditCoupon'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -132,6 +133,9 @@ function App() {
 
             <Route path='coupon' element={<Coupon />} />
             <Route path='coupon/create' element={<AddCoupon />} />
+            <Route path='edit-coupon/:id' element={<EditCoupon />} />
+
+
             <Route path='delivery-area' element={<DeliveryArea />} />
             <Route path='create/delivery' element={<AddDelivery />} />
             <Route path='timeslot' element={<Timeslot />} />

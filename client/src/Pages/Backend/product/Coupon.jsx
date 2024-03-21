@@ -1,62 +1,193 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function Coupon() {
+    const { user } = useSelector((state) => ({ ...state }))
+
+    //Coupon Data
+    const [coupon, setCoupon] = useState([])
+
+    const allCoupon = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-coupon`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setCoupon(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allCoupon();
+    }, []);
+
+     //status control
+
+     const handleStatus = async(id)=>{
+        try{
+
+            const res = await fetch(`http://localhost:8000/coupon-status/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Coupon Status Updated`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allCoupon();
+                }
+
+        }catch(error){
+            console.log(error)
+        }
+
+    } 
+
+    //Delete Data
+
+    const handleClick = async(id) => {
+        
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Coupon?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-coupon/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Coupon Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allCoupon();
+                }
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
+    
+
+    //Data
 
     const columns = [
-      
 
         {
             name: 'SN',
-            selector: row => row.sn
+            selector: row => row.index
         },
-
+       
+     
         {
             name: 'Name',
             selector: row => row.name
         },
 
-       
-
         {
             name: 'Code',
             selector: row => row.code
-        },
+        }, 
 
-        
         {
-            name: 'Discount',
-            selector: row => row.discount
+            name: 'ExpireDate',
+            selector: row => row.expireDate
         },
 
-        
         {
-            name: 'Expired Date',
-            selector: row => row.expire
+            name: 'DisCount',
+            selector: row => (<span>{row.discount}%</span>)
         },
 
-        
-
-        
-        
 
         {
             name: 'Status',
             selector: row => (
                 <td className="sherah-table__column-6 sherah-table__data-6">
-                <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
-                    <label className="sherah__item-switch">
-                        <input
-                            id="status"
-                            onclick="changeCategoryStatus(2)"
-                            type="checkbox"
-                            defaultChecked=""
-                        />
-                        <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
-                    </label>
-                </div>
-            </td>
+                    <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
+                        <label className="sherah__item-switch">
+                            <input
+                                id="status"
+                                onClick={() =>handleStatus(row.id)}
+                                type="checkbox"
+                                checked={row.status === 'Active' ? 'checked' : ''}
+
+                            />
+                            <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
+                        </label>
+                    </div>
+                </td>
             )
         },
 
@@ -64,8 +195,8 @@ function Coupon() {
             name: 'Action',
             selector: row => (
                 <div className="sherah-table__status__group">
-                    <a
-                        href="https://reservq.minionionbd.com/edit-product-item/2"
+                    <Link
+                        to={`/admin/edit-coupon/${row.id}`}
                         className="sherah-table__action sherah-color2 sherah-color3__bg--opactity"
                     >
                         <svg
@@ -103,10 +234,10 @@ function Coupon() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    <a
-                        href="https://reservq.minionionbd.com/product-item-destroy/2"
-                        onclick="confirmation(event)"
+                    </Link>
+                    <Link
+                        to='#'
+                        onClick={() => handleClick(row.id)}
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >
                         <svg
@@ -143,40 +274,43 @@ function Coupon() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    
+                    </Link>
+
                 </div>
 
             )
         },
 
-
-
-
-
-
     ]
 
-    const data = [
-        {
-            sn: 1212,
-            name: 'Baked Chicken Wings and Legs',
-            code: '5000',
-            discount: '400',
-            expire: '2025-12-10',
-            status: 'on',
-           
+    const [record, setRecord] = useState([])
 
-        }
-    ]
-
-    const [record, setRecord] = useState(data);
+    useEffect(() => {
+        const data = coupon.map((item, index) => ({
+            index : index+1,
+            name: item.name,
+            code: item.code,
+            expireDate: item.expireDate,
+            discount: item.discount,
+            status: item.status,
+            id: item._id
+        }));
+        setRecord(data);
+    }, [coupon]);
 
     const handleFilter = (event) => {
-        const newData = data.filter(row => {
-            return row.customer_name.toLowerCase().includes(event.target.value.toLowerCase())
+        const searchQuery = event.target.value.toLowerCase();
+
+        const newData = coupon.filter(row => {
+            return row.name.toLowerCase().includes(searchQuery);
         });
-        setRecord(newData);
+
+        // Update the record state if search query is present, else reset it to display all data
+        if (searchQuery) {
+            setRecord(newData);
+        } else {
+            setRecord(coupon);
+        }
     };
 
 
@@ -213,6 +347,11 @@ function Coupon() {
                                     </div>
                                 </div>
                                 <div className="sherah-table sherah-page-inner sherah-border sherah-default-bg mg-top-25">
+
+                                <div className='form-group col-md-3 offset-md-9'>
+                                        <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
+                                    </div>
+                                    <br></br>
 
                                     <DataTable columns={columns} data={record} pagination>
 
