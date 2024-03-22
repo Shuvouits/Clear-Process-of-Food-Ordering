@@ -6,6 +6,7 @@ const slugify = require('slugify');
 const Optional = require('../models/optional.js');
 const Coupon = require('../models/coupon.js');
 const Delivery = require('../models/delivery.js')
+const Time = require('../models/time.js')
 
 
 
@@ -628,6 +629,124 @@ exports. deleteDelivery = async(req, res)=> {
         
 
         const data = await Delivery.findOneAndDelete({_id : deliveryId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+exports.addTime = async(req,res)=> {
+    try{
+
+        const{slot, status} = req.body
+
+        const time = await new Time({
+           
+            slot,
+            status
+           
+        }).save();
+
+        res.status(200).json(time)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
+
+exports.allTime = async(req, res) => {
+
+    try{
+
+        const time = await Time.find();
+        return res.status(200).json(time)
+
+    }catch(error){
+        return res.status(500).json(error)
+    }
+    
+}  
+
+
+exports.timeStatus = async(req,res)=> {
+    try{
+        const timeId = req.params.id;
+
+        const data = await Time.findById({_id : timeId});
+
+        let status = data.status;
+
+        if(status === 'Active'){
+            status = 'Inactive'
+        }else{
+            status = 'Active'
+        }
+
+        const updateData = await Time.findByIdAndUpdate(timeId, {status:status}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}  
+
+
+exports.editTime = async(req,res)=> {
+    try{
+        const timeId = req.params.id;
+        const data = await Time.findById(timeId);
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}   
+
+
+exports.updateTime = async(req,res)=> {
+    try{
+        const timeId = req.params.id;
+        const {slot} = req.body;
+
+        const updateData = await Time.findByIdAndUpdate(timeId, {slot}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+} 
+
+exports. deleteTime = async(req, res)=> {
+    try{
+       
+        const timeId = req.params.id;
+        
+
+        const data = await Time.findOneAndDelete({_id : timeId})
 
         if(!data){
             return res.status(401).json({

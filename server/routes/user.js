@@ -3,7 +3,8 @@ const {
     login, logout, passwordChange, profileUpdate, addCategory, allCategory, editCategory, updateCategory, deleteCategory, 
     categoryStatus, addOptionalItem, allOptional, editOptional, updateOptional, optionalStatus, deleteOptional, addCoupon,
     allCoupon, editCoupon, updateCoupon, couponStatus, deleteCoupon, addDelivery, allDelivery,
-    editDelivery, updateDelivery, deliveryStatus, deleteDelivery
+    editDelivery, updateDelivery, deliveryStatus, deleteDelivery, addTime, allTime, timeStatus,
+    editTime, updateTime, deleteTime
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -43,6 +44,13 @@ router.get('/edit-delivery/:id', authUser, editDelivery);
 router.post('/update-delivery/:id', authUser, updateDelivery);
 router.post('/delivery-status/:id', authUser, deliveryStatus);
 router.get('/delete-delivery/:id', authUser, deleteDelivery);
+
+router.post('/add-time', authUser, addTime);
+router.get('/all-time', authUser, allTime);
+router.get('/edit-time/:id', authUser, editTime);
+router.post('/time-status/:id', authUser, timeStatus);
+router.post('/update-time/:id', authUser, updateTime);
+router.get('/delete-time/:id', authUser, deleteTime);
 
 
 

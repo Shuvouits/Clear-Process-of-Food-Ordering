@@ -1,38 +1,178 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function Timeslot() {
 
+    const { user } = useSelector((state) => ({ ...state }))
+
+    //Time Data
+    const [time, setTime] = useState([])
+
+    const allTime = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-time`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setTime(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allTime();
+    }, []);
+
+    //status control
+
+    const handleStatus = async(id)=>{
+        try{
+
+            const res = await fetch(`http://localhost:8000/time-status/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Coupon Status Updated`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allTime();
+                }
+
+        }catch(error){
+            console.log(error)
+        }
+
+    } 
+
+    //Delete
+
+    const handleClick = async(id) => {
+        
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Coupon?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-time/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Data Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allTime();
+                }
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
+
+
+    //Data table
+
     const columns = [
-      
+
         {
             name: 'SN',
-            selector: row => row.sn
+            selector: row => row.index
         },
 
         {
             name: 'Slot Name',
-            selector: row => row.slot_name
+            selector: row => row.slot
         },
 
-        
+
         {
             name: 'Status',
             selector: row => (
                 <td className="sherah-table__column-6 sherah-table__data-6">
-                <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
-                    <label className="sherah__item-switch">
-                        <input
-                            id="status"
-                            onclick="changeCategoryStatus(2)"
-                            type="checkbox"
-                            defaultChecked=""
-                        />
-                        <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
-                    </label>
-                </div>
-            </td>
+                    <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
+                        <label className="sherah__item-switch">
+                            <input
+                                id="status"
+                                onClick={() =>handleStatus(row.id)}
+                                type="checkbox"
+                                checked={row.status === 'Active' ? 'checked' : ''}
+                                
+                            />
+                            <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
+                        </label>
+                    </div>
+                </td>
             )
         },
 
@@ -40,8 +180,8 @@ function Timeslot() {
             name: 'Action',
             selector: row => (
                 <div className="sherah-table__status__group">
-                    <a
-                        href="https://reservq.minionionbd.com/edit-product-item/2"
+                    <Link
+                        to={`/admin/edit-timeslot/${row.id}`}
                         className="sherah-table__action sherah-color2 sherah-color3__bg--opactity"
                     >
                         <svg
@@ -79,10 +219,10 @@ function Timeslot() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    <a
-                        href="https://reservq.minionionbd.com/product-item-destroy/2"
-                        onclick="confirmation(event)"
+                    </Link>
+                    <Link
+                       
+                       onClick={() => handleClick(row.id)}
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >
                         <svg
@@ -119,8 +259,8 @@ function Timeslot() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    
+                    </Link>
+
                 </div>
 
             )
@@ -133,17 +273,21 @@ function Timeslot() {
 
     ]
 
-    const data = [
-        {
-            sn: '1220202',
-            slot_name: '12:00 PM - 12:30 PM',
-            status: 'on',
-           
+    const [record, setRecord] = useState([])
 
-        }
-    ]
+    useEffect(() => {
+        const data = time.map((item, index) => ({
+            index: index + 1,
+            slot: item.slot,
+            status: item.status,
+            id: item._id
+        }));
+        setRecord(data);
+    }, [time]);
 
-    const [record, setRecord] = useState(data);
+
+
+
 
     const handleFilter = (event) => {
         const newData = data.filter(row => {
@@ -187,6 +331,11 @@ function Timeslot() {
                                 </div>
                                 <div className="sherah-table sherah-page-inner sherah-border sherah-default-bg mg-top-25">
 
+
+                                    <div className='form-group col-md-3 offset-md-9'>
+                                        <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
+                                    </div>
+                                    <br></br>
                                     <DataTable columns={columns} data={record} pagination>
 
                                     </DataTable>

@@ -58,6 +58,7 @@ import EditCategory from './Pages/Backend/product/EditCategory'
 import EditOptional from './Pages/Backend/product/EditOptional'
 import EditCoupon from './Pages/Backend/product/EditCoupon'
 import EditDelivery from './Pages/Backend/product/EditDelivery'
+import EditTime from './Pages/Backend/product/EditTime'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -145,6 +146,9 @@ function App() {
 
             <Route path='timeslot' element={<Timeslot />} />
             <Route path='timeslot/create' element={<AddTimeSlot />} />
+            <Route path='edit-timeslot/:id' element={<EditTime />} />
+
+
             <Route path='customer-list' element={<CustomerList />} />
             <Route path='profile' element={<AdminProfile />} />
             <Route path='blogs' element={<Blogs />} />

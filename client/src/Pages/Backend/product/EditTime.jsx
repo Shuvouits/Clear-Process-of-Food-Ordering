@@ -1,14 +1,49 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 
-function AddTimeSlot() {
+function EditTime() {
 
     const { user } = useSelector((state) => ({ ...state }))
-    const [formData, setFormData] = useState({})
+    const { id } = useParams()
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
+
+    const [time, setTime] = useState({})
+    const specificTime = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/edit-time/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setTime(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+    useEffect(() => {
+        specificTime();
+    }, []);
+
+    const [formData, setFormData] = useState({})
+
+    useEffect(() => {
+        setFormData({
+            slot: time.slot || '',
+            status: time.status || ''
+        });
+    }, [time]);
 
     const handleChange = (e) => {
         setFormData({
@@ -18,15 +53,16 @@ function AddTimeSlot() {
 
     }
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true)
-        console.log(formData)
+
 
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-time', {
+            const res = await fetch(`http://localhost:8000/update-time/${time._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,7 +79,7 @@ function AddTimeSlot() {
                 Swal.fire({
                     toast: false,
                     animation: true,
-                    text: `Added New Category `,
+                    text: `Data Updated Successfully`,
                     icon: 'success',
                     showConfirmButton: true,
                     timer: 3000,
@@ -69,6 +105,7 @@ function AddTimeSlot() {
         }
     };
 
+    console.log(formData)
 
 
     return (
@@ -82,15 +119,15 @@ function AddTimeSlot() {
                                 <div className="row">
                                     <div className="col-12">
                                         <div className="sherah-breadcrumb mg-top-30">
-                                            <h2 className="sherah-breadcrumb__title">Create Time Slot</h2>
+                                            <h2 className="sherah-breadcrumb__title">Edit Time Slot</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
-                                                    <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                    <Link to="/admin/dashboard">
                                                         Dashboard
-                                                    </a>
+                                                    </Link>
                                                 </li>
                                                 <li className="active">
-                                                    <a href="">Create Time Slot</a>
+                                                    <Link to="#">Edit Time Slot</Link>
                                                 </li>
                                             </ul>
                                         </div>
@@ -116,11 +153,12 @@ function AddTimeSlot() {
                                                                 <div className="form-group__input">
                                                                     <input
                                                                         className="sherah-wc__form-input"
-                                                                        defaultValue=""
+                                                                       
                                                                         placeholder="Type here"
                                                                         type="text"
                                                                         id="slot"
                                                                         onChange={handleChange}
+                                                                        value={formData.slot}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -150,4 +188,4 @@ function AddTimeSlot() {
     )
 }
 
-export default AddTimeSlot
+export default EditTime
