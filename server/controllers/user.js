@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const slugify = require('slugify');
 const Optional = require('../models/optional.js');
 const Coupon = require('../models/coupon.js');
+const Delivery = require('../models/delivery.js')
 
 
 
@@ -506,6 +507,127 @@ exports. deleteCoupon = async(req, res)=> {
         
 
         const data = await Coupon.findOneAndDelete({_id : couponId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+}   
+
+
+exports.addDelivery = async(req,res)=> {
+    try{
+
+        const{name, minTime, maxTime, dfee, status} = req.body
+
+        const delivery = await new Delivery({
+           
+            name,
+            minTime,
+            maxTime,
+            dfee,
+            status
+           
+        }).save();
+
+        res.status(200).json(delivery)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}    
+
+
+
+exports.allDelivery = async(req, res) => {
+
+    try{
+
+        const delivery = await Delivery.find();
+        return res.status(200).json(delivery)
+
+    }catch(error){
+        return res.status(500).json(error)
+    }
+    
+}  
+
+exports.editDelivery = async(req,res)=> {
+    try{
+        const deliveryId = req.params.id;
+        const data = await Delivery.findById(deliveryId);
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+exports.updateDelivery = async(req,res)=> {
+    try{
+        const deliveryId = req.params.id;
+        const {name, minTime, maxTime, dfee, status} = req.body;
+
+        const updateData = await Delivery.findByIdAndUpdate(deliveryId, { name, minTime, maxTime, dfee, status}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}   
+
+
+exports.deliveryStatus = async(req,res)=> {
+    try{
+        const deliveryId = req.params.id;
+
+        const data = await Delivery.findById({_id : deliveryId});
+
+        let status = data.status;
+
+        if(status === 'Active'){
+            status = 'Inactive'
+        }else{
+            status = 'Active'
+        }
+
+        const updateData = await Delivery.findByIdAndUpdate(deliveryId, {status:status}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}  
+
+exports. deleteDelivery = async(req, res)=> {
+    try{
+       
+        const deliveryId = req.params.id;
+        
+
+        const data = await Delivery.findOneAndDelete({_id : deliveryId})
 
         if(!data){
             return res.status(401).json({

@@ -57,6 +57,7 @@ import NotFound from './Pages/NotFound'
 import EditCategory from './Pages/Backend/product/EditCategory'
 import EditOptional from './Pages/Backend/product/EditOptional'
 import EditCoupon from './Pages/Backend/product/EditCoupon'
+import EditDelivery from './Pages/Backend/product/EditDelivery'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -138,6 +139,10 @@ function App() {
 
             <Route path='delivery-area' element={<DeliveryArea />} />
             <Route path='create/delivery' element={<AddDelivery />} />
+            <Route path='edit-delivery-item/:id' element={<EditDelivery />} />
+
+
+
             <Route path='timeslot' element={<Timeslot />} />
             <Route path='timeslot/create' element={<AddTimeSlot />} />
             <Route path='customer-list' element={<CustomerList />} />

@@ -1,14 +1,53 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import Swal from 'sweetalert2'
 
-function AddDelivery() {
+function EditDelivery() {
 
     const { user } = useSelector((state) => ({ ...state }))
-    const [formData, setFormData] = useState({})
+    const { id } = useParams()
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
+
+    const [delivery, setDelivery] = useState({})
+    const specificDelivery = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/edit-delivery/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setDelivery(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+    useEffect(() => {
+        specificDelivery();
+    }, []);
+
+
+    const [formData, setFormData] = useState({})
+
+    useEffect(() => {
+        setFormData({
+            name: delivery.name || '',
+            minTime: delivery.minTime || '',
+            maxTime: delivery.maxTime || '',
+            dfee: delivery.dfee || '',
+            status: delivery.status || ''
+        });
+    }, [delivery]);
 
     const handleChange = (e) => {
         setFormData({
@@ -26,7 +65,7 @@ function AddDelivery() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-delivery', {
+            const res = await fetch(`http://localhost:8000/update-delivery/${delivery._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +121,7 @@ function AddDelivery() {
                                 <div className="row">
                                     <div className="col-12">
                                         <div className="sherah-breadcrumb mg-top-30">
-                                            <h2 className="sherah-breadcrumb__title">Delivery Area</h2>
+                                            <h2 className="sherah-breadcrumb__title"> Edit Delivery Area</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
                                                     <a href="https://reservq.minionionbd.com/admin-dashboard">
@@ -90,7 +129,7 @@ function AddDelivery() {
                                                     </a>
                                                 </li>
                                                 <li className="active">
-                                                    <a href="">Delivery Area</a>
+                                                    <a href=""> Edit Delivery Area</a>
                                                 </li>
                                             </ul>
                                         </div>
@@ -120,6 +159,7 @@ function AddDelivery() {
                                                                         id="name"
                                                                         onChange={handleChange}
                                                                         required
+                                                                        value={formData.name}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -137,6 +177,7 @@ function AddDelivery() {
                                                                         id="minTime"
                                                                         onChange={handleChange}
                                                                         required
+                                                                        value={formData.minTime}
                                                                         
                                                                     />
                                                                 </div>
@@ -155,6 +196,7 @@ function AddDelivery() {
                                                                         id="maxTime"
                                                                         onChange={handleChange}
                                                                         required
+                                                                        value={formData.maxTime}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -172,6 +214,7 @@ function AddDelivery() {
                                                                         onChange={handleChange}
                                                                         id="dfee"
                                                                         required
+                                                                        value={formData.dfee}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -187,10 +230,8 @@ function AddDelivery() {
                                                                     id="status"
                                                                     onChange={handleChange}
                                                                 >
-                                                                   <option value="Active">Active</option>
-                                                                        <option value="Inactive">Inactive</option>
-
-
+                                                                     <option value="Active" selected={formData.status === 'Active'} >Active</option>
+                                                                        <option value="Inactive" selected={formData.status === 'Inactive'}>Inactive</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -219,4 +260,4 @@ function AddDelivery() {
     )
 }
 
-export default AddDelivery
+export default EditDelivery

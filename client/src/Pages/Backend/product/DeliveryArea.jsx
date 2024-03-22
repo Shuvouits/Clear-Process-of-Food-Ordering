@@ -1,14 +1,156 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function DeliveryArea() {
 
+    const { user } = useSelector((state) => ({ ...state }))
+
+    //Coupon Data
+    const [delivery, setDelivery] = useState([])
+
+    const allDelivery = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-delivery`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setDelivery(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allDelivery();
+    }, []);
+
+     //status control
+
+     const handleStatus = async(id)=>{
+        
+        try{
+
+            const res = await fetch(`http://localhost:8000/delivery-status/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Status Updated Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allDelivery();
+                }
+
+        }catch(error){
+            console.log(error)
+        }
+
+    } 
+
+    //delete Data
+
+    const handleClick = async(id) => {
+        
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Coupon?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-delivery/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Coupon Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allDelivery();
+                }
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
+
+
+
+
+    
+    //Data Table
     const columns = [
 
         {
             name: 'SN',
-            selector: row => row.sn
+            selector: row => row.index
         },
       
 
@@ -19,7 +161,12 @@ function DeliveryArea() {
 
         {
             name: 'Delivery Time',
-            selector: row => row.dtime
+            selector: row => (<span>{row.minTime} - {row.maxTime} Minutes</span>)
+        },
+
+        {
+            name: 'Delivery Fee',
+            selector: row => (<span>{row.dfee}Tk.</span>)
         },
 
     
@@ -30,10 +177,10 @@ function DeliveryArea() {
                 <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
                     <label className="sherah__item-switch">
                         <input
-                            id="status"
-                            onclick="changeCategoryStatus(2)"
-                            type="checkbox"
-                            defaultChecked=""
+                           id="status"
+                           onClick={() =>handleStatus(row.id)}
+                           type="checkbox"
+                           checked={row.status === 'Active' ? 'checked' : ''}
                         />
                         <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
                     </label>
@@ -46,8 +193,8 @@ function DeliveryArea() {
             name: 'Action',
             selector: row => (
                 <div className="sherah-table__status__group">
-                    <a
-                        href="https://reservq.minionionbd.com/edit-product-item/2"
+                    <Link
+                        to={`/admin/edit-delivery-item/${row.id}`}
                         className="sherah-table__action sherah-color2 sherah-color3__bg--opactity"
                     >
                         <svg
@@ -85,10 +232,10 @@ function DeliveryArea() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    <a
-                        href="https://reservq.minionionbd.com/product-item-destroy/2"
-                        onclick="confirmation(event)"
+                    </Link>
+                    <Link
+                        to="#"
+                        onClick={() => handleClick(row.id)}
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >
                         <svg
@@ -125,7 +272,7 @@ function DeliveryArea() {
                                 />
                             </g>
                         </svg>
-                    </a>
+                    </Link>
                     
                 </div>
 
@@ -137,27 +284,39 @@ function DeliveryArea() {
 
 
 
-    ]
+    ] 
 
-    const data = [
-        {
-            sn: '400',
-            name: 'Baked Chicken Wings and Legs',
-            dtime: '2022/6/23',
-            status: 'on',
-           
+    const [record, setRecord] = useState([])
 
-        }
-    ]
-
-    const [record, setRecord] = useState(data);
+    useEffect(() => {
+        const data = delivery.map((item, index) => ({
+            index : index+1,
+            name: item.name,
+            minTime: item.minTime,
+            dfee: item.dfee,
+            maxTime: item.maxTime,
+            status: item.status,
+            id: item._id
+        }));
+        setRecord(data);
+    }, [delivery]);
 
     const handleFilter = (event) => {
-        const newData = data.filter(row => {
-            return row.customer_name.toLowerCase().includes(event.target.value.toLowerCase())
+        const searchQuery = event.target.value.toLowerCase();
+
+        const newData = coupon.filter(row => {
+            return row.name.toLowerCase().includes(searchQuery);
         });
-        setRecord(newData);
+
+        // Update the record state if search query is present, else reset it to display all data
+        if (searchQuery) {
+            setRecord(newData);
+        } else {
+            setRecord(delivery);
+        }
     };
+
+   
 
 
     return (

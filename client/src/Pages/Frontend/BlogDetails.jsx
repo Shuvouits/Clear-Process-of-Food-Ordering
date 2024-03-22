@@ -192,12 +192,8 @@ function BlogDetails() {
                                             action="https://reservq.minionionbd.com/blog/comment"
                                             method="POST"
                                         >
-                                            <input
-                                                type="hidden"
-                                                name="_token"
-                                                defaultValue="vKsd7uvI7IdkeSiahIEZwpX30NwWuUAtOKDLmzSn"
-                                            />
-                                            <input type="hidden" name="blog_id" defaultValue={31} />
+                                            
+                                            
                                             <div className="from-box">
                                                 <div className="from-item">
                                                     <div className="from-inner-two pb-4">
@@ -205,9 +201,10 @@ function BlogDetails() {
                                                             className="form-control"
                                                             name="comment"
                                                             id="exampleFormControlTextarea3"
-                                                            rows={5}
+                                                            style={{height: '200px'}}
+                                                            
                                                             placeholder="Type here *"
-                                                            defaultValue={"                            "}
+                                                            
                                                         />
                                                     </div>
                                                     <div className="form-group homec-form-input">

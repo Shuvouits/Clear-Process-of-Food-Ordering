@@ -2,7 +2,8 @@ const express = require('express');
 const {
     login, logout, passwordChange, profileUpdate, addCategory, allCategory, editCategory, updateCategory, deleteCategory, 
     categoryStatus, addOptionalItem, allOptional, editOptional, updateOptional, optionalStatus, deleteOptional, addCoupon,
-    allCoupon, editCoupon, updateCoupon, couponStatus, deleteCoupon
+    allCoupon, editCoupon, updateCoupon, couponStatus, deleteCoupon, addDelivery, allDelivery,
+    editDelivery, updateDelivery, deliveryStatus, deleteDelivery
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -35,6 +36,13 @@ router.get('/edit-coupon/:id', authUser, editCoupon);
 router.post('/update-coupon/:id', authUser, updateCoupon);
 router.post('/coupon-status/:id', authUser, couponStatus);
 router.get('/delete-coupon/:id', authUser, deleteCoupon);
+
+router.post('/add-delivery', authUser, addDelivery);
+router.get('/all-delivery', authUser, allDelivery);
+router.get('/edit-delivery/:id', authUser, editDelivery);
+router.post('/update-delivery/:id', authUser, updateDelivery);
+router.post('/delivery-status/:id', authUser, deliveryStatus);
+router.get('/delete-delivery/:id', authUser, deleteDelivery);
 
 
 

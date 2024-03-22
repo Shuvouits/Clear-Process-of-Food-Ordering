@@ -11,42 +11,65 @@ function Navbar({ handleSidebar }) {
     const dispatch = useDispatch();
 
     const handleLogOut = async () => {
-        alert('Are you sure?')
+        
         try {
 
-            const res = await fetch('http://localhost:8000/logout', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${user.token}`,
-                }
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Are You Logged Out?',
+                icon: 'warning',
+                position: 'center',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
             });
 
-            const data = await res.json();
+            if (result.isConfirmed) {
 
-            if (res.status === 200) {
-                dispatch({ type: "LOGOUT", payload: null });
-                Cookies.set("user", null);
+                const res = await fetch('http://localhost:8000/logout', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`,
+                    }
+                });
+    
+                const data = await res.json();
+    
+                if (res.status === 200) {
+                    dispatch({ type: "LOGOUT", payload: null });
+                    Cookies.set("user", null);
+    
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: 'You Have Successfully Logged Out',
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+    
+    
+                    navigate('/admin/login')
+                }
 
-                Swal.fire({
-                    toast: false,
-                    animation: true,
-                    text: 'You Have Successfully Logged Out',
-                    icon: 'success',
-                    showConfirmButton: true,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    customClass: {
-                        container: 'custom-toast-container',
-                        popup: 'custom-toast-popup',
-                        title: 'custom-toast-title',
-                        icon: 'custom-toast-icon',
-                    },
-                })
-
-
-                navigate('/admin/login')
             }
+
+           
 
         } catch (error) {
             console.log(error)
@@ -131,13 +154,13 @@ function Navbar({ handleSidebar }) {
                                                 <div className="sherah-header__author sherah-flex__center--top">
                                                     <div className="sherah-header__author-img">
                                                         <img
-                                                            src="https://reservq.minionionbd.com/uploads/custom-images/john-doe-2024-01-13-04-47-55-9146.jpg"
+                                                            src={user.avatar}
                                                             alt="#"
                                                         />
                                                     </div>
                                                     <div className="sherah-header__author--info sherah-dflex sherah-dflex__base">
                                                         <h4 className="sherah-header__author--title  sherah-dflex sherah-dflex__column">
-                                                            John Doe
+                                                            {user.fullName}
                                                             <span className="sherah-header__author--text">
                                                                 Admin
                                                             </span>

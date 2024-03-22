@@ -239,7 +239,7 @@ function AdminProfile() {
                                                                                         <div className="sherah-profile-cover sherah-offset-bg sherah-dflex">
                                                                                             <div className="sherah-profile-cover__img">
                                                                                                 <img
-                                                                                                    src="https://reservq.minionionbd.com/uploads/custom-images/john-doe-2024-01-13-04-47-55-9146.jpg"
+                                                                                                    src={user.avatar}
                                                                                                     alt="#"
                                                                                                 />
                                                                                             </div>
