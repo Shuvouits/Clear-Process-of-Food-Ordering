@@ -1,6 +1,38 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function AddProduct() {
+
+    const [productSize, setProductSize] = useState([
+        {
+            id: 1,
+            size: '',
+            price: ''
+        },
+    ]);
+
+    const handleAddProduct = () => {
+        setProductSize([
+            ...productSize,
+            { id: productSize.length + 1, size: '', price: '' },
+        ]);
+    };
+
+    const handleRemoveProduct = (id) => {
+        setProductSize(productSize.filter((productSize) => productSize.id !== id));
+
+    };
+
+    const handleProductChange = (id, field, value) => {
+        setProductSize((prevProductSize) =>
+            prevProductSize.map((productSize) =>
+                productSize.id === id ? { ...productSize, [field]: value } : productSize
+            )
+        );
+    };
+
+    console.log(productSize)
+
+
     return (
         <section className="sherah-adashboard sherah-show">
             <div className="container">
@@ -479,44 +511,70 @@ function AddProduct() {
                                                                 <label className="sherah-wc__form-label">
                                                                     Product Size
                                                                 </label>
+
+
                                                                 <div className="checkbox-group">
-                                                                    <table
-                                                                        className="table table-bordered table-hover"
-                                                                        id="dynamic_field"
-                                                                    >
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        name="size[]"
-                                                                                        placeholder="Enter Size"
-                                                                                        className="form-control name_list"
-                                                                                    />
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input
-                                                                                        type="number"
-                                                                                        name="price[]"
-                                                                                        placeholder="Enter Price"
-                                                                                        className="form-control name_email"
-                                                                                    />
-                                                                                </td>
-                                                                                <td>
-                                                                                    <button
-                                                                                        type="button"
-                                                                                        name="add"
-                                                                                        id="add"
-                                                                                        className="btn btn-primary"
-                                                                                    >
-                                                                                        +
-                                                                                    </button>
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
+            <table className="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Size</th>
+                        <th>Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {productSize.map((data) => (
+                        <tr key={data.id}>
+                            <td>
+                                <input
+                                    type="text"
+                                    value={data.size}
+                                    onChange={(e) => handleProductChange(data.id, 'size', e.target.value)}
+                                    placeholder="Enter Size"
+                                    className="form-control name_list"
+                                />
+                            </td>
+                            <td>
+                                <input
+                                    type="number"
+                                    value={data.price}
+                                    onChange={(e) => handleProductChange(data.id, 'price', e.target.value)}
+                                    placeholder="Enter Price"
+                                    className="form-control name_email"
+                                />
+                            </td>
+                            <td>
+                                <button
+                                    type="button"
+                                    className="btn btn-danger"
+                                    onClick={() => handleRemoveProduct(data.id)}
+                                >
+                                    -
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+            <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleAddProduct}
+            >
+                +
+            </button>
+        </div>
+
+
+
+
+
                                                             </div>
+
+
+
+
+
                                                         </div>
                                                         <div className="col-12">
                                                             <div className="form-group">
