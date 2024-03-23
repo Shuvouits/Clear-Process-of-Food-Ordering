@@ -140,4 +140,8 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
  
 }
 
+.multiSelectContainer {
+  width: 72vw !important;
+}
+
 

@@ -3,11 +3,13 @@ import { useSelector } from 'react-redux';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app, storage } from '../../firebase.js'
 import { useNavigate } from 'react-router-dom'
+import { Multiselect } from 'multiselect-react-dropdown';
 
 
 function AddProduct() {
 
     const { user } = useSelector((state) => ({ ...state }))
+
 
 
     //Product Dynamic Form
@@ -129,8 +131,16 @@ function AddProduct() {
         allOption();
     }, []);
 
+    function handleOption(event) {
+        const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
+    }
+
+
+
+
+
     //product Thumbnail process
-    const [formData, setFormData] = useState({})
+
 
     const navigate = useNavigate();
 
@@ -192,7 +202,7 @@ function AddProduct() {
             setFileUploadError(true);
         }, () => {
             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                setFormData({ ...formData, avatar: downloadURL });
+                setFormData({ ...formData, vavatar: downloadURL });
                 setVimagePreview(downloadURL);
                 setVimageLoading(false)
             });
@@ -205,7 +215,7 @@ function AddProduct() {
             vhandleFileUpload(vfile)
         }
 
-    }, [vfile]); 
+    }, [vfile]);
 
 
 
@@ -215,59 +225,116 @@ function AddProduct() {
     const [mimagePreview, setMimagePreview] = useState([]);
     const [mfiles, setMfiles] = useState([]);
 
+
     const mhandleFileUpload = (mfile) => {
         setMimageLoading(true);
         const storage = getStorage(app);
         const fileName = new Date().getTime() + mfile.name;
         const storageRef = ref(storage, fileName);
         const uploadTask = uploadBytesResumable(storageRef, mfile);
-    
+
         uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Handle progress
-          },
-          (error) => {
-            // Handle errors
-            setFileUploadErrors([...fileUploadErrors, error]);
-          },
-          () => {
-            // Handle successful upload
-            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                setMimagePreview([...mimagePreview, downloadURL]);
-                setMimageLoading(false);
-            });
-          }
+            'state_changed',
+            (snapshot) => {
+                // Handle progress
+            },
+            (error) => {
+                // Handle errors
+                setFileUploadErrors([...fileUploadErrors, error]);
+            },
+            async () => {
+                // Handle successful upload
+                try {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    // Update formData with the new download URL
+                    setFormData((prevData) => ({
+                        ...prevData,
+                        mavatar: [...(prevData.mavatar || []), downloadURL], // Initialize as an empty array if undefined
+                    }));
+                    // Update mimagePreview with the new download URL
+                    setMimagePreview((prevPreview) => [...prevPreview, downloadURL]);
+                    setMimageLoading(false);
+                } catch (error) {
+                    console.error('Error retrieving download URL:', error);
+                    setFileUploadErrors([...fileUploadErrors, error]);
+                    setMimageLoading(false);
+                }
+            }
         );
-      };
-    
-      const handleFilesChange = (event) => {
+    };
+
+
+
+
+
+
+    const handleFilesChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
         setMfiles([...mfiles, ...selectedFiles]);
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         mfiles.forEach((mfile) => mhandleFileUpload(mfile));
-      }, [mfiles]);
-
-      console.log(mimagePreview)
-    
-
-   
+    }, [mfiles]);
 
 
 
 
 
+    const [formData, setFormData] = useState({})
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        const updatedFormData = {
+            ...formData,
+            mfiles,
+            [id]: value,
+        };
+
+        // Generate slug if productName field changes
+        if (id === 'productName') {
+            const slugValue = value.toLowerCase().replace(/\s+/g, '-');
+            updatedFormData.slug = slugValue;
+        }
+
+        setFormData(updatedFormData);
+    };
 
 
-    const handleChange = () => {
+
+
+
+
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const updatedFormData = {
+            ...formData,
+            productSize,
+            specification
+        }
+
+
+
+
+        try {
+
+
+
+
+            console.log(updatedFormData)
+
+
+
+        } catch (error) {
+            console.log(error)
+        }
 
     }
 
-    const handleSubmit = () => {
 
-    }
 
 
 
@@ -300,6 +367,7 @@ function AddProduct() {
                                 <div className="sherah-page-inner sherah-border sherah-basic-page sherah-default-bg mg-top-25 p-0">
                                     <form
                                         className="sherah-wc__form-main"
+                                        onSubmit={handleSubmit}
 
                                     >
 
@@ -317,13 +385,17 @@ function AddProduct() {
                                                                 <div className="form-group__input">
                                                                     <input
                                                                         className="sherah-wc__form-input"
-                                                                        defaultValue=""
+
                                                                         placeholder="Type here"
                                                                         type="text"
-                                                                        id="name"
+                                                                        id="productName"
                                                                         required=""
-                                                                        onchange={handleChange}
+                                                                        onChange={handleChange}
                                                                     />
+
+
+
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -337,7 +409,8 @@ function AddProduct() {
                                                                     type="text"
                                                                     name="slug"
                                                                     id="slug"
-                                                                    required=""
+                                                                    required
+                                                                    value={formData.slug || ''}
                                                                 />
                                                             </div>
                                                         </div>
@@ -350,8 +423,8 @@ function AddProduct() {
                                                                     className="form-group__input"
                                                                     aria-label="Default select example"
                                                                     id='category'
-                                                                    onchange={handleChange}
-                                                                    required=""
+                                                                    onChange={handleChange}
+                                                                    required
                                                                 >
                                                                     <option readOnly="">Select</option>
                                                                     {category.map((data) => (
@@ -373,8 +446,8 @@ function AddProduct() {
                                                                     id='status'
                                                                     onChange={handleChange}
                                                                 >
-                                                                    <option value="active">Active</option>
-                                                                    <option value="inactive">Inactive</option>
+                                                                    <option value="Active">Active</option>
+                                                                    <option value="Inactive">Inactive</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -391,7 +464,7 @@ function AddProduct() {
                                                                     type="number"
 
                                                                     id="price"
-                                                                    onchange={handleChange}
+                                                                    onChange={handleChange}
                                                                 />
                                                             </div>
                                                         </div>
@@ -405,8 +478,7 @@ function AddProduct() {
                                                                     defaultValue=""
                                                                     placeholder="Type here"
                                                                     type="number"
-
-                                                                    id="offer_price"
+                                                                    id="offerPrice"
                                                                     onChange={handleChange}
                                                                 />
                                                             </div>
@@ -421,7 +493,8 @@ function AddProduct() {
                                                                     defaultValue=""
                                                                     placeholder="Type here"
                                                                     type="text"
-                                                                    id="vedio_url"
+                                                                    id="vedioUrl"
+                                                                    onChange={handleChange}
                                                                 />
                                                             </div>
                                                         </div>
@@ -437,6 +510,7 @@ function AddProduct() {
                                                                         row={8}
                                                                         placeholder="type here"
                                                                         type="text"
+                                                                        onChange={handleChange}
 
                                                                     />
                                                                 </div>
@@ -454,7 +528,7 @@ function AddProduct() {
                                                                         row={8}
                                                                         placeholder="type here"
                                                                         type="text"
-                                                                        onchange={handleChange}
+                                                                        onChange={handleChange}
 
                                                                     />
                                                                 </div>
@@ -472,7 +546,7 @@ function AddProduct() {
                                                                         row={8}
                                                                         placeholder="Type here"
                                                                         type="text"
-                                                                        onchange={handleChange}
+                                                                        onChange={handleChange}
 
                                                                     />
                                                                 </div>
@@ -489,10 +563,10 @@ function AddProduct() {
                                                                     className="form-group__input"
                                                                     aria-label="Default select example"
                                                                     id="populer"
-                                                                    onchange={handleChange}
+                                                                    onChange={handleChange}
                                                                 >
-                                                                    <option value={1}>Yes</option>
-                                                                    <option value={0}>No</option>
+                                                                    <option value='Yes'>Yes</option>
+                                                                    <option value='No'>No</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -507,33 +581,21 @@ function AddProduct() {
                                                                 <div className="checkbox-group">
 
 
-                                                                    {option.map((data) => (
+                                                                    <select
+                                                                        className="form-group__input"
+                                                                        aria-label="Default select example"
+                                                                        id='category'
+                                                                        onChange={handleOption}
+                                                                        required
+                                                                        multi={true}
+                                                                    >
+                                                                        <option readOnly="" disabled selected value="">Select</option>
+                                                                        {option.map((data) => (
+                                                                            <option key={data._id} value={data._id}>{data.name}</option>
 
-                                                                        <div className="checkbox-group__single">
-                                                                            <input
-                                                                                type="checkbox"
-                                                                                value={data._id}
-                                                                                className="btn-check"
+                                                                        ))}
 
-                                                                                id="optionId"
-                                                                                onchange={handleChange}
-                                                                            />
-                                                                            <label
-                                                                                className="checkbox-group__single--label"
-                                                                                htmlFor="option11"
-                                                                            >
-                                                                                {data.name}
-                                                                            </label>
-                                                                        </div>
-
-
-                                                                    ))}
-
-
-
-
-
-
+                                                                    </select>
 
 
                                                                 </div>
@@ -705,7 +767,7 @@ function AddProduct() {
                                                         <div class="col-12">
                                                             <div class="form-group">
                                                                 <label class="sherah-wc__form-label">Product Gallery (Select Multiple)</label>
-                                                                <input class="sherah-wc__form-input" type="file"  id="mavatar"  onChange={handleFilesChange} multiple accept="image/*" />
+                                                                <input class="sherah-wc__form-input" type="file" id="mavatar" onChange={handleFilesChange} multiple accept="image/*" />
                                                             </div>
                                                         </div>
 
