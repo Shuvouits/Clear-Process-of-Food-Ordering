@@ -1,6 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
+import { app, storage } from '../../firebase.js'
+import { useNavigate } from 'react-router-dom'
+
 
 function AddProduct() {
+
+    const { user } = useSelector((state) => ({ ...state }))
+
+
+    //Product Dynamic Form
 
     const [productSize, setProductSize] = useState([
         {
@@ -9,6 +19,7 @@ function AddProduct() {
             price: ''
         },
     ]);
+
 
     const handleAddProduct = () => {
         setProductSize([
@@ -30,7 +41,235 @@ function AddProduct() {
         );
     };
 
-    console.log(productSize)
+    //Specification Dynamic form
+
+    const [specification, setSpecification] = useState([
+        {
+            id: 1,
+            sname: ''
+        },
+    ]);
+
+    const handleAddSpecification = () => {
+        setSpecification([
+            ...specification,
+            { id: specification.length + 1, sname: '' },
+        ]);
+    };
+
+    const handleRemoveSpecification = (id) => {
+        setSpecification(specification.filter((specification) => specification.id !== id));
+
+    };
+
+    const handleSpecificationChange = (id, field, value) => {
+        setSpecification((prevSpecification) =>
+            prevSpecification.map((specification) =>
+                specification.id === id ? { ...specification, [field]: value } : specification
+            )
+        );
+    };
+
+    //category Data fetch
+
+    const [category, setCategory] = useState([])
+
+    const allCategory = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-category`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setCategory(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allCategory();
+    }, []);
+
+    //optional Item Data fetch
+
+    const [option, setOption] = useState([])
+    const allOption = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-optional`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setOption(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allOption();
+    }, []);
+
+    //product Thumbnail process
+    const [formData, setFormData] = useState({})
+
+    const navigate = useNavigate();
+
+    const [file, setFile] = useState(undefined)
+    const [filePerc, setFilePerc] = useState(0);
+    const [fileUploadError, setFileUploadError] = useState(false)
+    const [imagePreview, setImagePreview] = useState(null);
+    const [imageLoading, setImageLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
+
+
+
+    const handleFileUpload = (file) => {
+        setImageLoading(true)
+        const storage = getStorage(app);
+        const fileName = new Date().getTime() + file.name;
+        const storageRef = ref(storage, fileName);
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on('state_changed', (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setFilePerc(Math.round(progress));
+        }, (error) => {
+            setFileUploadError(true);
+        }, () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setFormData({ ...formData, avatar: downloadURL });
+                setImagePreview(downloadURL);
+                setImageLoading(false)
+            });
+        });
+    };
+
+    useEffect(() => {
+
+        if (file) {
+            handleFileUpload(file)
+        }
+
+    }, [file]);
+
+
+    //video thumbnail
+    const [vfile, setVfile] = useState(undefined)
+    const [vimagePreview, setVimagePreview] = useState(null);
+    const [vimageLoading, setVimageLoading] = useState(false)
+
+    const vhandleFileUpload = (vfile) => {
+        setVimageLoading(true)
+        const storage = getStorage(app);
+        const fileName = new Date().getTime() + vfile.name;
+        const storageRef = ref(storage, fileName);
+        const uploadTask = uploadBytesResumable(storageRef, vfile);
+
+        uploadTask.on('state_changed', (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setFilePerc(Math.round(progress));
+        }, (error) => {
+            setFileUploadError(true);
+        }, () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setFormData({ ...formData, avatar: downloadURL });
+                setVimagePreview(downloadURL);
+                setVimageLoading(false)
+            });
+        });
+    };
+
+    useEffect(() => {
+
+        if (vfile) {
+            vhandleFileUpload(vfile)
+        }
+
+    }, [vfile]); 
+
+
+
+    //multiple file
+    const [mimageLoading, setMimageLoading] = useState(false)
+    const [fileUploadErrors, setFileUploadErrors] = useState([]);
+    const [mimagePreview, setMimagePreview] = useState([]);
+    const [mfiles, setMfiles] = useState([]);
+
+    const mhandleFileUpload = (mfile) => {
+        setMimageLoading(true);
+        const storage = getStorage(app);
+        const fileName = new Date().getTime() + mfile.name;
+        const storageRef = ref(storage, fileName);
+        const uploadTask = uploadBytesResumable(storageRef, mfile);
+    
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            // Handle progress
+          },
+          (error) => {
+            // Handle errors
+            setFileUploadErrors([...fileUploadErrors, error]);
+          },
+          () => {
+            // Handle successful upload
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                setMimagePreview([...mimagePreview, downloadURL]);
+                setMimageLoading(false);
+            });
+          }
+        );
+      };
+    
+      const handleFilesChange = (event) => {
+        const selectedFiles = Array.from(event.target.files);
+        setMfiles([...mfiles, ...selectedFiles]);
+      };
+    
+      useEffect(() => {
+        mfiles.forEach((mfile) => mhandleFileUpload(mfile));
+      }, [mfiles]);
+
+      console.log(mimagePreview)
+    
+
+   
+
+
+
+
+
+
+
+    const handleChange = () => {
+
+    }
+
+    const handleSubmit = () => {
+
+    }
+
+
 
 
     return (
@@ -61,17 +300,9 @@ function AddProduct() {
                                 <div className="sherah-page-inner sherah-border sherah-basic-page sherah-default-bg mg-top-25 p-0">
                                     <form
                                         className="sherah-wc__form-main"
-                                        action="https://reservq.minionionbd.com/product-add"
-                                        method="POST"
-                                        encType="m"
-                                        ultipart=""
-                                        form-data=""
+
                                     >
-                                        <input
-                                            type="hidden"
-                                            name="_token"
-                                            defaultValue="InB6DDogn6rLwcDnLrOREftAsuDEXvkpYmTisI9N"
-                                        />
+
                                         <div className="row">
                                             <div className="col-12">
                                                 {/* Product Info */}
@@ -90,8 +321,8 @@ function AddProduct() {
                                                                         placeholder="Type here"
                                                                         type="text"
                                                                         id="name"
-                                                                        name="name"
                                                                         required=""
+                                                                        onchange={handleChange}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -118,18 +349,16 @@ function AddProduct() {
                                                                 <select
                                                                     className="form-group__input"
                                                                     aria-label="Default select example"
-                                                                    name="category_id"
+                                                                    id='category'
+                                                                    onchange={handleChange}
                                                                     required=""
                                                                 >
                                                                     <option readOnly="">Select</option>
-                                                                    <option value={48}>Delish Burger</option>
-                                                                    <option value={49}>Fried Rice</option>
-                                                                    <option value={50}>Pasta</option>
-                                                                    <option value={51}>Chicken</option>
-                                                                    <option value={52}>Pizzas</option>
-                                                                    <option value={53}>Sandwiches</option>
-                                                                    <option value={56}>Nachos</option>
-                                                                    <option value={57}>Tacos</option>
+                                                                    {category.map((data) => (
+                                                                        <option value={data._id}>{data.name}</option>
+
+                                                                    ))}
+
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -141,7 +370,8 @@ function AddProduct() {
                                                                 <select
                                                                     className="form-group__input"
                                                                     aria-label="Default select example"
-                                                                    name="status"
+                                                                    id='status'
+                                                                    onChange={handleChange}
                                                                 >
                                                                     <option value="active">Active</option>
                                                                     <option value="inactive">Inactive</option>
@@ -155,12 +385,13 @@ function AddProduct() {
                                                                 </label>
                                                                 <input
                                                                     className="sherah-wc__form-input"
-                                                                    defaultValue=""
+
                                                                     required=""
                                                                     placeholder="Type here"
                                                                     type="number"
-                                                                    name="main_price"
+
                                                                     id="price"
+                                                                    onchange={handleChange}
                                                                 />
                                                             </div>
                                                         </div>
@@ -174,8 +405,9 @@ function AddProduct() {
                                                                     defaultValue=""
                                                                     placeholder="Type here"
                                                                     type="number"
-                                                                    name="offer_price"
+
                                                                     id="offer_price"
+                                                                    onChange={handleChange}
                                                                 />
                                                             </div>
                                                         </div>
@@ -189,7 +421,6 @@ function AddProduct() {
                                                                     defaultValue=""
                                                                     placeholder="Type here"
                                                                     type="text"
-                                                                    name="vedio_url"
                                                                     id="vedio_url"
                                                                 />
                                                             </div>
@@ -202,14 +433,11 @@ function AddProduct() {
                                                                 <div className="form-group__input">
                                                                     <textarea
                                                                         className="sherah-wc__form-input summernote"
-                                                                        id="vedio_top_ber_description"
+                                                                        id="tdescription"
                                                                         row={8}
                                                                         placeholder="type here"
                                                                         type="text"
-                                                                        name="vedio_top_ber_description"
-                                                                        defaultValue={
-                                                                            "                                    "
-                                                                        }
+
                                                                     />
                                                                 </div>
                                                             </div>
@@ -222,14 +450,12 @@ function AddProduct() {
                                                                 <div className="form-group__input">
                                                                     <textarea
                                                                         className="sherah-wc__form-input summernote"
-                                                                        id="vedio_buttom_description"
+                                                                        id="bdescription"
                                                                         row={8}
                                                                         placeholder="type here"
                                                                         type="text"
-                                                                        name="vedio_buttom_description"
-                                                                        defaultValue={
-                                                                            "                                    "
-                                                                        }
+                                                                        onchange={handleChange}
+
                                                                     />
                                                                 </div>
                                                             </div>
@@ -242,52 +468,18 @@ function AddProduct() {
                                                                 <div className="form-group__input">
                                                                     <textarea
                                                                         className="sherah-wc__form-input summernote"
-                                                                        id="description"
+                                                                        id="ldescription"
                                                                         row={8}
                                                                         placeholder="Type here"
                                                                         type="text"
-                                                                        name="long_description"
-                                                                        defaultValue={
-                                                                            "                                    "
-                                                                        }
+                                                                        onchange={handleChange}
+
                                                                     />
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="col-12">
-                                                            <div className="form-group">
-                                                                <label className="sherah-wc__form-label">
-                                                                    Seo Title *
-                                                                </label>
-                                                                <input
-                                                                    className="sherah-wc__form-input"
-                                                                    defaultValue=""
-                                                                    placeholder="Type here"
-                                                                    type="text"
-                                                                    name="seo_titel"
-                                                                    id="seo_titel"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="col-12">
-                                                            <div className="form-group">
-                                                                <label className="sherah-wc__form-label">
-                                                                    Seo Description *
-                                                                </label>
-                                                                <textarea
-                                                                    className="sherah-wc__form-input"
-                                                                    value=""
-                                                                    id="description"
-                                                                    row={8}
-                                                                    placeholder="type here"
-                                                                    type="text"
-                                                                    name="seo_description"
-                                                                    defaultValue={
-                                                                        "                                  "
-                                                                    }
-                                                                />
-                                                            </div>
-                                                        </div>
+
+
                                                         <div className="col-12">
                                                             <div className="form-group">
                                                                 <label className="sherah-wc__form-label">
@@ -296,82 +488,61 @@ function AddProduct() {
                                                                 <select
                                                                     className="form-group__input"
                                                                     aria-label="Default select example"
-                                                                    name="is_populer"
+                                                                    id="populer"
+                                                                    onchange={handleChange}
                                                                 >
                                                                     <option value={1}>Yes</option>
                                                                     <option value={0}>No</option>
                                                                 </select>
                                                             </div>
                                                         </div>
+
+
+
                                                         <div className="col-12">
                                                             <div className="form-group">
                                                                 <label className="sherah-wc__form-label">
                                                                     Optional Item
                                                                 </label>
                                                                 <div className="checkbox-group">
-                                                                    <div className="checkbox-group__single">
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            defaultValue={1}
-                                                                            className="btn-check"
-                                                                            name="items[]"
-                                                                            id="option10"
-                                                                        />
-                                                                        <label
-                                                                            className="checkbox-group__single--label"
-                                                                            htmlFor="option10"
-                                                                        >
-                                                                            Chicken Leg
-                                                                        </label>
-                                                                    </div>
-                                                                    <div className="checkbox-group__single">
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            defaultValue={3}
-                                                                            className="btn-check"
-                                                                            name="items[]"
-                                                                            id="option11"
-                                                                        />
-                                                                        <label
-                                                                            className="checkbox-group__single--label"
-                                                                            htmlFor="option11"
-                                                                        >
-                                                                            Drinks
-                                                                        </label>
-                                                                    </div>
-                                                                    <div className="checkbox-group__single">
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            defaultValue={4}
-                                                                            className="btn-check"
-                                                                            name="items[]"
-                                                                            id="option12"
-                                                                        />
-                                                                        <label
-                                                                            className="checkbox-group__single--label"
-                                                                            htmlFor="option12"
-                                                                        >
-                                                                            Nan
-                                                                        </label>
-                                                                    </div>
-                                                                    <div className="checkbox-group__single">
-                                                                        <input
-                                                                            type="checkbox"
-                                                                            defaultValue={5}
-                                                                            className="btn-check"
-                                                                            name="items[]"
-                                                                            id="option13"
-                                                                        />
-                                                                        <label
-                                                                            className="checkbox-group__single--label"
-                                                                            htmlFor="option13"
-                                                                        >
-                                                                            Extra Chess
-                                                                        </label>
-                                                                    </div>
+
+
+                                                                    {option.map((data) => (
+
+                                                                        <div className="checkbox-group__single">
+                                                                            <input
+                                                                                type="checkbox"
+                                                                                value={data._id}
+                                                                                className="btn-check"
+
+                                                                                id="optionId"
+                                                                                onchange={handleChange}
+                                                                            />
+                                                                            <label
+                                                                                className="checkbox-group__single--label"
+                                                                                htmlFor="option11"
+                                                                            >
+                                                                                {data.name}
+                                                                            </label>
+                                                                        </div>
+
+
+                                                                    ))}
+
+
+
+
+
+
+
+
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
+
+
                                                         <div className="col-lg-6 col-md-6 col-12">
                                                             <div className="product-form-box sherah-border mg-top-30">
                                                                 <div className="form-group">
@@ -380,20 +551,37 @@ function AddProduct() {
                                                                     </label>
                                                                     <div className="image-upload-group">
                                                                         <div className="image-upload-group__single">
-                                                                            <img required="" id="preview-img" src="" />
+                                                                            {imagePreview &&
+                                                                                (
+                                                                                    <img className='product_thumb_img' src={imagePreview} />
+
+                                                                                )
+                                                                            }
+
+                                                                            <span style={{ fontWeight: 'bold', color: 'red', fontSize: '30px' }}>
+
+                                                                                {
+                                                                                    imageLoading && (
+
+                                                                                        <span>{filePerc}% </span>
+
+                                                                                    )
+                                                                                }
+                                                                            </span>
+
                                                                         </div>
                                                                         <div className="image-upload-group__single image-upload-group__single--upload">
                                                                             <input
                                                                                 type="file"
                                                                                 className="btn-check"
                                                                                 name="tumb_image"
-                                                                                id="input-img1"
-                                                                                onchange="previewThumbnailImage('input-img1', 'preview-img')"
+                                                                                id="avatar"
+                                                                                onChange={(e) => setFile(e.target.files[0])}
                                                                                 autoComplete="off"
                                                                             />
                                                                             <label
                                                                                 className="image-upload-label"
-                                                                                htmlFor="input-img1"
+                                                                                htmlFor="avatar"
                                                                             >
                                                                                 <svg
                                                                                     xmlns="http://www.w3.org/2000/svg"
@@ -432,6 +620,9 @@ function AddProduct() {
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
+
                                                         <div className="col-lg-6 col-md-6 col-12">
                                                             <div className="product-form-box sherah-border mg-top-30">
                                                                 <div className="form-group">
@@ -440,20 +631,38 @@ function AddProduct() {
                                                                     </label>
                                                                     <div className="image-upload-group">
                                                                         <div className="image-upload-group__single">
-                                                                            <img id="preview-img1" src="" />
+                                                                            {vimagePreview &&
+                                                                                (
+                                                                                    <img className='product_thumb_img' src={vimagePreview} />
+
+                                                                                )
+                                                                            }
+
+                                                                            <span style={{ fontWeight: 'bold', color: 'red', fontSize: '30px' }}>
+
+                                                                                {
+                                                                                    vimageLoading && (
+
+                                                                                        <span>{filePerc}% </span>
+
+                                                                                    )
+                                                                                }
+                                                                            </span>
+
                                                                         </div>
                                                                         <div className="image-upload-group__single image-upload-group__single--upload">
                                                                             <input
                                                                                 type="file"
                                                                                 className="btn-check"
                                                                                 name="vedio_tumb_image"
-                                                                                id="input-img2"
-                                                                                onchange="previewThumbnailImage('input-img2', 'preview-img1')"
+                                                                                id="vavatar"
+
                                                                                 autoComplete="off"
+                                                                                onChange={(e) => setVfile(e.target.files[0])}
                                                                             />
                                                                             <label
                                                                                 className="image-upload-label"
-                                                                                htmlFor="input-img2"
+                                                                                htmlFor="vavatar"
                                                                             >
                                                                                 <svg
                                                                                     xmlns="http://www.w3.org/2000/svg"
@@ -492,20 +701,15 @@ function AddProduct() {
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div className="col-12">
-                                                            <div className="form-group">
-                                                                <label className="sherah-wc__form-label">
-                                                                    Product Gallery (Select Multiple)
-                                                                </label>
-                                                                <input
-                                                                    className="sherah-wc__form-input"
-                                                                    type="file"
-                                                                    name="images[]"
-                                                                    multiple=""
-                                                                    accept="image/*"
-                                                                />
+
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label class="sherah-wc__form-label">Product Gallery (Select Multiple)</label>
+                                                                <input class="sherah-wc__form-input" type="file"  id="mavatar"  onChange={handleFilesChange} multiple accept="image/*" />
                                                             </div>
                                                         </div>
+
+
                                                         <div className="col-12">
                                                             <div className="form-group">
                                                                 <label className="sherah-wc__form-label">
@@ -514,56 +718,56 @@ function AddProduct() {
 
 
                                                                 <div className="checkbox-group">
-            <table className="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>Size</th>
-                        <th>Price</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {productSize.map((data) => (
-                        <tr key={data.id}>
-                            <td>
-                                <input
-                                    type="text"
-                                    value={data.size}
-                                    onChange={(e) => handleProductChange(data.id, 'size', e.target.value)}
-                                    placeholder="Enter Size"
-                                    className="form-control name_list"
-                                />
-                            </td>
-                            <td>
-                                <input
-                                    type="number"
-                                    value={data.price}
-                                    onChange={(e) => handleProductChange(data.id, 'price', e.target.value)}
-                                    placeholder="Enter Price"
-                                    className="form-control name_email"
-                                />
-                            </td>
-                            <td>
-                                <button
-                                    type="button"
-                                    className="btn btn-danger"
-                                    onClick={() => handleRemoveProduct(data.id)}
-                                >
-                                    -
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
-            <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleAddProduct}
-            >
-                +
-            </button>
-        </div>
+                                                                    <table className="table table-bordered table-hover">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Size</th>
+                                                                                <th>Price</th>
+                                                                                <th>Actions</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {productSize.map((data) => (
+                                                                                <tr key={data.id}>
+                                                                                    <td>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            value={data.size}
+                                                                                            onChange={(e) => handleProductChange(data.id, 'size', e.target.value)}
+                                                                                            placeholder="Enter Size"
+                                                                                            className="form-control name_list"
+                                                                                        />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input
+                                                                                            type="number"
+                                                                                            value={data.price}
+                                                                                            onChange={(e) => handleProductChange(data.id, 'price', e.target.value)}
+                                                                                            placeholder="Enter Price"
+                                                                                            className="form-control name_email"
+                                                                                        />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            className="btn btn-danger"
+                                                                                            onClick={() => handleRemoveProduct(data.id)}
+                                                                                        >
+                                                                                            -
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            ))}
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-primary"
+                                                                        onClick={handleAddProduct}
+                                                                    >
+                                                                        +
+                                                                    </button>
+                                                                </div>
 
 
 
@@ -587,28 +791,44 @@ function AddProduct() {
                                                                         id="dynamic_field2"
                                                                     >
                                                                         <tbody>
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <input
-                                                                                        type="text"
-                                                                                        name="specifaction[]"
-                                                                                        placeholder="Enter Single Item"
-                                                                                        className="form-control name_list1"
-                                                                                    />
-                                                                                </td>
-                                                                                <td>
-                                                                                    <button
-                                                                                        type="button"
-                                                                                        name="add1"
-                                                                                        id="add1"
-                                                                                        className="btn btn-primary"
-                                                                                    >
-                                                                                        +
-                                                                                    </button>
-                                                                                </td>
-                                                                            </tr>
+
+                                                                            {specification.map((data) => (
+                                                                                <tr key={data.id}>
+                                                                                    <td>
+                                                                                        <input
+                                                                                            type="text"
+                                                                                            name="specifaction[]"
+                                                                                            placeholder="Enter Single Item"
+                                                                                            className="form-control name_list1"
+                                                                                            value={data.sname}
+                                                                                            onChange={(e) => handleSpecificationChange(data.id, 'sname', e.target.value)}
+                                                                                        />
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <button
+                                                                                            type="button"
+                                                                                            className="btn btn-danger"
+                                                                                            onClick={() => handleRemoveSpecification(data.id)}
+                                                                                        >
+                                                                                            -
+                                                                                        </button>
+                                                                                    </td>
+                                                                                </tr>
+
+                                                                            ))}
+
+
+
+
                                                                         </tbody>
                                                                     </table>
+                                                                    <button
+                                                                        type="button"
+                                                                        className="btn btn-primary"
+                                                                        onClick={handleAddSpecification}
+                                                                    >
+                                                                        +
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
