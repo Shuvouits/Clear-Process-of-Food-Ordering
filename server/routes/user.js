@@ -4,7 +4,7 @@ const {
     categoryStatus, addOptionalItem, allOptional, editOptional, updateOptional, optionalStatus, deleteOptional, addCoupon,
     allCoupon, editCoupon, updateCoupon, couponStatus, deleteCoupon, addDelivery, allDelivery,
     editDelivery, updateDelivery, deliveryStatus, deleteDelivery, addTime, allTime, timeStatus,
-    editTime, updateTime, deleteTime
+    editTime, updateTime, deleteTime, addProduct
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -50,7 +50,9 @@ router.get('/all-time', authUser, allTime);
 router.get('/edit-time/:id', authUser, editTime);
 router.post('/time-status/:id', authUser, timeStatus);
 router.post('/update-time/:id', authUser, updateTime);
-router.get('/delete-time/:id', authUser, deleteTime);
+router.get('/delete-time/:id', authUser, deleteTime);  
+
+router.post('/add-product', authUser, addProduct);
 
 
 

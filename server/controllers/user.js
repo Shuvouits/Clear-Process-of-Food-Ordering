@@ -7,6 +7,7 @@ const Optional = require('../models/optional.js');
 const Coupon = require('../models/coupon.js');
 const Delivery = require('../models/delivery.js')
 const Time = require('../models/time.js')
+const Product = require('../models/product.js')
 
 
 
@@ -740,7 +741,7 @@ exports.updateTime = async(req,res)=> {
     }
 } 
 
-exports. deleteTime = async(req, res)=> {
+exports.deleteTime = async(req, res)=> {
     try{
        
         const timeId = req.params.id;
@@ -762,6 +763,44 @@ exports. deleteTime = async(req, res)=> {
         return (error)
     }
 }  
+
+exports.addProduct = async(req,res) => {
+    try{
+
+        const{productName, slug, category, status, price, offerPrice, videoUrl, tdescription, bdescription, ldescription, populer, avatar, vavatar, optionalItem, mavatar, productSize, specification} = req.body
+        
+
+        const data = await new Product({
+           
+           productName,
+           slug,
+           category,
+           status,
+           price,
+           offerPrice,
+           videoUrl,
+           tdescription,
+           bdescription,
+           ldescription,
+           populer,
+           avatar,
+           vavatar,
+           optionalItem,
+           mavatar,
+           productSize,
+           specification
+           
+        }).save();
+
+        res.status(200).json(data)
+
+
+    }catch(error){
+        
+        console.log(error)
+        return res.status(500).json(error)
+    }
+}
 
 
   

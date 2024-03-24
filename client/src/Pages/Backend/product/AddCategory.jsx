@@ -143,6 +143,7 @@ function AddCategory() {
 
 
         } catch (error) {
+           
             console.log(error)
         }
     };
