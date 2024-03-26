@@ -144,5 +144,29 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
   width: 72vw !important;
 }  
 
+.optionListContainer {
+  z-index: 9999 !important;
+  overflow: none !important;
+}
+
+.form-check-input{
+  width: 30px !important;
+  height: 30px !important;
+}
+
+.form-group-custom{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  border: 1px solid gainsboro;
+  padding: 20px;
+}
+
+.customcheck{
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
 
 

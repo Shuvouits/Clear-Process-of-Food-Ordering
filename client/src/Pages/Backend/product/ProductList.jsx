@@ -1,8 +1,146 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function ProductList() {
+
+    const { user } = useSelector((state) => ({ ...state }))
+
+    //Category Data
+    const [product, setProduct] = useState([])
+    const allProduct = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-product`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setProduct(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allProduct();
+    }, []);   
+
+
+    //Delete Data
+
+    const handleClick = async(id) => {
+        
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Product?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-product/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Coupon Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allProduct();
+                }
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }  
+
+     //status control
+
+     const handleStatus = async(id)=>{
+
+        try{
+
+            const res = await fetch(`http://localhost:8000/product-status/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Product Status Updated`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allProduct();
+                }
+
+        }catch(error){
+            console.log(error)
+        }
+
+    } 
+
+
 
     const columns = [
         {
@@ -13,7 +151,7 @@ function ProductList() {
                     <div className="">
                         <img
                             className="product_list_thumb"
-                            src={row.image}
+                            src={row.avatar}
                             alt="#"
                         />
                     </div>
@@ -24,7 +162,7 @@ function ProductList() {
 
         {
             name: 'Name',
-            selector: row => row.name
+            selector: row => row.productName
         },
 
         {
@@ -38,7 +176,7 @@ function ProductList() {
                 <td className="sherah-table__column-6 sherah-table__data-4">
                 <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
                     <button className="btn btn-success rounded-circle">
-                        Yes
+                        {row.populer}
                     </button>
                 </div>
             </td>
@@ -53,9 +191,9 @@ function ProductList() {
                     <label className="sherah__item-switch">
                         <input
                             id="status"
-                            onclick="changeCategoryStatus(2)"
+                            onClick={() =>handleStatus(row.id)}
                             type="checkbox"
-                            defaultChecked=""
+                            checked={row.status === 'Active' ? 'checked' : ''}
                         />
                         <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
                     </label>
@@ -68,8 +206,8 @@ function ProductList() {
             name: 'Action',
             selector: row => (
                 <div className="sherah-table__status__group">
-                    <a
-                        href="https://reservq.minionionbd.com/edit-product-item/2"
+                    <Link
+                        to={`/admin/edit-product-item/${row.id}`}
                         className="sherah-table__action sherah-color2 sherah-color3__bg--opactity"
                     >
                         <svg
@@ -107,10 +245,10 @@ function ProductList() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    <a
-                        href="https://reservq.minionionbd.com/product-item-destroy/2"
-                        onclick="confirmation(event)"
+                    </Link>
+                    <Link
+                        to="#"
+                        onClick={() => handleClick(row.id)}
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >
                         <svg
@@ -147,9 +285,9 @@ function ProductList() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    <a
-                        href="https://reservq.minionionbd.com/product-gallery/2"
+                    </Link>
+                    <Link
+                        to={`/admin/product-gallery/${row.id}`}
                         className="sherah-table__action sherah-color2 sherah-color1__bg--offset blog_comment_delete"
                     >
                         <svg
@@ -183,7 +321,7 @@ function ProductList() {
                                 />
                             </g>
                         </svg>
-                    </a>
+                    </Link>
                 </div>
 
             )
@@ -196,25 +334,34 @@ function ProductList() {
 
     ]
 
-    const data = [
-        {
-            image: 'https://reservq.minionionbd.com/uploads/custom-images/baked-chicken-wings-and-legs-2024-01-25-10-02-43-3199.jpg',
-            name: 'Baked Chicken Wings and Legs',
-            price: '150',
-            popular: 'yes',
-            status: 'on',
-            action: 'action'
+   
+    const [record, setRecord] = useState([])
 
-        }
-    ]
+    useEffect(() => {
+        const data = product.map((item, index) => ({
+            avatar: item.avatar,
+            productName: item.productName,
+            price: item.price,
+            populer: item.populer,
+            status: item.status,
+            id: item._id
+        }));
+        setRecord(data);
+    }, [product]);
 
-    const [record, setRecord] = useState(data);
-
+   
     const handleFilter = (event) => {
-        const newData = data.filter(row => {
-            return row.customer_name.toLowerCase().includes(event.target.value.toLowerCase())
+        const searchQuery = event.target.value.toLowerCase();
+        const newData = product.filter(row => {
+            return row.productName.toLowerCase().includes(searchQuery);
         });
-        setRecord(newData);
+
+        // Update the record state if search query is present, else reset it to display all data
+        if (searchQuery) {
+            setRecord(newData);
+        } else {
+            setRecord(product);
+        }
     };
 
 
@@ -251,6 +398,13 @@ function ProductList() {
                                     </div>
                                 </div>
                                 <div className="sherah-table sherah-page-inner sherah-border sherah-default-bg mg-top-25">
+                                     
+
+                                <div className='form-group col-md-3 offset-md-9'>
+                                        <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
+                                    </div>
+                                    <br></br>
+
 
                                     <DataTable columns={columns} data={record} pagination>
 

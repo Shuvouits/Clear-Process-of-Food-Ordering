@@ -59,6 +59,8 @@ import EditOptional from './Pages/Backend/product/EditOptional'
 import EditCoupon from './Pages/Backend/product/EditCoupon'
 import EditDelivery from './Pages/Backend/product/EditDelivery'
 import EditTime from './Pages/Backend/product/EditTime'
+import EditProduct from './Pages/Backend/product/EditProduct'
+import ProductGallery from './Pages/Backend/product/ProductGallery'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -119,8 +121,12 @@ function App() {
             <Route path='order/details' element={<OrderDetails />} />
             <Route path='delivery/order' element={<DeliveryOrder />} />
             <Route path='pickup/order' element={<PickUpOrder />} />
+
+
             <Route path='product-create' element={<AddProduct />} />
             <Route path='product-list-show' element={<ProductList />} />
+            <Route path='edit-product-item/:id' element={<EditProduct />} />
+            <Route path='product-gallery/:id' element={<ProductGallery />} />
 
             <Route path='category-list' element={<CategoryList />} />
             <Route path='category-create' element={<AddCategory />} />

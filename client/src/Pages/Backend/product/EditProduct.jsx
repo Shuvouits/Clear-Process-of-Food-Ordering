@@ -2,26 +2,87 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app, storage } from '../../firebase.js'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { Multiselect } from 'multiselect-react-dropdown';
 import Loader from '../../../components/loader/Loader.jsx';
 import Swal from 'sweetalert2'
 
 
-function AddProduct() {
+function EditProduct() {
 
     const { user } = useSelector((state) => ({ ...state }))
-    const [formData, setFormData] = useState({})
+    const { id } = useParams();
     const [loading, setLoading] = useState(false)
+
+    //Specific Product
+    const [formData, setFormData] = useState({})
+    const [product, setProduct] = useState([])
+    const specificProduct = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/edit-product/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setProduct(data);
+
+
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+    useEffect(() => {
+        specificProduct();
+    }, []);
+
+
+
+    useEffect(() => {
+        setFormData({
+            productName: product.productName || '',
+            slug: product.slug || '',
+            category: product.category || '',
+            videoUrl: product.videoUrl || '',
+
+            status: product.status || '',
+            price: product.price || '',
+            offerPrice: product.offerPrice || '',
+            vedioUrl: product.vedioUrl || '',
+            avatar: product.avatar || '',
+            vavatar: product.vavatar || '',
+            tdescription: product.tdescription || '',
+            bdescription: product.bdescription || '',
+            ldescription: product.ldescription || '',
+            populer: product.populer || '',
+            optionalItem: product.optionalItem || '',
+            productSize: product.productSize || '',
+            specification: product.specification || ''
+        });
+    }, [product]);
+
+
+
+
+
 
     //Product Dynamic Form
 
-    const [productSize, setProductSize] = useState([
-        {
-            id: 1,
-            size: '',
-            price: ''
-        },
-    ]);
+    const [productSize, setProductSize] = useState([]);
+
+    useEffect(() => {
+        if (formData.productSize) {
+            setProductSize(formData.productSize);
+        }
+    }, [formData.productSize]);
 
 
     const handleAddProduct = () => {
@@ -33,7 +94,6 @@ function AddProduct() {
 
     const handleRemoveProduct = (id) => {
         setProductSize(productSize.filter((productSize) => productSize.id !== id));
-
     };
 
     const handleProductChange = (id, field, value) => {
@@ -45,15 +105,16 @@ function AddProduct() {
     };
 
 
-
     //Specification Dynamic form
 
-    const [specification, setSpecification] = useState([
-        {
-            id: 1,
-            sname: ''
-        },
-    ]);
+    const [specification, setSpecification] = useState([]);
+
+
+    useEffect(() => {
+        if (formData.specification) {
+            setSpecification(formData.specification);
+        }
+    }, [formData.specification]);
 
     const handleAddSpecification = () => {
         setSpecification([
@@ -138,8 +199,13 @@ function AddProduct() {
     }, []);
 
 
-    //optionalItem
-    const [optionalItem, setOptionalItem] = useState([])
+    const [optionalItem, setOptionalItem] = useState([]);
+
+    useEffect(() => {
+        if (formData.optionalItem) {
+            setOptionalItem(formData.optionalItem);
+        }
+    }, [formData.optionalItem]);
 
     const handleOptional = (event) => {
         const { value, checked } = event.target;
@@ -148,13 +214,10 @@ function AddProduct() {
         } else {
             setOptionalItem(prevItems => prevItems.filter(item => item !== value));
         }
-        
-    } 
-
-    console.log(optionalItem)
-    
+    };
 
 
+    console.log(formData)
 
 
 
@@ -238,71 +301,10 @@ function AddProduct() {
 
 
 
-    //multiple file
-    const [mimageLoading, setMimageLoading] = useState(false)
-    const [fileUploadErrors, setFileUploadErrors] = useState([]);
-    const [mimagePreview, setMimagePreview] = useState([]);
-    const [mfiles, setMfiles] = useState([]);
-
-
-    const mhandleFileUpload = (mfile) => {
-        setMimageLoading(true);
-        const storage = getStorage(app);
-        const fileName = new Date().getTime() + mfile.name;
-        const storageRef = ref(storage, fileName);
-        const uploadTask = uploadBytesResumable(storageRef, mfile);
-
-        uploadTask.on(
-            'state_changed',
-            (snapshot) => {
-                // Handle progress
-            },
-            (error) => {
-                // Handle errors
-                setFileUploadErrors([...fileUploadErrors, error]);
-            },
-            async () => {
-                // Handle successful upload
-                try {
-                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                    // Update formData with the new download URL
-                    setFormData((prevData) => ({
-                        ...prevData,
-                        mavatar: [...(prevData.mavatar || []), downloadURL], // Initialize as an empty array if undefined
-                    }));
-
-
-
-
-
-                    // Update mimagePreview with the new download URL
-                    setMimagePreview((prevPreview) => [...prevPreview, downloadURL]);
-                    setMimageLoading(false);
-                } catch (error) {
-                    console.error('Error retrieving download URL:', error);
-                    setFileUploadErrors([...fileUploadErrors, error]);
-                    setMimageLoading(false);
-                }
-            }
-        );
-    };
-
-
-    const handleFilesChange = (event) => {
-        const selectedFiles = Array.from(event.target.files);
-        setMfiles([...mfiles, ...selectedFiles]);
-    };
-
-    useEffect(() => {
-        mfiles.forEach((mfile) => mhandleFileUpload(mfile));
-    }, [mfiles]);
-
-
-    const handleChange = (e) => {
+  /*  const handleChange = (e) => {
         const { id, value } = e.target;
         const updatedFormData = {
             ...formData,
-            //mfiles,
             [id]: value,
         };
 
@@ -310,23 +312,29 @@ function AddProduct() {
         if (id === 'productName') {
             const slugValue = value.toLowerCase().replace(/\s+/g, '-');
             updatedFormData.slug = slugValue;
-        }
-
-
+        } 
 
         setFormData(updatedFormData);
+    };  */
+
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        const updatedFormData = {
+            ...formData,
+            [id]: value,
+        };
+    
+        // Generate slug if productName field changes
+        if (id === 'productName') {
+            const slugValue = value.toLowerCase().replace(/\s+/g, '-');
+            updatedFormData.slug = slugValue;
+        } 
+    
+        setFormData(updatedFormData);
     };
-
     
-    const [multipleImage, setMultipleImage] = useState([]);
 
-    useEffect(() => {
-        if (formData.mavatar) {
-            setMultipleImage(formData.mavatar);
-        }
-    }, [formData.mavatar]);
-
-    
+    console.log(formData);
 
 
 
@@ -339,13 +347,12 @@ function AddProduct() {
             productSize,
             specification,
             optionalItem,
-            multipleImage
         }
 
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-product', {
+            const res = await fetch(`http://localhost:8000/update-product/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -355,7 +362,7 @@ function AddProduct() {
             });
 
             const data = await res.json();
-            console.log(data)
+
             setLoading(false)
 
             if (res.status === 200) {
@@ -363,7 +370,7 @@ function AddProduct() {
                 Swal.fire({
                     toast: false,
                     animation: true,
-                    text: `New Product Insert successfully`,
+                    text: `Product Updated successfully`,
                     icon: 'success',
                     showConfirmButton: true,
                     timer: 3000,
@@ -397,16 +404,6 @@ function AddProduct() {
 
 
 
-
-
-
-
-
-
-
-
-
-
     return (
 
         <>
@@ -430,12 +427,12 @@ function AddProduct() {
                                     <div className="row">
                                         <div className="col-12">
                                             <div className="sherah-breadcrumb mg-top-30">
-                                                <h2 className="sherah-breadcrumb__title">Create Product</h2>
+                                                <h2 className="sherah-breadcrumb__title">Edit Product</h2>
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
-                                                        <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                        <Link to="/admin/dashboard">
                                                             Dashboard
-                                                        </a>
+                                                        </Link>
                                                     </li>
                                                     <li className="active">
                                                         <a href="">Create Product</a>
@@ -469,8 +466,9 @@ function AddProduct() {
                                                                             placeholder="Type here"
                                                                             type="text"
                                                                             id="productName"
-                                                                            required=""
+                                                                            required
                                                                             onChange={handleChange}
+                                                                            value={formData.productName}
                                                                         />
 
 
@@ -479,21 +477,24 @@ function AddProduct() {
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                            <div className="form-group">
-                                                                <label className="sherah-wc__form-label">Slug</label>
-                                                                <div className="form-group__input">
-                                                                    <input
-                                                                        className="sherah-wc__form-input"
-                                                                        defaultValue=""
-                                                                        placeholder="Type here"
-                                                                        type="text"
 
-                                                                        id="slug"
-                                                                        required
-                                                                        value={formData.slug || ''}
-                                                                    />
-                                                                </div>
-                                                            </div>
+
+                                                            <div className="form-group">
+    <label className="sherah-wc__form-label">Slug</label>
+    <div className="form-group__input">
+        <input
+            className="sherah-wc__form-input"
+            placeholder="Type here"
+            type="text"
+            id="slug"
+            required
+            onChange={handleChange}
+            value={formData.slug || ''}
+        />
+    </div>
+</div>
+
+
                                                             <div className="col-lg-6 col-md-6 col-12">
                                                                 <div className="form-group">
                                                                     <label className="sherah-wc__form-label">
@@ -508,7 +509,7 @@ function AddProduct() {
                                                                     >
                                                                         <option readOnly="">Select</option>
                                                                         {category.map((data) => (
-                                                                            <option value={data._id}>{data.name}</option>
+                                                                            <option value={data._id} selected={formData.category === data._id ? 'selected' : ''}>{data.name}</option>
 
                                                                         ))}
 
@@ -527,8 +528,8 @@ function AddProduct() {
                                                                         onChange={handleChange}
                                                                         required
                                                                     >
-                                                                        <option value="Active">Active</option>
-                                                                        <option value="Inactive">Inactive</option>
+                                                                        <option value="Active" selected={formData.status === 'Active' ? 'selected' : ''} >Active</option>
+                                                                        <option value="Inactive" selected={formData.status === 'Inactive' ? 'selected' : ''}>Inactive</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -546,6 +547,7 @@ function AddProduct() {
                                                                         id="price"
                                                                         onChange={handleChange}
                                                                         required
+                                                                        value={formData.price}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -561,6 +563,7 @@ function AddProduct() {
                                                                         type="number"
                                                                         id="offerPrice"
                                                                         onChange={handleChange}
+                                                                        value={formData.offerPrice}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -576,6 +579,7 @@ function AddProduct() {
                                                                         type="text"
                                                                         id="vedioUrl"
                                                                         onChange={handleChange}
+                                                                        value={formData.vedioUrl}
                                                                     />
                                                                 </div>
                                                             </div>
@@ -592,6 +596,7 @@ function AddProduct() {
                                                                             placeholder="type here"
                                                                             type="text"
                                                                             onChange={handleChange}
+                                                                            value={formData.tdescription}
 
                                                                         />
                                                                     </div>
@@ -610,6 +615,7 @@ function AddProduct() {
                                                                             placeholder="type here"
                                                                             type="text"
                                                                             onChange={handleChange}
+                                                                            value={formData.bdescription}
 
                                                                         />
                                                                     </div>
@@ -628,6 +634,7 @@ function AddProduct() {
                                                                             placeholder="Type here"
                                                                             type="text"
                                                                             onChange={handleChange}
+                                                                            value={formData.ldescription}
 
                                                                         />
                                                                     </div>
@@ -646,17 +653,15 @@ function AddProduct() {
                                                                         id="populer"
                                                                         onChange={handleChange}
                                                                     >
-                                                                        <option value='Yes'>Yes</option>
-                                                                        <option value='No'>No</option>
+                                                                        <option value='Yes' selected={formData.populer === 'Yes' ? 'selected' : ''}>Yes</option>
+                                                                        <option value='No' selected={formData.populer === 'No' ? 'selected' : ''} >No</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
 
 
 
-                                                           
-                                                            
-                                                            <div className='col-12' style={{marginTop: '30px'}}>
+                                                            <div className='col-12' style={{ marginTop: '30px' }}>
 
                                                                 <label className="sherah-wc__form-label">
                                                                     Optional Item
@@ -666,17 +671,19 @@ function AddProduct() {
 
 
                                                                     {option.map((data) => (
-
-                                                                        <div className='custom-row'>
-
-                                                                            <label class="form-check-label" for="check1" className='customcheck'>
-                                                                                <input type="checkbox" onChange={handleOptional}  class="form-check-input"  name="option1" value={data._id} /> {data.name}
+                                                                        <div className='custom-row' key={data._id}>
+                                                                            <label className="form-check-label customcheck" htmlFor="check1">
+                                                                                <input
+                                                                                    type="checkbox"
+                                                                                    onChange={handleOptional}
+                                                                                    className="form-check-input"
+                                                                                    name="option1"
+                                                                                    value={data._id}
+                                                                                    checked={optionalItem.includes(data._id)} // Use optionalItem state instead of formData.optionalItem
+                                                                                />
+                                                                                {data.name}
                                                                             </label>
-
                                                                         </div>
-
-
-
                                                                     ))}
 
 
@@ -688,7 +695,6 @@ function AddProduct() {
 
 
 
-
                                                             <div className="col-lg-6 col-md-6 col-12">
                                                                 <div className="product-form-box sherah-border mg-top-30">
                                                                     <div className="form-group">
@@ -697,9 +703,9 @@ function AddProduct() {
                                                                         </label>
                                                                         <div className="image-upload-group">
                                                                             <div className="image-upload-group__single">
-                                                                                {imagePreview &&
+                                                                                {formData.avatar &&
                                                                                     (
-                                                                                        <img className='product_thumb_img' src={imagePreview} />
+                                                                                        <img className='product_thumb_img' src={formData.avatar} />
 
                                                                                     )
                                                                                 }
@@ -777,9 +783,9 @@ function AddProduct() {
                                                                         </label>
                                                                         <div className="image-upload-group">
                                                                             <div className="image-upload-group__single">
-                                                                                {vimagePreview &&
+                                                                                {formData.vavatar &&
                                                                                     (
-                                                                                        <img className='product_thumb_img' src={vimagePreview} />
+                                                                                        <img className='product_thumb_img' src={formData.vavatar} />
 
                                                                                     )
                                                                                 }
@@ -848,12 +854,7 @@ function AddProduct() {
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-12">
-                                                                <div class="form-group">
-                                                                    <label class="sherah-wc__form-label">Product Gallery (Select Multiple)</label>
-                                                                    <input class="sherah-wc__form-input" type="file" id="mavatar" onChange={handleFilesChange} multiple accept="image/*" />
-                                                                </div>
-                                                            </div>
+                                                            
 
 
                                                             <div className="col-12">
@@ -1006,4 +1007,4 @@ function AddProduct() {
     )
 }
 
-export default AddProduct
+export default EditProduct

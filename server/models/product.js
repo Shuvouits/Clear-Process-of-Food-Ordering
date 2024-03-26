@@ -1,105 +1,94 @@
 const mongoose = require('mongoose');
 
-const optionalSchema = new mongoose.Schema({
+const generateRandomId = () => {
    
-    id: {
-        type: String,
+    return Math.floor(Math.random() * 1000000).toString();
+};
 
-    }
-}, { _id: false });
-
-const multiSchema = new mongoose.Schema({
-    link: {
-        type: String,
-    },
-
-}, { _id: false });
 
 const sizeSchema = new mongoose.Schema({
+    id: {
+        type: String,
+        default: generateRandomId,
+    },
     size: {
         type: String,
     },
     price: {
         type: String,
     }
-
 }, { _id: false });
 
 const specificationSchema = new mongoose.Schema({
+    id: {
+        type: String,
+        default: generateRandomId,
+    },
     sname: {
         type: String,
     }
-
 }, { _id: false });
+
+const multipleSchema = new mongoose.Schema({
+    id: {
+        type: String,
+        default: generateRandomId,
+    },
+    link: {
+        type: String,
+    }
+}, { _id: false });
+
 
 const productSchema = new mongoose.Schema({
     productName: {
         type: String,
-
     },
     slug: {
         type: String,
-
     },
     category: {
         type: String,
-
     },
-    status: {
-        type: String,
-
-    },
-
     price: {
         type: String,
-
     },
-
     offerPrice: {
         type: String,
-
+    },
+    vedioUrl: {
+        type: String,
     },
 
-    vedioUrl: {
+    status: {
         type: String,
     },
 
     tdescription: {
         type: String,
     },
-
     bdescription: {
         type: String,
-
     },
-
     ldescription: {
         type: String,
     },
-
     populer: {
         type: String,
     },
-
     avatar: {
         type: String,
     },
-
     vavatar: {
         type: String,
-
-
     },
-
     optionalItem: {
-        type: [optionalSchema],
+        type: [String], // Adjusted to match the structure
         default: undefined
-
     },
-
-    mavatar: {
-        type: [multiSchema],
-        default: undefined
+    multipleImage: {
+        type: [multipleSchema], // Change the type to an array of strings
+        default: undefined,
     },
     productSize: {
         type: [sizeSchema],
@@ -109,8 +98,6 @@ const productSchema = new mongoose.Schema({
         type: [specificationSchema],
         default: undefined
     }
-
-
 }, { timestamps: true });
 
 module.exports = mongoose.model("Product", productSchema);

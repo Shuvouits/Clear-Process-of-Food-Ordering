@@ -767,7 +767,17 @@ exports.deleteTime = async(req, res)=> {
 exports.addProduct = async(req,res) => {
     try{
 
-        const{productName, slug, category, status, price, offerPrice, videoUrl, tdescription, bdescription, ldescription, populer, avatar, vavatar, optionalItem, mavatar, productSize, specification} = req.body
+        const{productName, slug, category, status, price, offerPrice, vedioUrl, tdescription, bdescription, ldescription, populer, avatar, vavatar, optionalItem, multipleImage, productSize, specification} = req.body
+        
+        const generateRandomId = () => {
+            return Math.floor(Math.random() * 1000000).toString();
+        };  
+
+        const multipleImageWithIds = multipleImage.map((imageUrl) => ({
+            id: generateRandomId(),
+            link: imageUrl
+        }));
+
         
 
         const data = await new Product({
@@ -778,7 +788,7 @@ exports.addProduct = async(req,res) => {
            status,
            price,
            offerPrice,
-           videoUrl,
+           vedioUrl,
            tdescription,
            bdescription,
            ldescription,
@@ -786,13 +796,13 @@ exports.addProduct = async(req,res) => {
            avatar,
            vavatar,
            optionalItem,
-           mavatar,
+           multipleImage : multipleImageWithIds,
            productSize,
            specification
            
-        }).save();
+        }).save(); 
 
-        res.status(200).json(data)
+        res.status(200).json(data) 
 
 
     }catch(error){
@@ -800,7 +810,175 @@ exports.addProduct = async(req,res) => {
         console.log(error)
         return res.status(500).json(error)
     }
+}  
+
+exports.allProduct = async(req, res) => {
+
+    try{
+
+        const product = await Product.find();
+        return res.status(200).json(product)
+
+    }catch(error){
+        return res.status(500).json(error)
+    }
+    
+}   
+
+exports.editProduct = async(req,res)=> {
+    try{
+        const productId = req.params.id;
+        const data = await Product.findById(productId);
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+exports.deleteProductImage = async(req,res)=> {
+    try{
+
+        const { productId, imageId } = req.params;
+
+        const data = await Product.findByIdAndUpdate(productId, {
+            $pull: { 'multipleImage': { 'id': imageId } }
+        });
+
+        if (!data) {
+            return res.status(404).json({
+                message: 'No data found'
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Image deleted successfully'
+        });
+
+    }catch(error){
+        console.log(error)
+        
+    }
 }
+
+
+
+exports.updateProductImage = async (req, res) => {
+    try {
+        const productId = req.params.id;
+        const { multipleImage } = req.body;
+
+        const generateRandomId = () => {
+            return Math.floor(Math.random() * 1000000).toString();
+        };
+
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // Ensure product.multipleImage is an array
+        const existingImages = Array.isArray(product.multipleImage) ? product.multipleImage : [];
+
+        // Map existing images with their IDs
+        const updatedImages = [
+            ...existingImages,
+            ...multipleImage.map(imageUrl => ({
+                id: generateRandomId(),
+                link: imageUrl
+            }))
+        ];
+
+        // Update product with updated images
+        const updateData = await Product.findByIdAndUpdate(productId, { multipleImage: updatedImages }, { new: true });
+
+
+
+        return res.status(200).json(updateData);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}  
+
+
+exports.updateProduct = async(req,res)=> {
+    try{
+        const productId = req.params.id;
+        const{productName, slug, category, status, price, offerPrice, vedioUrl, tdescription, bdescription, ldescription, populer, avatar, vavatar, optionalItem, multipleImage, productSize, specification} = req.body
+
+        const updateData = await Product.findByIdAndUpdate(productId, {productName, slug, category, status, price, offerPrice, vedioUrl, tdescription, bdescription, ldescription, populer, avatar, vavatar, optionalItem, multipleImage, productSize, specification}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Product not Found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}  
+
+
+exports. deleteProduct = async(req, res)=> {
+    try{
+       
+        const productId = req.params.id;
+        
+
+        const data = await Product.findOneAndDelete({_id : productId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+
+exports.productStatus = async(req,res)=> {
+    try{
+        const productId = req.params.id;
+
+        const data = await Product.findById({_id : productId});
+
+        let status = data.status;
+
+        if(status === 'Active'){
+            status = 'Inactive'
+        }else{
+            status = 'Active'
+        }
+
+        const updateData = await Product.findByIdAndUpdate(productId, {status:status}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}  
+
+
+
+
+
 
 
   
