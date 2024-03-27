@@ -150,9 +150,10 @@ function ProductList() {
                 <td className="sherah-table__column-1 sherah-table__data-6">
                     <div className="">
                         <img
-                            className="product_list_thumb"
+                            className="product_list_thumbi"
                             src={row.avatar}
                             alt="#"
+                            width={70}
                         />
                     </div>
                 </td>

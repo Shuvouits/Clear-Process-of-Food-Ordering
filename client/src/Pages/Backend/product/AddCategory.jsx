@@ -58,7 +58,7 @@ function AddCategory() {
 
     }
 
-    
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -143,7 +143,7 @@ function AddCategory() {
 
 
         } catch (error) {
-           
+
             console.log(error)
         }
     };

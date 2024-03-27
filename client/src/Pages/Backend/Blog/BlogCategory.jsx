@@ -1,8 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 function BlogCategory() {
+
+    const { user } = useSelector((state) => ({ ...state }))
+
+    //Coupon Data
+    const [category, setCategory] = useState([])
+
+    const allCategory = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-blog-category`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setCategory(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allCategory();
+    }, []);
+
 
     const columns = [
 
@@ -128,22 +161,32 @@ function BlogCategory() {
 
     ]
 
-    const data = [
-        {
-            sn: '11310702',
-            name: 'Shuvo Bhowmik',
-            status: 'on',
+    const [record, setRecord] = useState([])
 
-        }
-    ]
-
-    const [record, setRecord] = useState(data);
+    useEffect(() => {
+        const data = category.map((item, index) => ({
+            sn : index+1,
+            name: item.name,
+            
+            status: item.status,
+            id: item._id
+        }));
+        setRecord(data);
+    }, [category]);
 
     const handleFilter = (event) => {
-        const newData = data.filter(row => {
-            return row.customer_name.toLowerCase().includes(event.target.value.toLowerCase())
+        const searchQuery = event.target.value.toLowerCase();
+
+        const newData = category.filter(row => {
+            return row.name.toLowerCase().includes(searchQuery);
         });
-        setRecord(newData);
+
+        // Update the record state if search query is present, else reset it to display all data
+        if (searchQuery) {
+            setRecord(newData);
+        } else {
+            setRecord(category);
+        }
     };
 
 

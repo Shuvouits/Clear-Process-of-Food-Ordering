@@ -301,21 +301,21 @@ function EditProduct() {
 
 
 
-  /*  const handleChange = (e) => {
-        const { id, value } = e.target;
-        const updatedFormData = {
-            ...formData,
-            [id]: value,
-        };
-
-        // Generate slug if productName field changes
-        if (id === 'productName') {
-            const slugValue = value.toLowerCase().replace(/\s+/g, '-');
-            updatedFormData.slug = slugValue;
-        } 
-
-        setFormData(updatedFormData);
-    };  */
+    /*  const handleChange = (e) => {
+          const { id, value } = e.target;
+          const updatedFormData = {
+              ...formData,
+              [id]: value,
+          };
+  
+          // Generate slug if productName field changes
+          if (id === 'productName') {
+              const slugValue = value.toLowerCase().replace(/\s+/g, '-');
+              updatedFormData.slug = slugValue;
+          } 
+  
+          setFormData(updatedFormData);
+      };  */
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -323,16 +323,16 @@ function EditProduct() {
             ...formData,
             [id]: value,
         };
-    
+
         // Generate slug if productName field changes
         if (id === 'productName') {
             const slugValue = value.toLowerCase().replace(/\s+/g, '-');
             updatedFormData.slug = slugValue;
-        } 
-    
+        }
+
         setFormData(updatedFormData);
     };
-    
+
 
     console.log(formData);
 
@@ -480,19 +480,19 @@ function EditProduct() {
 
 
                                                             <div className="form-group">
-    <label className="sherah-wc__form-label">Slug</label>
-    <div className="form-group__input">
-        <input
-            className="sherah-wc__form-input"
-            placeholder="Type here"
-            type="text"
-            id="slug"
-            required
-            onChange={handleChange}
-            value={formData.slug || ''}
-        />
-    </div>
-</div>
+                                                                <label className="sherah-wc__form-label">Slug</label>
+                                                                <div className="form-group__input">
+                                                                    <input
+                                                                        className="sherah-wc__form-input"
+                                                                        placeholder="Type here"
+                                                                        type="text"
+                                                                        id="slug"
+                                                                        required
+                                                                        onChange={handleChange}
+                                                                        value={formData.slug || ''}
+                                                                    />
+                                                                </div>
+                                                            </div>
 
 
                                                             <div className="col-lg-6 col-md-6 col-12">
@@ -854,7 +854,7 @@ function EditProduct() {
                                                                 </div>
                                                             </div>
 
-                                                            
+
 
 
                                                             <div className="col-12">

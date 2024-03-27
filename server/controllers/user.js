@@ -8,6 +8,7 @@ const Coupon = require('../models/coupon.js');
 const Delivery = require('../models/delivery.js')
 const Time = require('../models/time.js')
 const Product = require('../models/product.js')
+const BlogCategory = require('../models/blogCategory.js')
 
 
 
@@ -974,6 +975,42 @@ exports.productStatus = async(req,res)=> {
         console.log(error)
     }
 }  
+
+
+exports.addBlogCategory = async(req,res)=> {
+    try{
+
+        const{name, status, slug} = req.body
+
+        const data = await new BlogCategory({
+           
+            name,
+            status,
+            slug
+           
+        }).save();
+
+        res.status(200).json(data)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}  
+
+exports.allBlogCategory = async(req, res) => {
+
+    try{
+
+        const data = await BlogCategory.find();
+        return res.status(200).json(data)
+       
+
+    }catch(error){
+        return res.status(500).json(error)
+    }
+    
+}   
 
 
 
