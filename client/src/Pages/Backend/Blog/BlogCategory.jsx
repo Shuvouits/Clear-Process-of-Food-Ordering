@@ -8,7 +8,7 @@ function BlogCategory() {
 
     const { user } = useSelector((state) => ({ ...state }))
 
-    //Coupon Data
+    //Category Data
     const [category, setCategory] = useState([])
 
     const allCategory = async () => {
@@ -39,51 +39,51 @@ function BlogCategory() {
 
 
 
-     //status control
+    //status control
 
-     const handleStatus = async(id)=>{
-        try{
+    const handleStatus = async (id) => {
+        try {
 
             const res = await fetch(`http://localhost:8000/blog-category-status/${id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.token}`
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`
+                },
+            });
+
+            const data = await res.json();
+
+            if (res.status === 200) {
+
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: `Category Updated`,
+                    icon: 'success',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        container: 'custom-toast-container',
+                        popup: 'custom-toast-popup',
+                        title: 'custom-toast-title',
+                        icon: 'custom-toast-icon',
                     },
-                });
+                })
+                allCategory();
+            }
 
-                const data = await res.json();
-
-                if (res.status === 200) {
-
-                    Swal.fire({
-                        toast: false,
-                        animation: true,
-                        text: `Category Updated`,
-                        icon: 'success',
-                        showConfirmButton: true,
-                        timer: 3000,
-                        timerProgressBar: true,
-                        customClass: {
-                            container: 'custom-toast-container',
-                            popup: 'custom-toast-popup',
-                            title: 'custom-toast-title',
-                            icon: 'custom-toast-icon',
-                        },
-                    })
-                    allCategory();
-                }
-
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
 
-    }  
+    }
 
-     //Delete Data
+    //Delete Data
 
-     const handleClick = async(id) => {
-        
+    const handleClick = async (id) => {
+
         try {
 
             const result = await Swal.fire({
@@ -160,19 +160,19 @@ function BlogCategory() {
             name: 'Status',
             selector: row => (
                 <td className="sherah-table__column-6 sherah-table__data-6">
-                <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
-                    <label className="sherah__item-switch">
-                        <input
+                    <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
+                        <label className="sherah__item-switch">
+                            <input
 
-                            id="status"
-                            onClick={() =>handleStatus(row.id)}
-                            type="checkbox"
-                            checked={row.status === 'Active' ? 'checked' : ''}
-                        />
-                        <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
-                    </label>
-                </div>
-            </td>
+                                id="status"
+                                onClick={() => handleStatus(row.id)}
+                                type="checkbox"
+                                checked={row.status === 'Active' ? 'checked' : ''}
+                            />
+                            <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
+                        </label>
+                    </div>
+                </td>
             )
         },
 
@@ -260,7 +260,7 @@ function BlogCategory() {
                             </g>
                         </svg>
                     </Link>
-                  
+
                 </div>
 
             )
@@ -273,9 +273,9 @@ function BlogCategory() {
 
     useEffect(() => {
         const data = category.map((item, index) => ({
-            sn : index+1,
+            sn: index + 1,
             name: item.name,
-            
+
             status: item.status,
             id: item._id
         }));
@@ -295,7 +295,10 @@ function BlogCategory() {
         } else {
             setRecord(category);
         }
-    };
+    };  
+
+
+   
 
 
     return (
@@ -331,6 +334,12 @@ function BlogCategory() {
                                     </div>
                                 </div>
                                 <div className="sherah-table sherah-page-inner sherah-border sherah-default-bg mg-top-25">
+
+                                    <div className='form-group col-md-3 offset-md-9'>
+                                        <input type='text' placeholder='search..' className='form-control' onChange={handleFilter} />
+                                    </div>
+                                    <br></br>
+
 
                                     <DataTable columns={columns} data={record} pagination>
 
