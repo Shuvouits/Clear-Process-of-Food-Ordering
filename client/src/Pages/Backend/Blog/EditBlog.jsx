@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app, storage } from '../../firebase.js'
 import Loader from '../../../components/loader/Loader.jsx';
-function AddBlog() {
+function EditBlog() {
 
     const { user } = useSelector((state) => ({ ...state }))
     const [formData, setFormData] = useState({})
     const navigate = useNavigate();
+    const { id } = useParams()
 
     //category Data fetch
 
@@ -40,6 +41,44 @@ function AddBlog() {
     useEffect(() => {
         allCategory();
     }, []);
+
+    const [blog, setBlog] = useState([])
+
+    const specificBlog = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/edit-blog/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setBlog(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+    useEffect(() => {
+        specificBlog();
+    }, []);
+
+    useEffect(() => {
+        setFormData({
+            title: blog.title || '',
+            slug: blog.slug || '',
+            status: blog.status || '',
+            avatar: blog.avatar || '',
+            category: blog.category || '',
+            description: blog.description || ''
+        });
+    }, [blog]);
 
 
 
@@ -108,44 +147,11 @@ function AddBlog() {
 
         try {
 
-            if (file) {
-
-                const storageRef = ref(storage, `/files/${file.name}`);
-                const uploadTask = uploadBytesResumable(storageRef, file);
-
-                // Wait for both upload and download URL retrieval
-                const [snapshot] = await Promise.all([
-                    new Promise((resolve, reject) => {
-                        uploadTask.on(
-                            "state_changed",
-                            (snapshot) => {
-                                // Handle upload state changes if needed
-                            },
-                            (err) => {
-                                console.log(err);
-                                reject(err);
-                            },
-                            () => {
-                                resolve(uploadTask.snapshot);
-                            }
-                        );
-                    }),
-                ]);
-
-                // Get the download URL
-                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-                // Update formData with the download URL
-                setFormData((prevData) => ({
-                    ...prevData,
-                    avatar: downloadURL,
-                }));
-
-            }
+           
 
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-blog', {
+            const res = await fetch(`http://localhost:8000/update-blog/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -162,7 +168,7 @@ function AddBlog() {
                 Swal.fire({
                     toast: false,
                     animation: true,
-                    text: `Added New Category `,
+                    text: `Blog Data Updated `,
                     icon: 'success',
                     showConfirmButton: true,
                     timer: 3000,
@@ -190,7 +196,7 @@ function AddBlog() {
         }
     };
 
-    console.log(formData)
+    console.log(blog)
 
 
     return (
@@ -257,6 +263,7 @@ function AddBlog() {
                                                                             type="text"
                                                                             id="title"
                                                                             onChange={handleChange}
+                                                                            value={formData.title}
                                                                         />
                                                                     </div>
                                                                 </div>
@@ -290,14 +297,11 @@ function AddBlog() {
                                                                     <select
                                                                         className="form-group__input"
                                                                         aria-label="Default select example"
-                                                                        id="category"
-                                                                        onChange={handleChange}
+                                                                        id="blogCategory"
                                                                     >
 
-                                                                        <option selected disabled>Select Category</option>
-
                                                                         {category.map((data) => (
-                                                                            <option value={data._id}>{data.name}</option>
+                                                                            <option value={data._id} selected = {formData.category === data._id ? 'selected' : ''} >{data.name}</option>
 
                                                                         ))}
 
@@ -316,8 +320,8 @@ function AddBlog() {
                                                                         id="status"
                                                                         onChange={handleChange}
                                                                     >
-                                                                        <option value="Active">Active</option>
-                                                                        <option value="Inactive">Inactive</option>
+                                                                         <option value="Active" selected={formData.status === 'Active'} >Active</option>
+                                                                        <option value="Inactive" selected={formData.status === 'Inactive'}>Inactive</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -332,6 +336,7 @@ function AddBlog() {
                                                                             id="description"
                                                                             style={{ height: '200px' }}
                                                                             onChange={handleChange}
+                                                                            value={formData.description}
 
                                                                         />
 
@@ -350,9 +355,9 @@ function AddBlog() {
                                                     <div className="image-upload-group">
                                                         <div className="image-upload-group__single">
 
-                                                            {imagePreview &&
+                                                            {formData.avatar &&
                                                                 (
-                                                                    <img className='admin_avatar' src={imagePreview} />
+                                                                    <img className='admin_avatar' src={formData.avatar} />
 
                                                                 )
                                                             }
@@ -378,7 +383,6 @@ function AddBlog() {
                                                                 id="avatar"
                                                                 onChange={(e) => setFile(e.target.files[0])}
                                                                 autoComplete="off"
-                                                                required
                                                             />
                                                             <label
                                                                 className="image-upload-label"
@@ -425,7 +429,7 @@ function AddBlog() {
                                                     type="submit"
                                                     className="sherah-btn sherah-btn__primary"
                                                 >
-                                                    Create Blog
+                                                    Update Blog
                                                 </button>
                                             </div>
                                         </form>
@@ -445,4 +449,4 @@ function AddBlog() {
     )
 }
 
-export default AddBlog
+export default EditBlog

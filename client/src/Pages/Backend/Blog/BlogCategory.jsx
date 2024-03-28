@@ -285,20 +285,39 @@ function BlogCategory() {
     const handleFilter = (event) => {
         const searchQuery = event.target.value.toLowerCase();
 
+
         const newData = category.filter(row => {
             return row.name.toLowerCase().includes(searchQuery);
         });
 
         // Update the record state if search query is present, else reset it to display all data
-        if (searchQuery) {
-            setRecord(newData);
+        if (searchQuery.length > 0) {
+
+            const data = newData.map((item, index) => ({
+                sn: index + 1,
+                name: item.name,
+    
+                status: item.status,
+                id: item._id
+            }));
+            setRecord(data);
+            console.log("newData")
+            
         } else {
             setRecord(category);
+
+            const data = category.map((item, index) => ({
+                sn: index + 1,
+                name: item.name,
+    
+                status: item.status,
+                id: item._id
+            }));
+            setRecord(data);
+            
+            console.log("category")
         }
     };  
-
-
-   
 
 
     return (

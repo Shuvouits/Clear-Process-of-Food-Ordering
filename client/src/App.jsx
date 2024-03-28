@@ -62,6 +62,7 @@ import EditTime from './Pages/Backend/product/EditTime'
 import EditProduct from './Pages/Backend/product/EditProduct'
 import ProductGallery from './Pages/Backend/product/ProductGallery'
 import EditBlogCategory from './Pages/Backend/Blog/EditBlogCategory'
+import EditBlog from './Pages/Backend/Blog/EditBlog'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -164,6 +165,7 @@ function App() {
             <Route path='blog-category-create' element={<AddBlogCategory />} />
 
             <Route path='edit-blog-category-item/:id' element={<EditBlogCategory />} />
+            <Route path='edit-blog-item/:id' element={<EditBlog />} />
 
           </Route>
 
