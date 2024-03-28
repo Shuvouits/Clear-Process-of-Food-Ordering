@@ -1013,6 +1013,93 @@ exports.allBlogCategory = async(req, res) => {
 }   
 
 
+exports.editBlogCategory = async(req,res)=> {
+    try{
+        const categoryId = req.params.id;
+        const data = await BlogCategory.findById(categoryId);
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}   
+
+
+exports.updateBlogCategory = async(req,res)=> {
+    try{
+        const categoryId = req.params.id;
+        const{name, status, slug} = req.body
+
+        const updateData = await BlogCategory.findByIdAndUpdate(categoryId, {name, status, slug}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}   
+
+
+exports.blogCategoryStatus = async(req,res)=> {
+    try{
+        const categoryId = req.params.id;
+
+        const data = await BlogCategory.findById({_id : categoryId});
+
+        let status = data.status;
+
+        if(status === 'Active'){
+            status = 'Inactive'
+        }else{
+            status = 'Active'
+        }
+
+        const updateData = await BlogCategory.findByIdAndUpdate(categoryId, {status:status}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+    }
+}  
+
+
+
+exports. deleteBlogcategory = async(req, res)=> {
+    try{
+       
+        const categoryId = req.params.id;
+        
+
+        const data = await BlogCategory.findOneAndDelete({_id : categoryId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+
+
 
 
 

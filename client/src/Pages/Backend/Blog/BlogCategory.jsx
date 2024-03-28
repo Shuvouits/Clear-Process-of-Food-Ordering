@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
 function BlogCategory() {
 
@@ -37,6 +38,112 @@ function BlogCategory() {
     }, []);
 
 
+
+     //status control
+
+     const handleStatus = async(id)=>{
+        try{
+
+            const res = await fetch(`http://localhost:8000/blog-category-status/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Category Updated`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allCategory();
+                }
+
+        }catch(error){
+            console.log(error)
+        }
+
+    }  
+
+     //Delete Data
+
+     const handleClick = async(id) => {
+        
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Category?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-blog-category/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Category Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allCategory();
+                }
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
+
+
+    //Data
     const columns = [
 
         {
@@ -56,10 +163,11 @@ function BlogCategory() {
                 <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
                     <label className="sherah__item-switch">
                         <input
+
                             id="status"
-                            onclick="changeCategoryStatus(2)"
+                            onClick={() =>handleStatus(row.id)}
                             type="checkbox"
-                            defaultChecked=""
+                            checked={row.status === 'Active' ? 'checked' : ''}
                         />
                         <span className="sherah__item-switch--slide sherah__item-switch--round"></span>
                     </label>
@@ -72,8 +180,8 @@ function BlogCategory() {
             name: 'Action',
             selector: row => (
                 <div className="sherah-table__status__group">
-                    <a
-                        href="https://reservq.minionionbd.com/edit-product-item/2"
+                    <Link
+                        to={`/admin/edit-blog-category-item/${row.id}`}
                         className="sherah-table__action sherah-color2 sherah-color3__bg--opactity"
                     >
                         <svg
@@ -111,10 +219,10 @@ function BlogCategory() {
                                 />
                             </g>
                         </svg>
-                    </a>
-                    <a
-                        href="https://reservq.minionionbd.com/product-item-destroy/2"
-                        onclick="confirmation(event)"
+                    </Link>
+                    <Link
+                        to="#"
+                        onClick={() => handleClick(row.id)}
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >
                         <svg
@@ -151,7 +259,7 @@ function BlogCategory() {
                                 />
                             </g>
                         </svg>
-                    </a>
+                    </Link>
                   
                 </div>
 
@@ -218,7 +326,7 @@ function BlogCategory() {
                                             to="/admin/blog-category-create"
                                             className="sherah-btn sherah-gbcolor"
                                         >
-                                            Create Blog
+                                            Create Blog Category
                                         </Link>
                                     </div>
                                 </div>
