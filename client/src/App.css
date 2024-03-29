@@ -169,4 +169,13 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
 }
 
 
+.categories-main-box .categories-item {
+
+  width: auto !important;
+
+}  
+.categories-main-box{
+
+}
+
 

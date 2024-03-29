@@ -1,6 +1,36 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 function FAQ() {
+
+  const [faqs, setFaqs] = useState([
+    {
+      question: "Can I make a reservation online?",
+      answer: "Yes, you can make a reservation online through our website.",
+      isOpen: false
+    },
+    {
+      question: "What type of cuisine does your restaurant offer?",
+      answer: "We offer a variety of cuisines including Italian, Asian fusion, and Mediterranean.",
+      isOpen: false
+    },
+    {
+      question: "Do you have vegetarian options?",
+      answer: "Yes, we have a wide range of vegetarian dishes available on our menu.",
+      isOpen: false
+    }
+  ]);
+
+  const toggleFaq = index => {
+    setFaqs(prevFaqs => (
+      prevFaqs.map((faq, i) => (
+        i === index ? { ...faq, isOpen: !faq.isOpen } : { ...faq, isOpen: false }
+      ))
+    ));
+  };
+
+
+
+
   return (
     <>
     
@@ -13,7 +43,8 @@ function FAQ() {
                   Foodie FAQ: Your Culinary Queries Answered
                 </h2>
               </div>
-              <div class="faq-main">
+
+             {/* <div class="faq-main">
                 <div class="accordion" id="accordionExample">
                   <div class="accordion-item">
                     <h2 class="accordion-header" id="heading1">
@@ -50,7 +81,27 @@ function FAQ() {
                     </div>
                   </div>
                 </div>
-              </div>
+  </div>  */}  
+
+
+<div className="faq-main">
+      {faqs.map((faq, index) => (
+        <div className="accordion-item" key={index}>
+          <h2 className="accordion-header" id={`heading${index}`}>
+            <button className={`accordion-button${faq.isOpen ? '' : ' collapsed'}`} type="button" onClick={() => toggleFaq(index)} aria-expanded={faq.isOpen ? 'true' : 'false'}>
+              {faq.question}
+            </button>
+          </h2>
+          <div id={`collapse${index}`} className={`accordion-collapse${faq.isOpen ? ' show' : ' collapse'}`} aria-labelledby={`heading${index}`} data-bs-parent="#accordionExample">
+            <div className="accordion-body">
+              <p>{faq.answer}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+
             </div>
             <div class="col-lg-6 ">
               <div class="row">

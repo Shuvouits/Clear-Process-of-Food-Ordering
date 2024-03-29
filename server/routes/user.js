@@ -21,7 +21,7 @@ router.post('/profile-update', authUser, profileUpdate);
 
 
 router.post('/add-category', authUser, addCategory);
-router.get('/all-category', authUser, allCategory);
+router.get('/all-category',  allCategory);
 router.get('/edit-category/:id', authUser, editCategory);
 router.post('/update-category/:id', authUser, updateCategory);
 router.get('/delete-category/:id', authUser, deleteCategory);
@@ -56,7 +56,7 @@ router.post('/update-time/:id', authUser, updateTime);
 router.get('/delete-time/:id', authUser, deleteTime);  
 
 router.post('/add-product', authUser, addProduct);
-router.get('/all-product', authUser, allProduct);
+router.get('/all-product', allProduct);
 router.get('/edit-product/:id', authUser, editProduct);
 router.get('/delete-product/:productId/image/:imageId', authUser, deleteProductImage);
 router.post('/update-product-image/:id', authUser, updateProductImage);
@@ -72,7 +72,7 @@ router.post('/blog-category-status/:id', authUser, blogCategoryStatus);
 router.get('/delete-blog-category/:id', authUser, deleteBlogcategory);
 
 router.post('/add-blog', authUser, addBlog);
-router.get('/all-blog', authUser, allBlog);
+router.get('/all-blog', allBlog);
 router.get('/edit-blog/:id', authUser, editBlog);
 router.post('/update-blog/:id', authUser, updateBlog);
 router.post('/blog-status/:id', authUser, blogStatus);

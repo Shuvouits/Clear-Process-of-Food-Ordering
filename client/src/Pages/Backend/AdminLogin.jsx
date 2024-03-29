@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 import Swal from 'sweetalert2'
@@ -87,12 +87,7 @@ function AdminLogin() {
             >
               {/* Logo */}
               <div className="sherah-wc__logo">
-                <a href="https://reservq.minionionbd.com">
-                  <img
-                    src="https://reservq.minionionbd.com/uploads/website-images/stiky-logo-2023-10-29-09-42-50-6269.png"
-                    alt="#"
-                  />
-                </a>
+                
               </div>
               {/* Middle Image */}
               <div className="sherah-wc__middle">

@@ -133,7 +133,7 @@ function ProductGallery() {
                             className="product_list_thumb"
                             src={row.image}
                             alt="#"
-                            style={{ width: '50px', height: '50px' }}
+                            style={{ width: '100px', height: '60px' }}
                         />
                     </div>
                 </td>

@@ -176,7 +176,7 @@ function ProductList() {
             selector: row => (
                 <td className="sherah-table__column-6 sherah-table__data-4">
                 <div className="sherah-ptabs__notify-switch sherah-ptabs__notify-switch--two">
-                    <button className="btn btn-success rounded-circle">
+                    <button className={`btn rounded-circle ${row.populer === 'Yes' ? 'btn-success' : 'btn-danger'}`}>
                         {row.populer}
                     </button>
                 </div>

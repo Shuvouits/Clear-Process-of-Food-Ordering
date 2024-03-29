@@ -62,6 +62,7 @@ const productSchema = new mongoose.Schema({
 
     status: {
         type: String,
+        default: 'Active'
     },
 
     tdescription: {
@@ -75,6 +76,7 @@ const productSchema = new mongoose.Schema({
     },
     populer: {
         type: String,
+        default: 'Yes'
     },
     avatar: {
         type: String,

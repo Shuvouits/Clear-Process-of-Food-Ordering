@@ -818,7 +818,7 @@ exports.allProduct = async(req, res) => {
 
     try{
 
-        const product = await Product.find();
+        const product = await Product.find({status: 'Active'});
         return res.status(200).json(product)
 
     }catch(error){

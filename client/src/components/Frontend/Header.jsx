@@ -5,7 +5,7 @@ function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [cart, setCart] = useState(false)
 
-  const handleCartClick = ()=>{
+  const handleCartClick = () => {
     setCart(!cart)
   }
 
@@ -32,7 +32,8 @@ function Header() {
     <>
 
       <header className="header  header-two  ">
-        <div className="container">
+
+        {/* menu part start */} <div className="container">
           <div className="header-main">
             <div className="header-left-center">
               <a href="https://reservq.minionionbd.com/menu">
@@ -104,7 +105,7 @@ function Header() {
             </div>
           </div>
         </div>
-        {/* menu part start */}
+
         <nav className={`menu-bg ${isScrolled ? 'nav-bg' : ''}`}  >
           <div className="container">
             <div className="row">
@@ -113,7 +114,7 @@ function Header() {
                   <div className="nav-main">
                     <div className="logo">
                       <Link to="/">
-                        <h1 style={{color: '#fe724c', fontWeight:'bold'}}>FoodOrder</h1>
+                        <h1 style={{ color: '#fe724c', fontWeight: 'bold' }}>FoodOrder</h1>
                       </Link>
                     </div>
                     <div className="menu">
@@ -305,7 +306,10 @@ function Header() {
             </div>
           </div>
         </nav>
+
       </header>
+
+
 
       <aside id="offcanvas-nav" className=''>
         <nav class="m-nav">

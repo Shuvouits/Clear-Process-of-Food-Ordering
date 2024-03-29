@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function Login() {
   return (
@@ -29,12 +30,12 @@ function Login() {
   </div>
   <div className="sign-up-main">
     <div className="sign-up-logo">
-      <a href="https://reservq.minionionbd.com">
+      <Link to="/">
         <img
           src="https://reservq.minionionbd.com/uploads/website-images/login-page-logo-2023-10-29-08-09-50-3973.png"
           alt="logo"
         />
-      </a>
+      </Link>
     </div>
     <div className="sign-up-text">
       <h2>Welcome back</h2>
@@ -97,7 +98,7 @@ function Login() {
               </div>
               <div className="sign-up-main-btn">
                 <a
-                  href="https://reservq.minionionbd.com/forgot/password"
+                  href="/forgot/password"
                   className="modal-sign-up-from-btn"
                 >
                   Forget Password?

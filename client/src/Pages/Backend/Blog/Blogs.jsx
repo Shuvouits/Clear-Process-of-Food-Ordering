@@ -164,9 +164,9 @@ function Blogs() {
                             className=""
                             src={row.avatar}
                             alt="#"
-                            width={60}
-                            height={60}
-                            style={{borderRadius: '10px'}}
+                            width={100}
+                            height={100}
+                            style={{borderRadius: '5px'}}
                         />
                     </div>
                 </td>

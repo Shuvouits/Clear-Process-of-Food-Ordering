@@ -206,6 +206,7 @@ function AddProduct() {
     const [vfile, setVfile] = useState(undefined)
     const [vimagePreview, setVimagePreview] = useState(null);
     const [vimageLoading, setVimageLoading] = useState(false)
+    const [vfilePerc, setVfilePerc] = useState(0);
 
     const vhandleFileUpload = (vfile) => {
         setVimageLoading(true)
@@ -216,7 +217,7 @@ function AddProduct() {
 
         uploadTask.on('state_changed', (snapshot) => {
             const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            setFilePerc(Math.round(progress));
+            setVfilePerc(Math.round(progress));
         }, (error) => {
             setFileUploadError(true);
         }, () => {
@@ -789,7 +790,7 @@ function AddProduct() {
                                                                                     {
                                                                                         vimageLoading && (
 
-                                                                                            <span>{filePerc}% </span>
+                                                                                            <span>{vfilePerc}% </span>
 
                                                                                         )
                                                                                     }
