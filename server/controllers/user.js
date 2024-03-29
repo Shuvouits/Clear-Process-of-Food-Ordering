@@ -1226,6 +1226,18 @@ exports. deleteBlog = async(req, res)=> {
 }  
 
 
+exports.specificMenu = async(req,res)=> {
+    try{
+        const title = req.params.title;
+        const data = await Product.findOne({slug: title});
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+
 
 
 
