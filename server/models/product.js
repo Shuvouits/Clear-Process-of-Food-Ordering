@@ -39,6 +39,14 @@ const multipleSchema = new mongoose.Schema({
     }
 }, { _id: false });
 
+const optionalSchema = new mongoose.Schema({
+
+    id: {
+        type: String,
+    }
+
+}, { _id: false })
+
 
 const productSchema = new mongoose.Schema({
     productName: {
@@ -85,7 +93,7 @@ const productSchema = new mongoose.Schema({
         type: String,
     },
     optionalItem: {
-         type: [String],  // Adjusted to match the structure
+        type: [optionalSchema],
        /* type: mongoose.Schema.Types.ObjectId, */
         default: undefined
     },

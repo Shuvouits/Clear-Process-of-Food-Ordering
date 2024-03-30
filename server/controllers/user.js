@@ -780,7 +780,11 @@ exports.addProduct = async(req,res) => {
             link: imageUrl
         }));
 
-        
+        const optionData = optionalItem.map((item)=>({
+            id: item
+        }))
+
+
 
         const data = await new Product({
            
@@ -797,14 +801,14 @@ exports.addProduct = async(req,res) => {
            populer,
            avatar,
            vavatar,
-           optionalItem,
+           optionalItem : optionData,
            multipleImage : multipleImageWithIds,
            productSize,
            specification
            
         }).save(); 
 
-        res.status(200).json(data) 
+        res.status(200).json(data)
 
 
     }catch(error){
@@ -1229,12 +1233,8 @@ exports. deleteBlog = async(req, res)=> {
 exports.specificMenu = async(req,res)=> {
     try{
         const title = req.params.title;
-        const data = await Product.findOne({slug: title});
+        const data = await Product.findOne({slug: title}).populate('optionalItem');
 
-
-      
-
-       
 
         if(!data){
             return res.status(404).json('No Data Found')

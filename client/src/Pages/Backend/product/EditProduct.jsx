@@ -207,17 +207,25 @@ function EditProduct() {
         }
     }, [formData.optionalItem]);
 
+
     const handleOptional = (event) => {
         const { value, checked } = event.target;
+    
         if (checked) {
-            setOptionalItem(prevItems => [...prevItems, value]);
+            // Add the object with the correct structure
+            const newItem = { id: value };
+            setOptionalItem(prevItems => [...prevItems, newItem]);
         } else {
-            setOptionalItem(prevItems => prevItems.filter(item => item !== value));
+            // Remove the object with the matching id
+            setOptionalItem(prevItems => prevItems.filter(item => item.id !== value));
         }
     };
 
+    console.log(optionalItem)
 
-    console.log(formData)
+   
+
+
 
 
 
@@ -334,8 +342,6 @@ function EditProduct() {
     };
 
 
-    console.log(formData);
-
 
 
     const handleSubmit = async (e) => {
@@ -428,6 +434,10 @@ function EditProduct() {
                                         <div className="col-12">
                                             <div className="sherah-breadcrumb mg-top-30">
                                                 <h2 className="sherah-breadcrumb__title">Edit Product</h2>
+
+                                               
+
+
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
                                                         <Link to="/admin/dashboard">
@@ -670,16 +680,21 @@ function EditProduct() {
 
 
 
-                                                                    {option.map((data) => (
+                                                                    {option.map((data, index) => (
                                                                         <div className='custom-row' key={data._id}>
-                                                                            <label className="form-check-label customcheck" htmlFor="check1">
+                                                                            <label className="form-check-label customcheck" htmlFor={`check${index + 1}`}>
                                                                                 <input
                                                                                     type="checkbox"
                                                                                     onChange={handleOptional}
                                                                                     className="form-check-input"
                                                                                     name="option1"
+                                                                                    id={`check${index + 1}`}
                                                                                     value={data._id}
-                                                                                    checked={optionalItem.includes(data._id)} // Use optionalItem state instead of formData.optionalItem
+                                                                                   // checked = {optionalItem?.[index]?.id === data._id ? 'checked' : ''}
+                                                                                     // Use optionalItem state instead of formData.optionalItem
+
+                                                                                    checked={optionalItem.some(item => item.id === data._id)} 
+                                                                                     
                                                                                 />
                                                                                 {data.name}
                                                                             </label>

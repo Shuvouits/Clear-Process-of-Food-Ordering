@@ -386,10 +386,8 @@ function AddProduct() {
             }
 
 
-
-
-
         } catch (error) {
+            return(error)
             setLoading(false)
             console.log(error)
         }
