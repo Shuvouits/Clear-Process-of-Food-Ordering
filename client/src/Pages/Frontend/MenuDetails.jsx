@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react'
 import InnerBanner from '../../components/Frontend/InnerBanner'
 import Resturent from '../../components/Frontend/Resturent'
 import { useParams } from 'react-router-dom'
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from 'react-slick';
 
 function MenuDetails() {
-    const {title} = useParams()
+    const { title } = useParams()
 
     const [menu, setMenu] = useState({})
-    const [formData, setFormData] = useState({})
+
     const specificMenu = async () => {
 
         try {
@@ -36,6 +39,80 @@ function MenuDetails() {
         specificMenu();
     }, []);
 
+    const [optionalData, setOptionalData] = useState([])
+
+    const allOptional = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-optional`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+
+            const data = await res.json();
+            setOptionalData(data);
+
+        } catch (error) {
+            return (error)
+            console.log(error)
+
+        }
+
+    };
+    useEffect(() => {
+        allOptional();
+    }, []);
+
+    const [menuTab, setMenuTab] = useState(true)
+
+    const handleMenu = () => {
+        setMenuTab(true)
+        setVideoTab(false)
+        setReviewTab(false)
+    }
+
+    const [videoTab, setVideoTab] = useState(false)
+
+    const handleVideo = () => {
+        setVideoTab(true)
+        setMenuTab(false)
+        setReviewTab(false)
+    }
+
+    const [reviewTab, setReviewTab] = useState(false)
+
+    const handleReview = () => {
+        setVideoTab(false)
+        setMenuTab(false)
+        setReviewTab(true)
+    }
+
+
+    var settings = {
+        dots: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        autoplay: true,
+        autoplaySpeed: 2000,
+
+        responsive: [
+            {
+                breakpoint: 1000,
+                settings: {
+                    slidesToShow: 1,
+                }
+            }
+        ]
+
+    };
+
+    console.log(optionalData)
+
 
 
     return (
@@ -49,10 +126,14 @@ function MenuDetails() {
                             <div className="food-details-head">
 
                                 <h2>{menu.productName}</h2>
-                               
-                               
+
+
                             </div>
+
                             <div className="food-details-slick">
+
+
+
                                 <div className="slider-for slick-initialized slick-slider">
                                     <div className="slick-list draggable">
                                         <div className="slick-track" style={{ opacity: 1, width: 3488 }}>
@@ -139,113 +220,69 @@ function MenuDetails() {
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div className="slider-nav slick-initialized slick-slider">
                                     <div className="slick-list draggable" style={{ padding: 0 }}>
-                                        <div
-                                            className="slick-track"
-                                            style={{
-                                                opacity: 1,
-                                                width: 872,
-                                                transform: "translate3d(-654px, 0px, 0px)",
-                                                transition: "transform 2000ms ease 0s"
-                                            }}
-                                        >
-                                            <div
-                                                className="slider-nav-img slick-slide"
-                                                data-slick-index={0}
-                                                aria-hidden="true"
-                                                style={{ width: 188 }}
-                                                tabIndex={-1}
-                                            >
-                                                <img
-                                                    src="https://reservq.minionionbd.com/uploads/custom-images/Gallery2024-01-25-10-05-536314.jpg"
-                                                    alt=""
-                                                />
-                                                <div className="overlay" />
-                                            </div>
-                                            <div
-                                                className="slider-nav-img slick-slide"
-                                                data-slick-index={1}
-                                                aria-hidden="true"
-                                                style={{ width: 188 }}
-                                                tabIndex={-1}
-                                            >
-                                                <img
-                                                    src="https://reservq.minionionbd.com/uploads/custom-images/Gallery2024-01-25-10-05-537300.jpg"
-                                                    alt=""
-                                                />
-                                                <div className="overlay" />
-                                            </div>
-                                            <div
-                                                className="slider-nav-img slick-slide"
-                                                data-slick-index={2}
-                                                aria-hidden="true"
-                                                style={{ width: 188 }}
-                                                tabIndex={0}
-                                            >
-                                                <img
-                                                    src="https://reservq.minionionbd.com/uploads/custom-images/Gallery2024-01-25-10-05-532067.jpg"
-                                                    alt=""
-                                                />
-                                                <div className="overlay" />
-                                            </div>
-                                            <div
-                                                className="slider-nav-img slick-slide slick-current slick-center"
-                                                data-slick-index={3}
-                                                aria-hidden="true"
-                                                style={{ width: 188 }}
-                                                tabIndex={0}
-                                            >
-                                                <img
-                                                    src=''
-                                                    alt=""
-                                                />
-                                                <div className="overlay" />
-                                            </div>
-                                        </div>
+                                        <Slider {...settings} >
+                                            {Array.isArray(menu.multipleImage) && menu.multipleImage.map((item, index) => (
+                                                <div key={index} className='custom-slider'>
+                                                    <img src={item.link} alt={`Image ${index + 1}`} width={150} height={100} style={{ borderRadius: '10px' }} />
+                                                </div>
+                                            ))}
+                                        </Slider>
                                     </div>
                                 </div>
+
+
                             </div>
+
+
+
                             <div className="food-details-item-box">
                                 <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                     <li className="nav-item" role="presentation">
                                         <button
-                                            className="nav-link"
+                                            className={`nav-link ${menuTab ? 'active' : ''}`}
                                             id="pills-home-tab"
                                             data-bs-toggle="pill"
                                             data-bs-target="#pills-home"
                                             type="button"
                                             role="tab"
                                             aria-controls="pills-home"
-                                            aria-selected="false"
+                                            aria-selected={`${menuTab ? 'true' : 'false'}`}
+                                            onClick={handleMenu}
                                         >
                                             Menu Details
                                         </button>
                                     </li>
                                     <li className="nav-item" role="presentation">
                                         <button
-                                            className="nav-link active"
+
+                                            className={`nav-link ${videoTab ? 'active' : ''}`}
                                             id="pills-profile-tab"
                                             data-bs-toggle="pill"
                                             data-bs-target="#pills-profile"
                                             type="button"
                                             role="tab"
                                             aria-controls="pills-profile"
-                                            aria-selected="true"
+                                            aria-selected={`${videoTab ? 'true' : 'false'}`}
+                                            onClick={handleVideo}
                                         >
                                             Video
                                         </button>
                                     </li>
                                     <li className="nav-item" role="presentation">
                                         <button
-                                            className="nav-link"
+                                            className={`nav-link ${reviewTab ? 'active' : ''}`}
                                             id="pills-contact-tab"
                                             data-bs-toggle="pill"
                                             data-bs-target="#pills-contact"
                                             type="button"
                                             role="tab"
                                             aria-controls="pills-contact"
-                                            aria-selected="false"
+                                            aria-selected={`${reviewTab ? 'true' : 'false'}`}
+                                            onClick={handleReview}
                                         >
                                             Review
                                         </button>
@@ -253,7 +290,7 @@ function MenuDetails() {
                                 </ul>
                                 <div className="tab-content" id="pills-tabContent">
                                     <div
-                                        className="tab-pane fade"
+                                        className={`tab-pane fade ${menuTab ? 'active show' : ''}`}
                                         id="pills-home"
                                         role="tabpanel"
                                         aria-labelledby="pills-home-tab"
@@ -324,7 +361,8 @@ function MenuDetails() {
                                         </div>
                                     </div>
                                     <div
-                                        className="tab-pane fade active show"
+
+                                        className={`tab-pane fade ${videoTab ? 'active show' : ''}`}
                                         id="pills-profile"
                                         role="tabpanel"
                                         aria-labelledby="pills-profile-tab"
@@ -368,7 +406,8 @@ function MenuDetails() {
                                         </div>
                                     </div>
                                     <div
-                                        className="tab-pane fade"
+
+                                        className={`tab-pane fade ${reviewTab ? 'active show' : ''}`}
                                         id="pills-contact"
                                         role="tabpanel"
                                         aria-labelledby="pills-contact-tab"
@@ -550,220 +589,87 @@ function MenuDetails() {
                                     <div className="together-box-text">
                                         <h5>Select Size</h5>
                                     </div>
-                                    <div className="together-box-item">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="radio"
-                                                name="size"
-                                                defaultValue="Small,150"
-                                                id="size_0"
-                                                data-info="Small,150"
-                                            />
-                                            <label className="form-check-label" htmlFor="size_0">
-                                                Small
-                                            </label>
+
+                                    {Array.isArray(menu.productSize) && menu.productSize.map((item, index) => (
+                                        <div className="together-box-item">
+                                            <div className="form-check">
+                                                <input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    name="size"
+                                                    defaultValue="Small,150"
+                                                    id="size_0"
+                                                    data-info="Small,150"
+                                                />
+                                                <label className="form-check-label" htmlFor="size_0">
+                                                    {item.size}
+                                                </label>
+                                            </div>
+                                            <div className="form-check-btn">
+                                                <div className="grid">{item.price} Tk.</div>
+                                            </div>
                                         </div>
-                                        <div className="form-check-btn">
-                                            <div className="grid">$150</div>
-                                        </div>
-                                    </div>
-                                    <div className="together-box-item">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="radio"
-                                                name="size"
-                                                defaultValue="Mediam,200"
-                                                id="size_1"
-                                                data-info="Mediam,200"
-                                            />
-                                            <label className="form-check-label" htmlFor="size_1">
-                                                Mediam
-                                            </label>
-                                        </div>
-                                        <div className="form-check-btn">
-                                            <div className="grid">$200</div>
-                                        </div>
-                                    </div>
-                                    <div className="together-box-item">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="radio"
-                                                name="size"
-                                                defaultValue="Large,250"
-                                                id="size_2"
-                                                data-info="Large,250"
-                                            />
-                                            <label className="form-check-label" htmlFor="size_2">
-                                                Large
-                                            </label>
-                                        </div>
-                                        <div className="form-check-btn">
-                                            <div className="grid">$250</div>
-                                        </div>
-                                    </div>
+                                    ))}
+
+
+
+
                                     <div className="together-box-text">
                                         <h5>Select Addon (Optional)</h5>
                                     </div>
-                                    <div className="together-box-item">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                name="addons[]"
-                                                defaultValue={1}
-                                                id="addon_0_0"
-                                            />
-                                            <label className="form-check-label" htmlFor="addon_0_0">
-                                                Chicken Leg ($40)
-                                            </label>
-                                        </div>
-                                        <div className="form-check-btn">
-                                            <div className="form-check-btn">
-                                                <div className="grid">
-                                                    <button className="btn btn-minus" data-addon-index="0_0">
-                                                        <i className="fa-solid fa-minus" />
-                                                    </button>
-                                                    <div className="column product-qty" id="quantityUpdate_0_0">
-                                                        0
-                                                    </div>
+
+                                    {optionalData.map((item, index) => (
+                                        <div className="together-box-item">
+                                        
+
+                                                <div className="form-check">
                                                     <input
-                                                        type="hidden"
-                                                        name="addons_qty[]"
-                                                        id="qtyInput_0_0"
+                                                        className="form-check-input"
+                                                        type="checkbox"
+                                                        name="addons[]"
                                                         defaultValue={1}
+                                                        id="addon_0_0"
                                                     />
-                                                    <button className="btn btn-plus" data-addon-index="0_0">
-                                                        <i className="fa-solid fa-plus" />
-                                                    </button>
+                                                    <label className="form-check-label" htmlFor="addon_0_0">
+                                                        Chicken Leg ($40)
+                                                        {menu.optionalItem[index]}
+                                                    </label>
+                                                </div>
+
+
+                                            
+
+                                            <div className="form-check-btn">
+                                                <div className="form-check-btn">
+                                                    <div className="grid">
+                                                        <button className="btn btn-minus" data-addon-index="0_0">
+                                                            <i className="fa-solid fa-minus" />
+                                                        </button>
+                                                        <div className="column product-qty" id="quantityUpdate_0_0">
+                                                            0
+                                                        </div>
+                                                        <input
+                                                            type="hidden"
+                                                            name="addons_qty[]"
+                                                            id="qtyInput_0_0"
+                                                            defaultValue={1}
+                                                        />
+                                                        <button className="btn btn-plus" data-addon-index="0_0">
+                                                            <i className="fa-solid fa-plus" />
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className="together-box-item">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                name="addons[]"
-                                                defaultValue={3}
-                                                id="addon_1_0"
-                                            />
-                                            <label className="form-check-label" htmlFor="addon_1_0">
-                                                Drinks ($25)
-                                            </label>
-                                        </div>
-                                        <div className="form-check-btn">
-                                            <div className="form-check-btn">
-                                                <div className="grid">
-                                                    <button className="btn btn-minus" data-addon-index="1_0">
-                                                        <i className="fa-solid fa-minus" />
-                                                    </button>
-                                                    <div className="column product-qty" id="quantityUpdate_1_0">
-                                                        0
-                                                    </div>
-                                                    <input
-                                                        type="hidden"
-                                                        name="addons_qty[]"
-                                                        id="qtyInput_1_0"
-                                                        defaultValue={1}
-                                                    />
-                                                    <button className="btn btn-plus" data-addon-index="1_0">
-                                                        <i className="fa-solid fa-plus" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="together-box-item">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                name="addons[]"
-                                                defaultValue={4}
-                                                id="addon_2_0"
-                                            />
-                                            <label className="form-check-label" htmlFor="addon_2_0">
-                                                Nan ($10)
-                                            </label>
-                                        </div>
-                                        <div className="form-check-btn">
-                                            <div className="form-check-btn">
-                                                <div className="grid">
-                                                    <button className="btn btn-minus" data-addon-index="2_0">
-                                                        <i className="fa-solid fa-minus" />
-                                                    </button>
-                                                    <div className="column product-qty" id="quantityUpdate_2_0">
-                                                        0
-                                                    </div>
-                                                    <input
-                                                        type="hidden"
-                                                        name="addons_qty[]"
-                                                        id="qtyInput_2_0"
-                                                        defaultValue={1}
-                                                    />
-                                                    <button className="btn btn-plus" data-addon-index="2_0">
-                                                        <i className="fa-solid fa-plus" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="together-box-item">
-                                        <div className="form-check">
-                                            <input
-                                                className="form-check-input"
-                                                type="checkbox"
-                                                name="addons[]"
-                                                defaultValue={5}
-                                                id="addon_3_0"
-                                            />
-                                            <label className="form-check-label" htmlFor="addon_3_0">
-                                                Extra Chess ($5)
-                                            </label>
-                                        </div>
-                                        <div className="form-check-btn">
-                                            <div className="form-check-btn">
-                                                <div className="grid">
-                                                    <button className="btn btn-minus" data-addon-index="3_0">
-                                                        <i className="fa-solid fa-minus" />
-                                                    </button>
-                                                    <div className="column product-qty" id="quantityUpdate_3_0">
-                                                        0
-                                                    </div>
-                                                    <input
-                                                        type="hidden"
-                                                        name="addons_qty[]"
-                                                        id="qtyInput_3_0"
-                                                        defaultValue={1}
-                                                    />
-                                                    <button className="btn btn-plus" data-addon-index="3_0">
-                                                        <i className="fa-solid fa-plus" />
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="together-box-inner-btn">
-                                        <div className="grid">
-                                            <button className="btn btn-minus" id="btn-minus">
-                                                <i className="fa-solid fa-minus" />
-                                            </button>
-                                            <input
-                                                className="column product-qty"
-                                                type="text"
-                                                name="qty"
-                                                id="qtyInput"
-                                                defaultValue={1}
-                                            />
-                                            <button className="btn btn-plus" id="btn-plus">
-                                                <i className="fa-solid fa-plus" />
-                                            </button>
-                                        </div>
-                                    </div>
+                                    ))}  
+
+                                   
+
+
+
+
+
+
                                     <div className="together-box-inner-btn-btm">
                                         <button type="submit" className="main-btn-six" tabIndex={-1}>
                                             <span>
@@ -805,6 +711,8 @@ function MenuDetails() {
                                             Add to Cart
                                         </button>
                                     </div>
+
+
                                 </div>
                             </form>
                             <div className="blog-details-promobanner-res-df"></div>

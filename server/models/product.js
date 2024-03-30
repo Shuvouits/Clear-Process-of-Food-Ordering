@@ -85,7 +85,8 @@ const productSchema = new mongoose.Schema({
         type: String,
     },
     optionalItem: {
-        type: [String], // Adjusted to match the structure
+         type: [String],  // Adjusted to match the structure
+       /* type: mongoose.Schema.Types.ObjectId, */
         default: undefined
     },
     multipleImage: {

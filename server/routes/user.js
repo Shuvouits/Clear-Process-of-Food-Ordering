@@ -28,7 +28,7 @@ router.get('/delete-category/:id', authUser, deleteCategory);
 router.post('/category-status/:id', authUser, categoryStatus);
 
 router.post('/add-optional-item', authUser, addOptionalItem);
-router.get('/all-optional', authUser, allOptional);
+router.get('/all-optional',  allOptional);
 router.get('/edit-optional/:id', authUser, editOptional);
 router.post('/update-optional/:id', authUser, updateOptional);
 router.post('/optional-status/:id', authUser, optionalStatus);

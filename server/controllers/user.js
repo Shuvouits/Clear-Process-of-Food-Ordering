@@ -1230,6 +1230,15 @@ exports.specificMenu = async(req,res)=> {
     try{
         const title = req.params.title;
         const data = await Product.findOne({slug: title});
+
+
+      
+
+       
+
+        if(!data){
+            return res.status(404).json('No Data Found')
+        }
         return res.status(200).json(data)
 
     }catch(error){
