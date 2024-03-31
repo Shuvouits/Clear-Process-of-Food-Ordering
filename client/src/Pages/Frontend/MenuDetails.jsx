@@ -11,6 +11,24 @@ function MenuDetails() {
 
     const [menu, setMenu] = useState([])
 
+    const [count, setCount] = useState(0)
+    const [clickData, setClickData] = useState({})
+
+    const handleAdd = (id) => {
+        setClickData(id)
+        setCount(count + 1)
+    }
+
+    const handleSub = (id) => {
+        setClickData(id)
+        
+        if(count > 0){
+            setCount(count - 1)
+
+        }
+       
+    }
+
     const specificMenu = async () => {
 
         try {
@@ -111,7 +129,9 @@ function MenuDetails() {
 
     };
 
-    console.log(menu)
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+    }
 
 
 
@@ -335,11 +355,9 @@ function MenuDetails() {
                                                         Required fields are marked *
                                                     </p>
                                                 </div>
-                                                <form action="https://reservq.minionionbd.com/product/review" method="POST">
-                                                    <input type="hidden" name="_token" defaultValue="J3ZawuoCjVH95jTtVmdVvEhh9N7PrBn0q6UKSHxd"
-                                                    />
-                                                    {" "}
-                                                    <input type="hidden" name="product_id" defaultValue={2} />
+                                                <form onSubmit={handleSubmit} >
+
+
                                                     <div className="from-box">
                                                         <div className="from-item">
                                                             <div id="full-stars-example-two">
@@ -415,11 +433,9 @@ function MenuDetails() {
                         </div>
 
                         <div className="col-lg-4">
-                            <form action="https://reservq.minionionbd.com/cart/add" method="POST">
-                                <input type="hidden" name="_token" defaultValue="J3ZawuoCjVH95jTtVmdVvEhh9N7PrBn0q6UKSHxd"
-                                />
-                                {" "}
-                                <input type="hidden" defaultValue={2} name="product_id" />
+                            <form onSubmit={handleSubmit}>
+
+
                                 <div className="together-box">
                                     <div className="together-box-text">
                                         <h5>
@@ -449,41 +465,51 @@ function MenuDetails() {
                                     </div>
 
                                     {Array.isArray(menu.optionalItem) && menu.optionalItem.map((item, index) => (
-    <div key={index}>
-        {optionalData.map((optItem, optIndex) => (
-            optItem._id === item.id && (
-                <div className="together-box-item" key={optIndex}>
-                    <div className="form-check">
-                        <input className="form-check-input" type="checkbox" name="addons[]" defaultValue={1} id={`addon_${index}_${optIndex}`} />
-                        <label className="form-check-label" htmlFor={`addon_${index}_${optIndex}`}>
-                            {optItem.name} - ${optItem.price}
-                        </label>
-                    </div>
-                    <div className="form-check-btn">
-                        <div className="form-check-btn">
-                            <div className="grid">
-                                <button className="btn btn-minus" data-addon-index={`${index}_${optIndex}`}>
-                                    <i className="fa-solid fa-minus" />
-                                </button>
-                                <div className="column product-qty" id={`quantityUpdate_${index}_${optIndex}`}>
-                                    0
-                                </div>
-                                <input type="hidden" name="addons_qty[]" id={`qtyInput_${index}_${optIndex}`} defaultValue={1} />
-                                <button className="btn btn-plus" data-addon-index={`${index}_${optIndex}`}>
-                                    <i className="fa-solid fa-plus" />
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )
-        ))}
-    </div>
-))}
+                                        <div key={index}>
+                                            {optionalData.map((optItem, optIndex) => (
+                                                optItem._id === item.id && (
+                                                    <div className="together-box-item" key={optIndex}>
+                                                        <div className="form-check">
+                                                            <input className="form-check-input" type="checkbox" name="addons[]" defaultValue={1} id={`addon_${index}_${optIndex}`} />
+                                                            <label className="form-check-label">
+                                                                {optItem.name} <span style={{ marginLeft: '25px' }}>(${optItem.price})</span>
+                                                            </label>
+                                                        </div>
+                                                        <div className="form-check-btn">
+                                                            <div className="form-check-btn">
+                                                                <div className="grid">
+                                                                    <button className="btn btn-minus"  onClick={() => handleSub(optItem._id)}>
+                                                                        <i className="fa fa-minus" />
+                                                                    </button>
+                                                                    <div className="column product-qty" >
+                                                                        {clickData === optItem._id && (
+                                                                            <>
+                                                                                {count}
+                                                                            </>
+
+                                                                        )}
+
+                                                                        {clickData != optItem._id &&(
+                                                                            <>
+                                                                                0
+                                                                            </>
+
+                                                                        )}
 
 
+                                                                    </div>
 
-
+                                                                    <button className="btn btn-plus" onClick={() => handleAdd(optItem._id)}>
+                                                                        <i className="fa fa-plus" />
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                )
+                                            ))}
+                                        </div>
+                                    ))}
 
 
                                     <div className="together-box-inner-btn-btm">

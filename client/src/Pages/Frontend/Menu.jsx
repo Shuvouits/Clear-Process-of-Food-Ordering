@@ -2,9 +2,14 @@ import React, { useState } from 'react'
 import InnerBanner from '../../components/Frontend/InnerBanner'
 import FAQ from '../../components/Frontend/FAQ'
 import Resturent from '../../components/Frontend/Resturent'
+import { useParams } from 'react-router-dom'
 
 function Menu() {
   const [modalOpen, setModalOpen] = useState(false)
+
+  const { title } = useParams();
+  console.log(title)
+ 
 
   const handleModal = () => {
     setModalOpen(!modalOpen);

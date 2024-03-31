@@ -60,7 +60,7 @@ function Popular() {
                   </div>
                   <div className="popular-inner-box">
                     <div className="popular-item-box-text">
-                      <Link to="#">
+                      <Link to={`/menu/${item.slug}`}>
                         <h3 className="line-clamp-1">
                           {item.productName}
                         </h3>

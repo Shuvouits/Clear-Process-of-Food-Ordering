@@ -81,7 +81,7 @@ function Category() {
 
                         {category.map((item) => (
                             <div class="categories-main-box mt-48px customer-item-slick-row">
-                                <Link class="categories-item" data-aos="fade-up" to='#'>
+                                <Link class="categories-item" data-aos="fade-up" to={`/menu/category/${item.slug}`}>
                                     <div class="categories-icon">
                                         <img src={item.avatar} alt={item.name} />
                                     </div>

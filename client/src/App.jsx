@@ -64,6 +64,7 @@ import ProductGallery from './Pages/Backend/product/ProductGallery'
 import EditBlogCategory from './Pages/Backend/Blog/EditBlogCategory'
 import EditBlog from './Pages/Backend/Blog/EditBlog'
 import MenuDetails from './Pages/Frontend/MenuDetails'
+import CategoryMenuDetails from './Pages/Frontend/CategoryMenuDetails'
 
 //backend css import
 const currentPath = window.location.pathname;
@@ -102,6 +103,7 @@ function App() {
           <Route path='/blog/:title' element={<BlogDetails />} />
           <Route path='/cartlist' element={<Cart />} />
           <Route path='/checkout' element={<CheckOut />} />
+          <Route path='/menu/category/:title' element={<CategoryMenuDetails />} />
 
 
         </Route>
