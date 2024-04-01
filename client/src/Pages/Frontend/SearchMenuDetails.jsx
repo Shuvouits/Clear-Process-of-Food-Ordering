@@ -4,12 +4,10 @@ import Resturent from '../../components/Frontend/Resturent'
 import FAQ from '../../components/Frontend/FAQ'
 import { Link, useParams } from 'react-router-dom'
 
-function CategoryMenuDetails() {
+function SearchMenuDetails() {
 
-    const { title } = useParams()
-
-
-
+   
+    const { title } = useParams();
     const [modalOpen, setModalOpen] = useState(false)
     const handleModal = () => {
         setModalOpen(!modalOpen);
@@ -88,7 +86,7 @@ function CategoryMenuDetails() {
 
 
 
-    const [formData, setFormData] = useState({})
+
 
 
     const handleCategory = async (id) => {
@@ -96,14 +94,23 @@ function CategoryMenuDetails() {
 
     }
 
-    const handleChange = (e) => {
+   
+    const [formData, setFormData] = useState({ menuFilter: '' });
 
+    useEffect(() => {
+        if (title) {
+            setFormData(prevState => ({ ...prevState, menuFilter: title }));
+        }
+    }, [title]);
+
+    const handleChange = (e) => {
         setFormData({
             ...formData,
             [e.target.id]: e.target.value,
-        })
+        });
+    };
 
-    }
+
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -113,6 +120,8 @@ function CategoryMenuDetails() {
         item.productName &&
         item.productName.toLowerCase().includes((formData.menuFilter || '').toLowerCase())
     );
+
+    console.log(formData)
 
 
 
@@ -159,7 +168,9 @@ function CategoryMenuDetails() {
                                                     id="menuFilter"
                                                     placeholder="Type your keyword"
                                                     onChange={handleChange}
+                                                    value={formData.menuFilter}
                                                 />
+
                                                 <div className="food-details-btn-search-btn">
                                                     <button type="submit" className="icon">
                                                         <span>
@@ -765,4 +776,4 @@ function CategoryMenuDetails() {
     )
 }
 
-export default CategoryMenuDetails
+export default SearchMenuDetails

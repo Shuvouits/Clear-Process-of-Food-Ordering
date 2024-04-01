@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [cart, setCart] = useState(false)
+  const navigate = useNavigate()
 
   const handleCartClick = () => {
     setCart(!cart)
@@ -23,6 +24,24 @@ function Header() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+
+  const [formData, setFormData] = useState({})
+
+  const handleChange = (e) => {
+
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+  })
+
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate(`/menu/search/${formData.menuFilter}`)
+  }
+
+
 
 
 
@@ -157,9 +176,9 @@ function Header() {
                     </div>
                   </div>
                   <div className="nav-btn-main">
-                    <form action="https://reservq.minionionbd.com/menu" method="GET">
+                    <form onSubmit={handleSubmit}>
                       <div className="nav-btn-one">
-                        <input type="text" name="keyword" className="form-control" id="exampleFormControlInput1" placeholder="Search here" />
+                        <input type="text"  className="form-control" id="menuFilter" onChange={handleChange} placeholder="Search here" />
                         <input type="hidden" name="category" />
                         <div className="nav-search">
                           <button type="submit">

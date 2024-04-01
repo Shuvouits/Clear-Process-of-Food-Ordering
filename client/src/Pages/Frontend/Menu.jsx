@@ -67,7 +67,7 @@ function Menu() {
 
 
   const handleSubmit = (e) => {
-    alert(e)
+    
     e.preventDefault()
   }
 
@@ -723,9 +723,6 @@ function Menu() {
 
 
       </section>
-
-
-
 
 
     </>
