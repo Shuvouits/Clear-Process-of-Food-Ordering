@@ -61,9 +61,7 @@ function BlogDetails() {
                                     />
                                 </div>
                                 <div className="blog-details-text all-details-root blog-details-mt-32px">
-                                    <p >
-                                        {item.description}
-                                    </p>
+                                    <div  dangerouslySetInnerHTML={{ __html: item.editorData }}></div>
 
                                 </div>
                                 <div className="row blog-details-mt-32px border-b ">
@@ -391,15 +389,7 @@ function BlogDetails() {
                                     </li>
                                 </ul>
                             </div>
-                            <div className="blog-details-promobanner">
-                                <a href="https://reservq.minionionbd.com/menu">
-                                    <img
-                                        src="https://reservq.minionionbd.com/uploads/custom-images/pertner-image-2023-10-21-08-41-59-7710.png"
-                                        className="w-100"
-                                        alt="img"
-                                    />
-                                </a>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

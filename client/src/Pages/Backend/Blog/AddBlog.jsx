@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app, storage } from '../../firebase.js'
 import Loader from '../../../components/loader/Loader.jsx';
+
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+
+
+
+
+
 function AddBlog() {
 
     const { user } = useSelector((state) => ({ ...state }))
@@ -82,6 +91,18 @@ function AddBlog() {
 
     }, [file]);
 
+    const [editorData, setEditorData] = useState({})
+
+    const handleEditorChange = (event, editor) => {
+        const data = editor.getData();
+        //console.log({ event, editor, data });
+
+        setEditorData(data)
+
+    };
+
+    
+
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -89,6 +110,7 @@ function AddBlog() {
             ...formData,
             //mfiles,
             [id]: value,
+
         };
 
         // Generate slug if productName field changes
@@ -104,44 +126,14 @@ function AddBlog() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true)
-        console.log(formData)
+        
+        const updatedFormData = {
+            ...formData,
+            editorData
+        }
+
 
         try {
-
-            if (file) {
-
-                const storageRef = ref(storage, `/files/${file.name}`);
-                const uploadTask = uploadBytesResumable(storageRef, file);
-
-                // Wait for both upload and download URL retrieval
-                const [snapshot] = await Promise.all([
-                    new Promise((resolve, reject) => {
-                        uploadTask.on(
-                            "state_changed",
-                            (snapshot) => {
-                                // Handle upload state changes if needed
-                            },
-                            (err) => {
-                                console.log(err);
-                                reject(err);
-                            },
-                            () => {
-                                resolve(uploadTask.snapshot);
-                            }
-                        );
-                    }),
-                ]);
-
-                // Get the download URL
-                const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-
-                // Update formData with the download URL
-                setFormData((prevData) => ({
-                    ...prevData,
-                    avatar: downloadURL,
-                }));
-
-            }
 
 
             // Make the API request with updated formData
@@ -151,7 +143,7 @@ function AddBlog() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.token}`,
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(updatedFormData),
             });
 
             const data = await res.json();
@@ -162,7 +154,7 @@ function AddBlog() {
                 Swal.fire({
                     toast: false,
                     animation: true,
-                    text: `Added New Category `,
+                    text: `New Blog Inserted Successfully `,
                     icon: 'success',
                     showConfirmButton: true,
                     timer: 3000,
@@ -189,6 +181,13 @@ function AddBlog() {
             setLoading(false)
         }
     };
+
+
+
+
+
+
+
 
     console.log(formData)
 
@@ -322,21 +321,27 @@ function AddBlog() {
                                                                 </div>
                                                             </div>
                                                             <div className="col-12">
+
+
                                                                 <div className="form-group">
                                                                     <label className="sherah-wc__form-label">
                                                                         Description
                                                                     </label>
-                                                                    <div className="form-group__input">
-                                                                        <textarea
-                                                                            className="sherah-wc__form-input summernote"
-                                                                            id="description"
-                                                                            style={{ height: '200px' }}
-                                                                            onChange={handleChange}
+                                                                    <div className="form-group__input" >
 
+
+                                                                        <CKEditor
+                                                                            editor={ClassicEditor}
+                                                                            data="<p>Hello, CKEditor!</p>"
+                                                                            onChange={handleEditorChange}
                                                                         />
+
 
                                                                     </div>
                                                                 </div>
+
+
+
                                                             </div>
 
 

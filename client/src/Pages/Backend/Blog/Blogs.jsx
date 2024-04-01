@@ -115,7 +115,7 @@ function Blogs() {
                     Swal.fire({
                         toast: false,
                         animation: true,
-                        text: `Category Deleted Successfully`,
+                        text: `Blog Deleted Successfully`,
                         icon: 'success',
                         showConfirmButton: true,
                         timer: 3000,

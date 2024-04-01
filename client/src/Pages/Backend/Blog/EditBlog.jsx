@@ -5,6 +5,11 @@ import Swal from 'sweetalert2'
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage"
 import { app, storage } from '../../firebase.js'
 import Loader from '../../../components/loader/Loader.jsx';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+
+
+
 function EditBlog() {
 
     const { user } = useSelector((state) => ({ ...state }))
@@ -76,7 +81,8 @@ function EditBlog() {
             status: blog.status || '',
             avatar: blog.avatar || '',
             category: blog.category || '',
-            description: blog.description || ''
+            description: blog.description || '',
+            editorData: blog.editorData || ''
         });
     }, [blog]);
 
@@ -121,6 +127,16 @@ function EditBlog() {
 
     }, [file]);
 
+    const [editorData, setEditorData] = useState({})
+
+    const handleEditorChange = (event, editor) => {
+        const data = editor.getData();
+        //console.log({ event, editor, data });
+
+        setEditorData(data)
+
+    };
+
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -143,11 +159,13 @@ function EditBlog() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true)
-        console.log(formData)
+
+        const updatedFormData = {
+            ...formData,
+            editorData
+        }
 
         try {
-
-           
 
 
             // Make the API request with updated formData
@@ -157,7 +175,7 @@ function EditBlog() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.token}`,
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(updatedFormData),
             });
 
             const data = await res.json();
@@ -196,7 +214,6 @@ function EditBlog() {
         }
     };
 
-    console.log(blog)
 
 
     return (
@@ -224,7 +241,7 @@ function EditBlog() {
                                     <div className="row">
                                         <div className="col-12">
                                             <div className="sherah-breadcrumb mg-top-30">
-                                                <h2 className="sherah-breadcrumb__title">Create Blog</h2>
+                                                <h2 className="sherah-breadcrumb__title">Edit Blog</h2>
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
                                                         <a href="https://reservq.minionionbd.com/admin-dashboard">
@@ -232,7 +249,7 @@ function EditBlog() {
                                                         </a>
                                                     </li>
                                                     <li className="active">
-                                                        <a href="">Create Blog</a>
+                                                        <a href="">Edit Blog</a>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -326,22 +343,27 @@ function EditBlog() {
                                                                 </div>
                                                             </div>
                                                             <div className="col-12">
+
+                                                                
+
                                                                 <div className="form-group">
                                                                     <label className="sherah-wc__form-label">
                                                                         Description
                                                                     </label>
-                                                                    <div className="form-group__input">
-                                                                        <textarea
-                                                                            className="sherah-wc__form-input summernote"
-                                                                            id="description"
-                                                                            style={{ height: '200px' }}
-                                                                            onChange={handleChange}
-                                                                            value={formData.description}
+                                                                    <div className="form-group__input" >
 
+
+                                                                        <CKEditor
+                                                                            editor={ClassicEditor}
+                                                                            data={formData.editorData}
+                                                                            onChange={handleEditorChange}
                                                                         />
+
 
                                                                     </div>
                                                                 </div>
+
+
                                                             </div>
 
 

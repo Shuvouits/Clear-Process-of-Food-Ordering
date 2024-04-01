@@ -185,4 +185,9 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
 
 }
 
+.ck.ck-editor__main>.ck-editor__editable{
+  border-color: var(--ck-color-base-border);
+  height: 300px !important;
+}
+
 

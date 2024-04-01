@@ -1107,7 +1107,7 @@ exports. deleteBlogcategory = async(req, res)=> {
 exports.addBlog = async(req,res)=> {
     try{
 
-        const{title, status, slug , avatar, category, description} = req.body
+        const{title, status, slug , avatar, category, description, editorData} = req.body
 
         const data = await new Blog({
            
@@ -1116,7 +1116,8 @@ exports.addBlog = async(req,res)=> {
             slug,
             avatar,
             category,
-            description
+            description,
+            editorData
            
         }).save();
 
@@ -1159,10 +1160,10 @@ exports.editBlog = async(req,res)=> {
 exports.updateBlog = async(req,res)=> {
     try{
         const blogId = req.params.id;
-        const{title, status, slug, avatar, description, category} = req.body
+        const{title, status, slug, avatar, description, category, editorData} = req.body
 
 
-        const updateData = await Blog.findByIdAndUpdate(blogId, {title, status, slug, avatar, description, category}, { new: true })
+        const updateData = await Blog.findByIdAndUpdate(blogId, {title, status, slug, avatar, description, category, editorData}, { new: true })
 
         if (!updateData) {
             return res.status(404).json({ message: 'Data not found' });
