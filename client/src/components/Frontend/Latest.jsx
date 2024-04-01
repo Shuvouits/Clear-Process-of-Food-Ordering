@@ -68,12 +68,12 @@ function Latest() {
                         </div>
                         <div className="col-lg-6">
                             <div className="news-taitel-btn">
-                                <a
-                                    href="https://reservq.minionionbd.com/blog"
+                                <Link
+                                    to="/blog"
                                     className="main-btn-four"
                                 >
                                     See More
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>

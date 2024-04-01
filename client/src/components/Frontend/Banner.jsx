@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-function Banner() {
+function Banner({handleVideo}) {
   return (
    
     <section className="banner-two">
@@ -26,7 +27,7 @@ function Banner() {
                 </span>
                 Get your Menu
               </a>
-              <a className="my-video-links" data-autoplay="true" data-vbtype="video" href="https://youtu.be/kRCH8kD1GD0">
+              <Link onClick={handleVideo} className="my-video-links" data-autoplay="true" data-vbtype="video" to='#'>
                 <div className="icon">
                   <span>
                     <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -35,7 +36,7 @@ function Banner() {
                   </span>
                 </div>
                 Watch Video
-              </a>
+              </Link>
             </div>
           </div>
         </div>

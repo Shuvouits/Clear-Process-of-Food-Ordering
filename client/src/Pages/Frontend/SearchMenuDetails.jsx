@@ -312,13 +312,13 @@ function SearchMenuDetails() {
                                                                         </div>
                                                                         <div className="text-item-center">
                                                                             <h3>
-                                                                                <a
+                                                                                <Link
                                                                                     title="Baked Chicken Wings and Legs"
                                                                                     className="line-clamp-1"
-                                                                                    href="https://reservq.minionionbd.com/menu/baked-chicken-wings-and-legs"
+                                                                                    to={`/menu/${item.slug}`}
                                                                                 >
                                                                                     {item.productName}
-                                                                                </a>
+                                                                                </Link>
                                                                             </h3>
                                                                         </div>
                                                                         <div className="text-item-center-item-box">
@@ -567,7 +567,7 @@ function SearchMenuDetails() {
                                                     </>
                                                 ))
                                             ) : (
-                                                <div style={{ fontWeight: 'bold', color: 'red' }}>No data found</div>
+                                                <div style={{ fontWeight: 'bold', color: 'red', fontSize: '30px' }}>No data found</div>
                                             )}
 
 

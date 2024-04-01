@@ -67,6 +67,7 @@ import MenuDetails from './Pages/Frontend/MenuDetails'
 import CategoryMenuDetails from './Pages/Frontend/CategoryMenuDetails'
 import SearchMenuDetails from './Pages/Frontend/SearchMenuDetails'
 
+
 //backend css import
 const currentPath = window.location.pathname;
 
