@@ -7,7 +7,7 @@ const {
     editTime, updateTime, deleteTime, addProduct, allProduct, editProduct, deleteProductImage,
     updateProductImage, updateProduct, deleteProduct, productStatus, addBlogCategory,
     allBlogCategory, editBlogCategory, updateBlogCategory, blogCategoryStatus, deleteBlogcategory,
-    addBlog, allBlog, editBlog, updateBlog, blogStatus, deleteBlog, specificMenu
+    addBlog, allBlog, editBlog, updateBlog, blogStatus, deleteBlog, specificMenu, customerRegister
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -79,6 +79,8 @@ router.post('/blog-status/:id', authUser, blogStatus);
 router.get('/delete-blog/:id', authUser, deleteBlog);
 
 router.get('/specific-menu/:title',  specificMenu);
+
+router.post('/customer-register',  customerRegister);
 
 
 

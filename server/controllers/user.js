@@ -10,6 +10,7 @@ const Time = require('../models/time.js')
 const Product = require('../models/product.js')
 const BlogCategory = require('../models/blogCategory.js')
 const Blog = require('../models/blog.js')
+const Customer = require('../models/customer.js')
 
 
 
@@ -1244,6 +1245,48 @@ exports.specificMenu = async(req,res)=> {
 
     }catch(error){
         return (error)
+    }
+}    
+
+
+exports.customerRegister = async(req,res)=> {
+    try{
+
+        const{name, email, password, avatar} = req.body
+
+        const cryptedPassword = await bcrypt.hash(password, 12)
+
+        const existEmail = await Customer.findOne({email})
+
+        if(existEmail){
+            return res.status(400).json({
+                "message" : "This email are already used"
+            })
+        }
+
+        const passLength = password.length > 6;
+
+        if(!passLength){
+            return res.status(400).json({
+                "message" : "Password at lest 6 character or number"
+            })
+        }
+
+        const data = await new Customer({
+           
+            name,
+            email,
+            password: cryptedPassword,
+            avatar
+           
+        }).save();
+
+        res.status(200).json(data)
+
+
+    }catch(error){
+        return(error)
+        console.log(error)
     }
 }  
 

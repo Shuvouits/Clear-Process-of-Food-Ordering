@@ -66,6 +66,8 @@ import EditBlog from './Pages/Backend/Blog/EditBlog'
 import MenuDetails from './Pages/Frontend/MenuDetails'
 import CategoryMenuDetails from './Pages/Frontend/CategoryMenuDetails'
 import SearchMenuDetails from './Pages/Frontend/SearchMenuDetails'
+import UserPrivate from './Pages/Frontend/UserPrivate'
+import Register from './Pages/Frontend/Register'
 
 
 //backend css import
@@ -75,14 +77,14 @@ if (currentPath.startsWith('/admin')) {
   import('./Pages/Backend/admin-assets/style.css');
   import('./Pages/Backend/admin-assets/reset.css');
 
- /* import('./Pages/Backend/admin-assets/chart.css');
-  import('./Pages/Backend/admin-assets/datatable.css');
-  import('./Pages/Backend/admin-assets/fontawesome.css');
-  import('./Pages/Backend/admin-assets/jquery.css');
-  import('./Pages/Backend/admin-assets/map.css');
-  import('./Pages/Backend/admin-assets/reset.css');
-  import('./Pages/Backend/admin-assets/slickslider.css'); */
- /* import('./Pages/Backend/admin-assets/toast.css'); */
+  /* import('./Pages/Backend/admin-assets/chart.css');
+   import('./Pages/Backend/admin-assets/datatable.css');
+   import('./Pages/Backend/admin-assets/fontawesome.css');
+   import('./Pages/Backend/admin-assets/jquery.css');
+   import('./Pages/Backend/admin-assets/map.css');
+   import('./Pages/Backend/admin-assets/reset.css');
+   import('./Pages/Backend/admin-assets/slickslider.css'); */
+  /* import('./Pages/Backend/admin-assets/toast.css'); */
 
 }
 
@@ -110,16 +112,24 @@ function App() {
 
 
         </Route>
-        <Route path='/user/' element={<UserLayout />}>
-          <Route path='dashboard' element={<DashboardPage />} />
-          <Route path='edit-profile' element={<ProfilePage />} />
-          <Route path='address' element={<AddressPage />} />
-          <Route path='order' element={<OrderPage />} />
-          <Route path='wishlist' element={<WishlistPage />} />
-          <Route path='change-password' element={<ChangePasswordPage />} />
+
+        <Route element={<UserPrivate />}>
+
+          <Route path='/user/' element={<UserLayout />}>
+            <Route path='dashboard' element={<DashboardPage />} />
+            <Route path='edit-profile' element={<ProfilePage />} />
+            <Route path='address' element={<AddressPage />} />
+            <Route path='order' element={<OrderPage />} />
+            <Route path='wishlist' element={<WishlistPage />} />
+            <Route path='change-password' element={<ChangePasswordPage />} />
+
+          </Route>
+
 
         </Route>
+
         <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
 
         <Route path='/admin/login' element={<AdminLogin />} />
         <Route element={<AdminPrivate />}>

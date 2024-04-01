@@ -190,4 +190,10 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
   height: 300px !important;
 }
 
+.form-check-input {
+   width: 25px !important; 
+   height: 25px !important; 
+   margin-right: 10px;
+}
+
 
