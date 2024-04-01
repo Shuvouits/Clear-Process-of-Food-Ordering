@@ -91,7 +91,9 @@ function CategoryMenuDetails() {
 
     }
 
-    console.log(categoryId)
+    const handleSubmit = (e) => {
+        e.preventDefault()
+    }
 
 
 
@@ -106,8 +108,7 @@ function CategoryMenuDetails() {
                             <div className="food-details-btn-box">
                                 <div className="food-details-btn-box-item">
                                     <form
-                                        action="https://reservq.minionionbd.com/menu"
-                                        method="GET"
+                                        onSubmit={handleSubmit}
                                         className="food-details-btn-box-item"
                                     >
                                         <select
