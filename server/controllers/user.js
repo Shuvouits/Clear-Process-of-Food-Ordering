@@ -1291,6 +1291,65 @@ exports.customerRegister = async(req,res)=> {
 }  
 
 
+exports.customerLogin = async (req, res) => {
+
+    try {
+
+        const { email, password } = req.body;
+        const validUser = await Customer.findOne({ email: email });
+        if (!validUser) {
+            return res.status(400).json({
+                message: "Email is not found"
+            })
+        }
+        const validPassword = bcrypt.compareSync(password, validUser.password);
+        if (!validPassword) {
+            return res.status(400).json({
+                message: "Incorrect Password"
+            })
+        }
+
+        const token = jwt.sign({ id: validUser._id }, process.env.SECRET_KEY)
+
+        return res.status(200).json({
+            id: validUser._id,
+            fullName: validUser.fullName,
+            email: validUser.email,
+            token: token,
+            avatar: validUser.avatar,
+            createdAt: validUser.createdAt
+        })
+
+
+    } catch (error) {
+
+        return res.status(500).json({
+            "message": "Internal server error"
+        })
+        console.log(error)
+
+    }
+
+}  
+
+exports.customerLogout = async (req, res) => {
+    try {
+
+        let tmp = req.header("Authorization");
+        tmp = null
+        const token = tmp;
+        return res.status(200).json({
+            "message": "User has been logged out"
+        })
+
+    } catch (error) {
+        res.status(500).json(error)
+
+    }
+
+}
+
+
 
 
 

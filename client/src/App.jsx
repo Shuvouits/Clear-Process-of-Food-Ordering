@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { Route, Router, Routes, useLocation } from 'react-router-dom'
+import { Route, Router, Routes, useLocation, useNavigate } from 'react-router-dom'
 import Home from './Pages/Frontend/Home'
 import Menu from './Pages/Frontend/Menu'
 import Layout from './Pages/Frontend/Layout'
@@ -68,6 +68,7 @@ import CategoryMenuDetails from './Pages/Frontend/CategoryMenuDetails'
 import SearchMenuDetails from './Pages/Frontend/SearchMenuDetails'
 import UserPrivate from './Pages/Frontend/UserPrivate'
 import Register from './Pages/Frontend/Register'
+import { useSelector } from 'react-redux'
 
 
 //backend css import
@@ -90,6 +91,17 @@ if (currentPath.startsWith('/admin')) {
 
 
 function App() {
+
+  const {customer} = useSelector( (state) => ({...state}) )
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (customer) {
+      navigate('/user/dashboard');
+    }
+  }, [customer, navigate]);
+
+
 
 
   return (
@@ -128,8 +140,15 @@ function App() {
 
         </Route>
 
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
+       
+
+        
+        
+
+
+        <Route path='/login' element= {<Login />} />
+
+        <Route path='/register' element= {<Register />} />
 
         <Route path='/admin/login' element={<AdminLogin />} />
         <Route element={<AdminPrivate />}>

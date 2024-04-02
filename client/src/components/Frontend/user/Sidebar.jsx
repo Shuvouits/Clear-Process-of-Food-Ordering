@@ -1,11 +1,86 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import Swal from 'sweetalert2'
+import Cookies from "js-cookie"
+import { useDispatch, useSelector } from 'react-redux'
 
 function Sidebar() {
     const [visible ,setVisible] = useState(false)
 
     const handleLogOut = () => {
         setVisible(!visible);
+    } 
+
+    const { customer } = useSelector((state) => ({ ...state }))
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const handleClick = async () => {
+        
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Are You Logged Out?',
+                icon: 'warning',
+                position: 'center',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+
+                const res = await fetch('http://localhost:8000/customer-logout', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${customer.token}`,
+                    }
+                });
+    
+                const data = await res.json();
+    
+                if (res.status === 200) {
+                    dispatch({ type: "CLOGOUT", payload: null });
+                    Cookies.set("customer", null);
+    
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: 'You Have Successfully Logged Out',
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+    
+    
+                    navigate('/login')
+                }
+
+            }
+
+           
+
+        } catch (error) {
+            console.log(error)
+
+        }
+
     }
 
     return (
@@ -243,7 +318,7 @@ function Sidebar() {
                                     className="logout-btn "
                                     data-bs-toggle="modal"
                                     data-bs-target="#exampleModal"
-                                    onClick={handleLogOut}
+                                    onClick={handleClick}
                                 >
                                     <span>
                                         <svg
@@ -266,72 +341,7 @@ function Sidebar() {
                                     </span>
                                     Logout
                                 </button>
-                                <div
-                                    className={`modal fade ${visible ? 'show' : ''}`}
-                                    id="exampleModal"
-                                    tabIndex={-1}
-                                    aria-hidden="true"
-                                    style={{ display: `${visible ? 'block' : ''}`, paddingRight: `${visible ? 23 : ''}` }}
-                                >
-                                    <div className="modal-dialog " style={{border: '1px solid gainsboro'}}>
-                                        <div className="modal-content">
-                                            <div className="modal-body">
-                                                <div className="modal-img">
-                                                    <span>
-                                                        <svg
-                                                            width={80}
-                                                            height={80}
-                                                            viewBox="0 0 80 80"
-                                                            fill="none"
-                                                            xmlns="http://www.w3.org/2000/svg"
-                                                        >
-                                                            <g clipPath="url(#clip0_312_69316)">
-                                                                <path
-                                                                    d="M77.4976 37.4998H45.8317C44.4517 37.4998 43.3318 36.3799 43.3318 34.9999C43.3318 33.62 44.4517 32.5 45.8317 32.5H77.4976C78.8776 32.5 79.9975 33.62 79.9975 34.9999C79.9975 36.3799 78.8776 37.4998 77.4976 37.4998Z"
-                                                                    fill="#F01543"
-                                                                ></path>
-                                                                <path
-                                                                    d="M64.9978 50.0011C64.3576 50.0011 63.718 49.7576 63.2309 49.2681C62.2544 48.291 62.2544 46.7078 63.2309 45.7312L73.9642 34.9985L63.2309 24.2652C62.2544 23.2887 62.2544 21.7055 63.2309 20.729C64.2081 19.7518 65.7913 19.7518 66.7678 20.729L79.2674 33.2286C80.2439 34.2051 80.2439 35.7883 79.2674 36.7648L66.7678 49.2644C66.2777 49.7576 65.6381 50.0011 64.9978 50.0011Z"
-                                                                    fill="#F01543"
-                                                                ></path>
-                                                                <path
-                                                                    d="M26.666 80.0014C25.9526 80.0014 25.2757 79.9013 24.5995 79.6914L4.53965 73.0082C1.81025 72.0549 0 69.5116 0 66.6687V6.67057C0 2.99393 2.99002 0.00390625 6.66666 0.00390625C7.37953 0.00390625 8.05639 0.104001 8.73325 0.313955L28.7924 6.9971C31.5225 7.95044 33.3321 10.4937 33.3321 13.3366V73.3347C33.3321 77.0114 30.3427 80.0014 26.666 80.0014ZM6.66666 5.00375C5.74994 5.00375 4.99984 5.75385 4.99984 6.67057V66.6687C4.99984 67.3785 5.47651 68.0383 6.15642 68.2751L26.1222 74.9283C26.2657 74.9747 26.4524 75.0016 26.666 75.0016C27.5828 75.0016 28.3322 74.2515 28.3322 73.3347V13.3366C28.3322 12.6268 27.8556 11.967 27.1757 11.7302L7.20986 5.07699C7.06643 5.0306 6.87967 5.00375 6.66666 5.00375Z"
-                                                                    fill="#F01543"
-                                                                ></path>
-                                                                <path
-                                                                    d="M50.8315 26.6699C49.4516 26.6699 48.3316 25.55 48.3316 24.17V9.17049C48.3316 6.87381 46.4622 5.00375 44.1655 5.00375H6.66667C5.28671 5.00375 4.16675 3.88379 4.16675 2.50383C4.16675 1.12387 5.28671 0.00390625 6.66667 0.00390625H44.1655C49.2221 0.00390625 53.3315 4.11388 53.3315 9.17049V24.17C53.3315 25.55 52.2115 26.6699 50.8315 26.6699Z"
-                                                                    fill="#F01543"
-                                                                ></path>
-                                                                <path
-                                                                    d="M44.1655 70.002H30.8322C29.4522 70.002 28.3323 68.882 28.3323 67.5021C28.3323 66.1221 29.4522 65.0021 30.8322 65.0021H44.1655C46.4622 65.0021 48.3316 63.1321 48.3316 60.8354V45.8359C48.3316 44.4559 49.4516 43.3359 50.8316 43.3359C52.2115 43.3359 53.3315 44.4559 53.3315 45.8359V60.8354C53.3315 65.892 49.2221 70.002 44.1655 70.002Z"
-                                                                    fill="#F01543"
-                                                                ></path>
-                                                            </g>
-                                                        </svg>
-                                                    </span>
-                                                </div>
-                                                <div className="modal-img-text">
-                                                    <h3>Are you sure want to leave?</h3>
-                                                </div>
-                                                <div className="modal-btn">
-                                                    <button
-                                                        type="button"
-                                                        className="no-btn"
-                                                        data-bs-dismiss="modal"
-                                                        onClick={handleLogOut}
-                                                    >
-                                                        No
-                                                    </button>
-                                                    <a href="https://reservq.minionionbd.com/user/logout">
-                                                        <button type="button" className="no-btn yes-btn">
-                                                            Yes, Logout
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                               
                             </li>
                         </ul>
                     </div>
