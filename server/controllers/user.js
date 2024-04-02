@@ -11,6 +11,7 @@ const Product = require('../models/product.js')
 const BlogCategory = require('../models/blogCategory.js')
 const Blog = require('../models/blog.js')
 const Customer = require('../models/customer.js')
+const Address = require('../models/address.js')
 
 
 
@@ -1313,7 +1314,7 @@ exports.customerLogin = async (req, res) => {
 
         return res.status(200).json({
             id: validUser._id,
-            fullName: validUser.fullName,
+            name: validUser.name,
             email: validUser.email,
             token: token,
             avatar: validUser.avatar,
@@ -1347,7 +1348,47 @@ exports.customerLogout = async (req, res) => {
 
     }
 
-}
+}  
+
+
+exports.customerAddress = async(req,res)=> {
+    try{
+
+        const{customer, darea, fname , lname, phone, email, address, selectedOption} = req.body
+
+        const data = await new Address({
+           
+            customer, darea, fname , lname, phone, email, address, selectedOption
+           
+        }).save();
+
+        res.status(200).json(data)
+
+
+    }catch(error){
+        return(error)
+        console.log(error)
+    }
+}  
+
+
+exports.allAddress = async(req, res) => {
+
+    try{
+
+        const customerId = req.params.id;
+
+        const data = await Address.findOne({customer: customerId}).populate('darea');
+        //const data = await Product.findOne({slug: title}).populate('optionalItem');
+        return res.status(200).json(data)
+       
+
+    }catch(error){
+        return res.status(500).json(error)
+        console.log(error)
+    }
+    
+} 
 
 
 

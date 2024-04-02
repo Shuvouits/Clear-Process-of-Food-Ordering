@@ -90,14 +90,14 @@ function Sidebar() {
                     <div className="dashboard-menu-profile-main">
                         <div className="dashboard-menu-profile">
                             <div className="dashboard-menu-profile-img">
-                                <img
-                                    src="https://reservq.minionionbd.com/uploads/custom-images/user-images-2024-01-13-05-07-44-2624.png"
+                            <img
+                                    src={customer.avatar}
                                     alt="img"
                                 />
                             </div>
                             <div className="dashboard-menu-profile-text">
-                                <h4>John Doe</h4>
-                                <p>User id #70</p>
+                                <h4>{customer.name}</h4>
+                                <p>User id #{customer.id}</p>
                             </div>
                         </div>
                     </div>

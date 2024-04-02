@@ -194,6 +194,13 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
    width: 25px !important; 
    height: 25px !important; 
    margin-right: 10px;
+} 
+
+.customAddress{
+  background: white;
+  width: 900px !important;
+  z-index: 9999;
+  border: 1px solid gainsboro;
 }
 
 

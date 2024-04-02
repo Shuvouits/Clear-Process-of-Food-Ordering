@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import { Route, Router, Routes, useLocation, useNavigate } from 'react-router-dom'
+import { Route, Router, Routes, useLocation, Navigate } from 'react-router-dom'
 import Home from './Pages/Frontend/Home'
 import Menu from './Pages/Frontend/Menu'
 import Layout from './Pages/Frontend/Layout'
@@ -92,16 +92,7 @@ if (currentPath.startsWith('/admin')) {
 
 function App() {
 
-  const {customer} = useSelector( (state) => ({...state}) )
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (customer) {
-      navigate('/user/dashboard');
-    }
-  }, [customer, navigate]);
-
-
+  const { customer } = useSelector((state) => ({ ...state }))
 
 
   return (
@@ -140,15 +131,15 @@ function App() {
 
         </Route>
 
-       
 
-        
-        
+        {customer ? (
+          <Route path='/login' element={<Navigate to="/user/dashboard" />} />
+        ) : (
+          <Route path='/login' element={<Login />} />
+        )}
 
 
-        <Route path='/login' element= {<Login />} />
-
-        <Route path='/register' element= {<Register />} />
+        <Route path='/register' element={<Register />} />
 
         <Route path='/admin/login' element={<AdminLogin />} />
         <Route element={<AdminPrivate />}>

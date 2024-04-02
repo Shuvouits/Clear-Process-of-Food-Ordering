@@ -8,7 +8,7 @@ const {
     updateProductImage, updateProduct, deleteProduct, productStatus, addBlogCategory,
     allBlogCategory, editBlogCategory, updateBlogCategory, blogCategoryStatus, deleteBlogcategory,
     addBlog, allBlog, editBlog, updateBlog, blogStatus, deleteBlog, specificMenu, customerRegister,
-    customerLogin, customerLogout
+    customerLogin, customerLogout, customerAddress, allAddress
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -43,7 +43,7 @@ router.post('/coupon-status/:id', authUser, couponStatus);
 router.get('/delete-coupon/:id', authUser, deleteCoupon);
 
 router.post('/add-delivery', authUser, addDelivery);
-router.get('/all-delivery', authUser, allDelivery);
+router.get('/all-delivery',  allDelivery);
 router.get('/edit-delivery/:id', authUser, editDelivery);
 router.post('/update-delivery/:id', authUser, updateDelivery);
 router.post('/delivery-status/:id', authUser, deliveryStatus);
@@ -81,9 +81,13 @@ router.get('/delete-blog/:id', authUser, deleteBlog);
 
 router.get('/specific-menu/:title',  specificMenu);
 
+//customer
+
 router.post('/customer-register',  customerRegister);
 router.post('/customer-login',  customerLogin);
 router.get('/customer-logout', authUser, customerLogout);
+router.post('/add-address', authUser, customerAddress);
+router.get('/all-address/:id', authUser, allAddress);
 
 
 
