@@ -1378,7 +1378,8 @@ exports.allAddress = async(req, res) => {
 
         const customerId = req.params.id;
 
-        const data = await Address.findOne({customer: customerId}).populate('darea');
+        const data = await Address.find({customer : customerId}).populate('darea');
+
         //const data = await Product.findOne({slug: title}).populate('optionalItem');
         return res.status(200).json(data)
        
@@ -1388,7 +1389,63 @@ exports.allAddress = async(req, res) => {
         console.log(error)
     }
     
-} 
+}  
+
+
+exports. deleteAddress = async(req, res)=> {
+    try{
+       
+        const addressId = req.params.id;
+        
+
+        const data = await Address.findOneAndDelete({_id : addressId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+exports.editAddress = async(req,res)=> {
+    try{
+        const addressId = req.params.id;
+        const data = await Address.findById(addressId);
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}   
+
+exports.updateUserAddress = async(req,res)=> {
+    try{
+        const addressId = req.params.id;
+        const{customer, darea, fname , lname, phone, email, address, selectedOption} = req.body
+
+
+        const updateData = await Address.findByIdAndUpdate(addressId, {customer, darea, fname , lname, phone, email, address, selectedOption}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json(updateData)
+
+
+    }catch(error){
+        console.log(error)
+        return(error)
+    }
+}  
 
 
 

@@ -8,7 +8,8 @@ const {
     updateProductImage, updateProduct, deleteProduct, productStatus, addBlogCategory,
     allBlogCategory, editBlogCategory, updateBlogCategory, blogCategoryStatus, deleteBlogcategory,
     addBlog, allBlog, editBlog, updateBlog, blogStatus, deleteBlog, specificMenu, customerRegister,
-    customerLogin, customerLogout, customerAddress, allAddress
+    customerLogin, customerLogout, customerAddress, allAddress, deleteAddress, editAddress,
+    updateUserAddress
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -88,6 +89,9 @@ router.post('/customer-login',  customerLogin);
 router.get('/customer-logout', authUser, customerLogout);
 router.post('/add-address', authUser, customerAddress);
 router.get('/all-address/:id', authUser, allAddress);
+router.get('/delete-address/:id', authUser, deleteAddress);
+router.get('/edit-address/:id', authUser, editAddress);
+router.post('/update-user-address/:id', authUser, updateUserAddress);
 
 
 

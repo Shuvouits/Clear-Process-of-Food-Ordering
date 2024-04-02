@@ -39,6 +39,7 @@ function Address() {
 
 
     const [address, setAddress] = useState([])
+    console.log(address)
     const allAddress = async () => {
 
         try {
@@ -64,8 +65,6 @@ function Address() {
     useEffect(() => {
         allAddress();
     }, []);
-
-    console.log(address)
 
 
 
@@ -133,6 +132,8 @@ function Address() {
                     },
                 })
 
+                allAddress();
+
                 setVisible(!visible)
 
 
@@ -144,6 +145,67 @@ function Address() {
         }
     };
 
+    //Delete Data
+
+    const handleDelete = async (id) => {
+
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Address?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-address/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${customer.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+                if (res.status === 200) {
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Address Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    allAddress();
+                }
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
 
     return (
 
@@ -153,10 +215,26 @@ function Address() {
                     <div className="col-lg-6 col-md-6">
                         <div className="dashboard-item-taitel">
                             <h4>Dashboard</h4>
-                            <p>Address</p>
-                            
 
-                           
+
+                            {address.length < 1 ? (
+                                <>
+
+                                    <br></br>
+                                    <h2>No Address Add Yet</h2>
+
+                                </>
+
+                            ) : (
+                                <>
+                                    <br></br>
+                                    <p>Address</p>
+                                </>
+
+                            )}
+
+
+
 
                         </div>
                     </div>
@@ -185,8 +263,8 @@ function Address() {
                                             <h4>Address #{index + 1}</h4>
                                         </div>
                                         <div className="delet-btn">
-                                            <a
-                                                href="https://reservq.minionionbd.com/user/address/1"
+                                            <Link
+                                                to={`/user/address/edit/${item._id}`}
                                                 className="delet-btn-two"
                                             >
                                                 <span>
@@ -205,8 +283,8 @@ function Address() {
                                                         />
                                                     </svg>
                                                 </span>
-                                            </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                                            </Link>
+                                            <Link onClick={() => handleDelete(item._id)} data-bs-toggle="modal" data-bs-target="#exampleModal1">
                                                 <span>
                                                     <svg
                                                         width={24}
@@ -224,7 +302,7 @@ function Address() {
                                                         ></path>
                                                     </svg>
                                                 </span>
-                                            </a>
+                                            </Link>
                                         </div>
                                     </div>
                                     <address>

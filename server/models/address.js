@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const addressSchema = new mongoose.Schema({
 
     customer: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Customer',
+        type: String,
+        
         
     },
    

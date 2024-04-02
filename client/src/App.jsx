@@ -69,6 +69,7 @@ import SearchMenuDetails from './Pages/Frontend/SearchMenuDetails'
 import UserPrivate from './Pages/Frontend/UserPrivate'
 import Register from './Pages/Frontend/Register'
 import { useSelector } from 'react-redux'
+import EditAddress from './Pages/Frontend/user/EditAddress'
 
 
 //backend css import
@@ -125,6 +126,7 @@ function App() {
             <Route path='order' element={<OrderPage />} />
             <Route path='wishlist' element={<WishlistPage />} />
             <Route path='change-password' element={<ChangePasswordPage />} />
+            <Route path='address/edit/:id' element={<EditAddress />} />
 
           </Route>
 

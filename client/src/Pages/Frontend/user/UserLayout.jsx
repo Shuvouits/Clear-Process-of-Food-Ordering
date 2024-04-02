@@ -12,6 +12,7 @@ function UserLayout() {
     return (
 
         <>
+            
             <Header />
 
             <main>
@@ -28,6 +29,7 @@ function UserLayout() {
                         </div>
                     </div>
                 </section>
+                
                 <Resturent />
 
             </main>
