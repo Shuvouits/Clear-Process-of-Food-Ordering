@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { format } from 'date-fns';
 import Swal from 'sweetalert2'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ProfileModal from './ProfileModal';
 
 function AdminProfile() {
@@ -145,7 +145,7 @@ function AdminProfile() {
                                                         id="list-tab"
                                                         role="tablist"
                                                     >
-                                                        <a
+                                                        <Link
                                                             className={`list-group-item ${personal ? 'active' : ''}`}
                                                             data-bs-toggle="list"
 
@@ -181,7 +181,7 @@ function AdminProfile() {
                                                             <span className="sherah-psidebar__title">
                                                                 Personal Info
                                                             </span>
-                                                        </a>
+                                                        </Link>
                                                         <a
                                                             className={`list-group-item ${changePassword ? 'active' : ''}`}
                                                             data-bs-toggle="list"
