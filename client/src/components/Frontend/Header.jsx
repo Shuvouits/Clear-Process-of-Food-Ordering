@@ -62,84 +62,84 @@ function Header() {
 
 
   const handleProfile = () => {
-      setProfile(!profile)
+    setProfile(!profile)
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     navigate(`/menu/search/${formData.menuFilter}`)
-  } 
+  }
 
   //log out functionality
 
 
   const handleClick = async () => {
-        
+
     try {
 
-        const result = await Swal.fire({
-            toast: false,
-            title: 'Are You Logged Out?',
-            icon: 'warning',
-            position: 'center',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!',
-            customClass: {
-                container: 'custom-toast-container',
-                popup: 'custom-toast-popup',
-                title: 'custom-toast-title',
-                icon: 'custom-toast-icon',
-            },
+      const result = await Swal.fire({
+        toast: false,
+        title: 'Are You Logged Out?',
+        icon: 'warning',
+        position: 'center',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes!',
+        customClass: {
+          container: 'custom-toast-container',
+          popup: 'custom-toast-popup',
+          title: 'custom-toast-title',
+          icon: 'custom-toast-icon',
+        },
+      });
+
+      if (result.isConfirmed) {
+
+        const res = await fetch('http://localhost:8000/customer-logout', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${customer.token}`,
+          }
         });
 
-        if (result.isConfirmed) {
+        const data = await res.json();
 
-            const res = await fetch('http://localhost:8000/customer-logout', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${customer.token}`,
-                }
-            });
+        if (res.status === 200) {
+          dispatch({ type: "CLOGOUT", payload: null });
+          Cookies.set("customer", null);
 
-            const data = await res.json();
-
-            if (res.status === 200) {
-                dispatch({ type: "CLOGOUT", payload: null });
-                Cookies.set("customer", null);
-
-                Swal.fire({
-                    toast: false,
-                    animation: true,
-                    text: 'You Have Successfully Logged Out',
-                    icon: 'success',
-                    showConfirmButton: true,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    customClass: {
-                        container: 'custom-toast-container',
-                        popup: 'custom-toast-popup',
-                        title: 'custom-toast-title',
-                        icon: 'custom-toast-icon',
-                    },
-                })
+          Swal.fire({
+            toast: false,
+            animation: true,
+            text: 'You Have Successfully Logged Out',
+            icon: 'success',
+            showConfirmButton: true,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: {
+              container: 'custom-toast-container',
+              popup: 'custom-toast-popup',
+              title: 'custom-toast-title',
+              icon: 'custom-toast-icon',
+            },
+          })
 
 
-                navigate('/login')
-            }
-
+          navigate('/login')
         }
 
-       
+      }
+
+
 
     } catch (error) {
-        console.log(error)
+      console.log(error)
 
     }
 
-}
+  }
 
 
 
@@ -415,118 +415,113 @@ function Header() {
 
                       {customer && (
 
-                        <Link to={'/user/dashboard'}>
-
-                          <div className="love user" style={{ marginLeft: '15px' }} onClick={handleProfile} ref={profileRef}>
-                            <div
-                              className="click"
-                              data-name="profile-dropdown"
-                            >
-                            </div>
-
-
-
-                            <span style={{background: 'white'}}>
-                              <img
-                                alt="img"
-                                src={customer.avatar}
-
-                              />
-                            </span>
-
-
-                            <div
-                              className={`profile-dropdown header-dropdown ${profile ? 'active-dropdown' : ''} `}
-                              id="profile-dropdown"
-                              style={{border: '1px solid gainsboro'}}
-                            >
-                              <div className="profile-dropdown-img">
-                                <img
-                                  alt="img"
-                                  src={customer.avatar}
-                                />
-                              </div>
-                              <div className="profile-dropdown-text">
-                                <h4>
-                                  {customer.name}
-                                </h4>
-                                <p>
-                                  User Id #{customer.id}
-                                </p>
-                              </div>
-                              <div className="profile-dropdown-menu">
-                                <ul>
-                                  <li>
-                                    <Link to="/user/dashboard">
-                                      <span>
-                                        <svg
-                                          fill="none"
-                                          height="24"
-                                          viewBox="0 0 24 24"
-                                          width="24"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <ellipse
-                                            cx="12"
-                                            cy="17.5"
-                                            rx="7"
-                                            ry="3.5"
-                                            strokeLinejoin="round"
-                                            strokeWidth="1.5"
-                                          />
-                                          <circle
-                                            cx="12"
-                                            cy="7"
-                                            r="4"
-                                            strokeLinejoin="round"
-                                            strokeWidth="1.5"
-                                          />
-                                        </svg>
-                                      </span>
-                                      Dashboard
-                                    </Link>
-                                  </li>
-                                </ul>
-                              </div>
-
-                              <div className="profile-dropdown-menu profile-dropdown-menu-two " onClick={handleClick}>
-                                <ul>
-                                  <li>
-                                    <Link to="#" >
-                                      <span>
-                                        <svg
-                                          fill="none"
-                                          height="24"
-                                          viewBox="0 0 24 24"
-                                          width="24"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                        >
-                                          <path
-                                            d="M20 14L21.2929 12.7071C21.6834 12.3166 21.6834 11.6834 21.2929 11.2929L20 10"
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="1.5"
-                                          />
-                                          <path
-                                            d="M21 12H13M6 20C3.79086 20 2 18.2091 2 16V8C2 5.79086 3.79086 4 6 4M6 20C8.20914 20 10 18.2091 10 16V8C10 5.79086 8.20914 4 6 4M6 20H14C16.2091 20 18 18.2091 18 16M6 4H14C16.2091 4 18 5.79086 18 8"
-                                            strokeLinecap="round"
-                                            strokeWidth="1.5"
-                                          />
-                                        </svg>
-                                      </span>
-                                      Logout
-                                    </Link>
-                                  </li>
-                                </ul>
-                              </div>
-
-
-
-                            </div>
+                        <div className="love user" style={{ marginLeft: '15px' }} onClick={handleProfile} ref={profileRef}>
+                          <div
+                            className="click"
+                            data-name="profile-dropdown"
+                          >
                           </div>
 
 
-                        </Link>
+
+                          <span style={{ background: 'white' }}>
+                            <img
+                              alt="img"
+                              src={customer.avatar}
+
+                            />
+                          </span>
+
+
+                          <div
+                            className={`profile-dropdown header-dropdown ${profile ? 'active-dropdown' : ''} `}
+                            id="profile-dropdown"
+                            style={{ border: '1px solid gainsboro' }}
+                          >
+                            <div className="profile-dropdown-img">
+                              <img
+                                alt="img"
+                                src={customer.avatar}
+                              />
+                            </div>
+                            <div className="profile-dropdown-text">
+                              <h4>
+                                {customer.name}
+                              </h4>
+                              <p>
+                                User Id #{customer.id}
+                              </p>
+                            </div>
+                            <div className="profile-dropdown-menu">
+                              <ul>
+                                <li>
+                                  <Link to="/user/dashboard">
+                                    <span>
+                                      <svg
+                                        fill="none"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        width="24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <ellipse
+                                          cx="12"
+                                          cy="17.5"
+                                          rx="7"
+                                          ry="3.5"
+                                          strokeLinejoin="round"
+                                          strokeWidth="1.5"
+                                        />
+                                        <circle
+                                          cx="12"
+                                          cy="7"
+                                          r="4"
+                                          strokeLinejoin="round"
+                                          strokeWidth="1.5"
+                                        />
+                                      </svg>
+                                    </span>
+                                    Dashboard
+                                  </Link>
+                                </li>
+                              </ul>
+                            </div>
+
+                            <div className="profile-dropdown-menu profile-dropdown-menu-two " onClick={handleClick}>
+                              <ul>
+                                <li>
+                                  <Link to="#" >
+                                    <span>
+                                      <svg
+                                        fill="none"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        width="24"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M20 14L21.2929 12.7071C21.6834 12.3166 21.6834 11.6834 21.2929 11.2929L20 10"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="1.5"
+                                        />
+                                        <path
+                                          d="M21 12H13M6 20C3.79086 20 2 18.2091 2 16V8C2 5.79086 3.79086 4 6 4M6 20C8.20914 20 10 18.2091 10 16V8C10 5.79086 8.20914 4 6 4M6 20H14C16.2091 20 18 18.2091 18 16M6 4H14C16.2091 4 18 5.79086 18 8"
+                                          strokeLinecap="round"
+                                          strokeWidth="1.5"
+                                        />
+                                      </svg>
+                                    </span>
+                                    Logout
+                                  </Link>
+                                </li>
+                              </ul>
+                            </div>
+
+
+
+                          </div>
+                        </div>
 
 
 

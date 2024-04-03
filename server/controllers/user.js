@@ -1317,6 +1317,8 @@ exports.customerLogin = async (req, res) => {
             name: validUser.name,
             email: validUser.email,
             token: token,
+            phone: validUser.phone,
+            address: validUser.address,
             avatar: validUser.avatar,
             createdAt: validUser.createdAt
         })
@@ -1446,6 +1448,38 @@ exports.updateUserAddress = async(req,res)=> {
         return(error)
     }
 }  
+
+
+exports.updateCustomerProfile = async(req,res)=> {
+    try{
+        const customerId = req.params.id;
+        let tmp = req.header("Authorization");
+        const token = tmp ? tmp.slice(7, tmp.length) : "";
+        const{name, email, phone, avatar, address} = req.body
+
+
+        const updateData = await Customer.findByIdAndUpdate(customerId, {name, email, phone, avatar, address}, { new: true })
+
+        if (!updateData) {
+            return res.status(404).json({ message: 'Data not found' });
+        }
+
+        return res.status(200).json({
+            id: updateData._id,
+            token: token,
+            name: updateData.name,
+            avatar: updateData.avatar,
+            email: updateData.email,
+            phone: updateData.phone,
+            address: updateData.address
+        })
+
+
+    }catch(error){
+        console.log(error)
+        return(error)
+    }
+} 
 
 
 
