@@ -146,6 +146,35 @@ function Header() {
 
 
    //Wishlist Data
+   const [wishlistData, setWishlistData] = useState([])
+   const allWishlist = async () => {
+
+       try {
+           const res = await fetch(`http://localhost:8000/all-wishlist`, {
+               method: 'GET',
+               headers: {
+                   'Content-Type': 'application/json',
+                   'Authorization': `Bearer ${customer.token}`,
+               },
+           });
+
+
+           const data = await res.json();
+           setWishlistData(data);
+
+           dispatch({ type: "WISHLIST", payload: data });
+          Cookies.set("wishlist", JSON.stringify(data));
+
+       } catch (error) {
+           return (error)
+
+       }
+
+   };
+
+   useEffect(() => {
+       allWishlist();
+   }, []);
   
 
  
