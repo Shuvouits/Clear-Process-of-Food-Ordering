@@ -99,7 +99,7 @@ function Login() {
       <div className="sign-up-main-two">
         <div className="sign-up-main-two-item">
           <div className="sign-up-img">
-            <img
+          <img
               src={Banner}
               alt="img"
             />
@@ -123,10 +123,7 @@ function Login() {
       <div className="sign-up-main">
         <div className="sign-up-logo">
           <Link to="/">
-            <img
-              src={Logo}
-              alt="logo"
-            />
+           <h2 style={{fontWeight: 'bold', color: '#fe724c'}}>Food Order</h2>
           </Link>
         </div>
         <div className="sign-up-text">
