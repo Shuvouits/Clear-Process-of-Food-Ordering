@@ -7,6 +7,8 @@ import Cookies from "js-cookie"
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const { wishlist } = useSelector((state) => ({ ...state }))
+
   const [cart, setCart] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -140,6 +142,11 @@ function Header() {
     }
 
   }
+
+
+
+   //Wishlist Data
+  
 
  
 
@@ -306,7 +313,7 @@ function Header() {
                            
                           </span>
 
-                          <span className='count'>15</span>
+                          <span className='count'>{customer ? wishlist.length : '0'}</span>
                           
                         </div>
                       </Link>

@@ -204,18 +204,20 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
 }
 
 .love{
-  position: relative;
+  
 }
 
 .count{
+
   position: absolute;
-  top: -25px;
-  color: white;
+  font-size: 25px;
   font-weight: bold;
-  font-size: 19px;
- 
-  width: 10px;
-  height: 10px;
+  top: -2%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: blue;
+  
+  
 }
 
 

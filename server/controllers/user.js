@@ -1547,19 +1547,17 @@ exports.wishlist = async(req,res)=> {
         const customerId = req.params.customerId;
 
         const product = await Wishlist.findOne({productId: productId});
-        console.log(product)
 
         if(!product){
 
             const data = await new Wishlist({
                 productId, customerId
-               
-               
             }).save();
+
+            const wishlistData = await Wishlist.find();
+            console.log(wishlistData)
     
-            res.status(200).json({
-                message: 'New product insert your wishlist'
-            })
+            res.status(200).json(wishlistData)
 
         }
 

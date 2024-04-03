@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
+import Cookies from "js-cookie";
 
 function Traditional() {
 
     const { customer } = useSelector((state) => ({ ...state }))
+    const dispatch = useDispatch();
 
     //Category Data
     const [category, setCategory] = useState([])
@@ -72,7 +74,30 @@ function Traditional() {
         setFilterData(id);
     }
 
+     
+
     const handlewishList = async(id) => {
+        if(!customer){
+
+            Swal.fire({
+                toast: false,
+                animation: true,
+                text: `You are not authorized user`,
+                icon: 'error',
+                showConfirmButton: true,
+                timer: 3000,
+                timerProgressBar: true,
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            })
+
+        }
+
+
         try {
             const res = await fetch(`http://localhost:8000/wishlist-product/${id}/${customer.id}`, {
                 method: 'POST',
@@ -84,12 +109,14 @@ function Traditional() {
 
             const data = await res.json();
 
+            console.log(data)
+
             if (res.status === 200) {
 
                 Swal.fire({
                     toast: false,
                     animation: true,
-                    text: `${data.message}`,
+                    text: `Product Inserted your wishlist`,
                     icon: 'success',
                     showConfirmButton: true,
                     timer: 3000,
@@ -101,6 +128,13 @@ function Traditional() {
                         icon: 'custom-toast-icon',
                     },
                 })
+
+                dispatch({ type: "WISHLIST", payload: data });
+                Cookies.set("wishlist", JSON.stringify(data));
+
+               
+
+                
 
             }
 
@@ -126,11 +160,14 @@ function Traditional() {
             
 
         } catch (error) {
-            return (error)
+            //return (error)
             console.log(error)
 
         }
-    }
+    }  
+
+
+   
 
 
 

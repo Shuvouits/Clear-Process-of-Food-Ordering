@@ -35,7 +35,7 @@ function Sidebar({handleSidebar, sidebar}) {
             <div className="admin-menu">
                 {/* Logo */}
                 <div className="logo sherah-sidebar-padding">
-                    <Link href="/admin/dashboard" style={{fontWeight: 'bold', fontSize: '30px'}}>
+                    <Link to="/admin/dashboard" style={{fontWeight: 'bold', fontSize: '30px'}}>
                         Food Order
                     </Link>
                     <div className="sherah__sicon close-icon d-xl-none" onClick={handleSidebar}>

@@ -12,6 +12,7 @@ export function customerReducer(
     case "CUPDATE":
       return action.payload;
 
+
     case "CLOGOUT":
       return null;
     case "VERIFY":
