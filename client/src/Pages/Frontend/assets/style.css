@@ -561,7 +561,7 @@ p {
 
 .header .menu-bg .nav-btn-main .nav-btn-two .love:after {
     position: absolute;
-    content: "8";
+   
     top: 0;
     right: 0;
     width: 16px;
@@ -589,7 +589,7 @@ p {
 
 .header .menu-bg .nav-btn-main .nav-btn-two .cart::after {
     position: absolute;
-    content: "3";
+   
 }
 
 .header .menu-bg .nav-btn-main .nav-btn-two .cart .click {

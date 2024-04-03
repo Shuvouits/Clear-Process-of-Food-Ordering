@@ -12,6 +12,7 @@ const BlogCategory = require('../models/blogCategory.js')
 const Blog = require('../models/blog.js')
 const Customer = require('../models/customer.js')
 const Address = require('../models/address.js')
+const Wishlist = require ('../models/wishlist.js')
 
 
 
@@ -1537,6 +1538,58 @@ exports.customerPasswordChange = async (req,res) => {
         console.log(error)
     }
 } 
+
+
+exports.wishlist = async(req,res)=> {
+    try{
+
+        const productId = req.params.productId;
+        const customerId = req.params.customerId;
+
+        const product = await Wishlist.findOne({productId: productId});
+        console.log(product)
+
+        if(!product){
+
+            const data = await new Wishlist({
+                productId, customerId
+               
+               
+            }).save();
+    
+            res.status(200).json({
+                message: 'New product insert your wishlist'
+            })
+
+        }
+
+        
+
+        if(product){
+            return res.status(400).json({
+                message: 'Product has already save your wishlist'
+            })
+        }
+
+
+    }catch(error){
+        return(error)
+        console.log(error)
+    }
+}  
+
+
+exports.allWishlist = async(req,res)=> {
+    try{
+        const userId = req.user.id;
+       
+        const data = await Wishlist.find({customerId : userId}).populate('productId');
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}  
 
 
 

@@ -203,4 +203,19 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
   border: 1px solid gainsboro;
 }
 
+.love{
+  position: relative;
+}
+
+.count{
+  position: absolute;
+  top: -25px;
+  color: white;
+  font-weight: bold;
+  font-size: 19px;
+ 
+  width: 10px;
+  height: 10px;
+}
+
 

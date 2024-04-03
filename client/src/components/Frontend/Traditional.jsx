@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2'
 
 function Traditional() {
+
+    const { customer } = useSelector((state) => ({ ...state }))
 
     //Category Data
     const [category, setCategory] = useState([])
@@ -68,7 +72,65 @@ function Traditional() {
         setFilterData(id);
     }
 
-    console.log(filterData)
+    const handlewishList = async(id) => {
+        try {
+            const res = await fetch(`http://localhost:8000/wishlist-product/${id}/${customer.id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${customer.token}`,
+                },
+            });
+
+            const data = await res.json();
+
+            if (res.status === 200) {
+
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: `${data.message}`,
+                    icon: 'success',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        container: 'custom-toast-container',
+                        popup: 'custom-toast-popup',
+                        title: 'custom-toast-title',
+                        icon: 'custom-toast-icon',
+                    },
+                })
+
+            }
+
+            if (res.status === 400) {
+
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: `${data.message}`,
+                    icon: 'error',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        container: 'custom-toast-container',
+                        popup: 'custom-toast-popup',
+                        title: 'custom-toast-title',
+                        icon: 'custom-toast-icon',
+                    },
+                })
+
+            }
+            
+
+        } catch (error) {
+            return (error)
+            console.log(error)
+
+        }
+    }
 
 
 
@@ -133,7 +195,7 @@ function Traditional() {
                                                 <div className="featured-item-img-overlay">
                                                     <div className="featured-item-img-over-text">
                                                         <div className="left-text">
-                                                            <a href="https://reservq.minionionbd.com/wishlist/add/2">
+                                                            <Link to="#" onClick={()=>handlewishList(item._id)}>
                                                                 <div className="icon">
                                                                     <span>
                                                                         <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -141,7 +203,7 @@ function Traditional() {
                                                                         </svg>
                                                                     </span>
                                                                 </div>
-                                                            </a>
+                                                            </Link>
                                                         </div>
                                                     </div>
                                                 </div>
