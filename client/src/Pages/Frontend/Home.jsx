@@ -11,12 +11,12 @@ import Resturent from '../../components/Frontend/Resturent'
 import Video from '../../components/Frontend/Video'
 
 
-function Home() {
+function Home({handleCart}) {
   const [vopen, setVopen] = useState(false);
 
   const handleVideo = () => {
     setVopen(!vopen)
-  }
+  } 
 
 
   return (
@@ -24,7 +24,7 @@ function Home() {
       <Banner handleVideo={handleVideo} />
       <Category />
 
-      <Traditional />
+      <Traditional handleCart={handleCart} />
       <Process />
       <Popular />
       <FAQ />

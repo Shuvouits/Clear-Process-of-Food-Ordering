@@ -91,9 +91,20 @@ if (currentPath.startsWith('/admin')) {
 }
 
 
+
+
 function App() {
 
   const { customer } = useSelector((state) => ({ ...state }))
+  const [productId, setProductId] = useState({})
+
+  const [cartModal, setCartModal] = useState(false);
+
+  const handleCart = (id) => {
+    setCartModal(!cartModal)
+    setProductId(id)
+  }
+
 
 
   return (
@@ -101,8 +112,8 @@ function App() {
 
       <Routes>
         {/* Frontend route */}
-        <Route path='/' element={<Layout />}>
-          <Route path='/' element={<Home />} />
+        <Route path='/' element={<Layout cartModal={cartModal} handleCart={handleCart} productId={productId} />}>
+          <Route path='/' element={<Home handleCart={handleCart} />} />
           <Route path='/menu' element={<Menu />} />
           <Route path='/menu/:title' element={<MenuDetails />} />
           <Route path='/about' element={<About />} />

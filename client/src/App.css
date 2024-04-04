@@ -210,12 +210,20 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
 .count{
 
   position: absolute;
-  font-size: 25px;
-  font-weight: bold;
-  top: -2%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: blue;
+    content: "8";
+    top: 0;
+    right: 0;
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    line-height: 16px;
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 500;
+    font-family: "Plus Jakarta Sans";
+    border-radius: 50px;
+    transition: all 0.3s;
   
   
 }

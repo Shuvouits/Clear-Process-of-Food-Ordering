@@ -5,6 +5,7 @@ import Resturent from '../../../components/Frontend/Resturent'
 import { Outlet } from 'react-router-dom'
 import Header from '../../../components/Frontend/Header'
 import Footer from '../../../components/Frontend/Footer'
+import ScrollTop from '../../../components/Frontend/ScrollTop'
 
 
 
@@ -12,7 +13,7 @@ function UserLayout() {
     return (
 
         <>
-            
+            <ScrollTop />
             <Header />
 
             <main>

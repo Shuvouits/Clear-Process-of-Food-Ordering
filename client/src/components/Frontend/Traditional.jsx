@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2'
 import Cookies from "js-cookie";
 
-function Traditional() {
+
+function Traditional({handleCart}) {
 
     const { customer } = useSelector((state) => ({ ...state }))
     const dispatch = useDispatch();
+
+   
 
     //Category Data
     const [category, setCategory] = useState([])
@@ -35,8 +38,6 @@ function Traditional() {
     useEffect(() => {
         allCategory();
     }, []);
-
-
 
 
 
@@ -167,10 +168,7 @@ function Traditional() {
     }  
 
 
-   
-
-
-
+    
 
     return (
         <>
@@ -285,7 +283,7 @@ function Traditional() {
 
 
                                                     <div className="featured-item-btn">
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" className="main-btn-three">
+                                                        <button onClick={() => handleCart(item._id)} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" className="main-btn-three">
                                                             <span>
                                                                 <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <path d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -384,7 +382,7 @@ function Traditional() {
 
 
                                                     <div className="featured-item-btn">
-                                                        <button type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" className="main-btn-three">
+                                                        <button onClick={handleCart} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" className="main-btn-three">
                                                             <span>
                                                                 <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <path d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -419,9 +417,9 @@ function Traditional() {
                         <div className="row">
                             <div className="col-lg-12">
                                 <div className="traditional-btn">
-                                    <a href="https://reservq.minionionbd.com/menu" className="main-btn-four">
+                                    <Link to="/menu" className="main-btn-four">
                                         See More
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </div>

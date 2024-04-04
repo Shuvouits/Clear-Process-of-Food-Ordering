@@ -1555,7 +1555,6 @@ exports.wishlist = async(req,res)=> {
             }).save();
 
             const wishlistData = await Wishlist.find();
-            console.log(wishlistData)
     
             res.status(200).json(wishlistData)
 
@@ -1582,6 +1581,18 @@ exports.allWishlist = async(req,res)=> {
         const userId = req.user.id;
        
         const data = await Wishlist.find({customerId : userId}).populate('productId');
+        return res.status(200).json(data)
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+exports.specificProduct = async(req,res)=> {
+    try{
+        const productId = req.params.id;
+        const data = await Product.findById(productId);
+        console.log(data)
         return res.status(200).json(data)
 
     }catch(error){

@@ -9,7 +9,8 @@ const {
     allBlogCategory, editBlogCategory, updateBlogCategory, blogCategoryStatus, deleteBlogcategory,
     addBlog, allBlog, editBlog, updateBlog, blogStatus, deleteBlog, specificMenu, customerRegister,
     customerLogin, customerLogout, customerAddress, allAddress, deleteAddress, editAddress,
-    updateUserAddress, updateCustomerProfile, customerPasswordChange, wishlist, allWishlist
+    updateUserAddress, updateCustomerProfile, customerPasswordChange, wishlist, allWishlist,
+    specificProduct
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -96,6 +97,9 @@ router.post('/update-customer-profile/:id', authUser, updateCustomerProfile);
 router.post('/customer-password-change', authUser, customerPasswordChange);
 router.post('/wishlist-product/:productId/:customerId', authUser, wishlist);
 router.get('/all-wishlist/', authUser, allWishlist);
+
+
+router.get('/specific-product/:id', authUser, specificProduct);
 
 
 
