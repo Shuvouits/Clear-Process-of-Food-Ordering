@@ -112,7 +112,7 @@ function App() {
 
       <Routes>
         {/* Frontend route */}
-        <Route path='/' element={<Layout cartModal={cartModal} handleCart={handleCart} productId={productId} />}>
+        <Route path='/' element={<Layout  cartModal={cartModal} handleCart={handleCart} productId={productId} />}>
           <Route path='/' element={<Home handleCart={handleCart} />} />
           <Route path='/menu' element={<Menu />} />
           <Route path='/menu/:title' element={<MenuDetails />} />

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSelector } from 'react-redux';
 
-function Cart({ cartModal, handleCart, productId }) {
+function Cart({cartModal, handleCart, productId }) {
   const { customer } = useSelector((state) => ({ ...state }))
   const [product, setProduct] = useState({})
+
+  
 
   const allProduct = async () => {
 
@@ -92,11 +94,41 @@ function Cart({ cartModal, handleCart, productId }) {
   };
 
 
-  console.log(optData)
+  const [formData, setFormData] = useState({})
 
-  const handleSubmit = () => {
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+   
+
+    const updatedFormData = {
+      ...formData,
+      productSize : productSize,
+      optData : optData
+    }
+
+    console.log(updatedFormData)
+    handleCart();
+
 
   }
+
+
+  const cartRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (cartRef.current && !cartRef.current.contains(event.target)) {
+        handleCart();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [cartRef]);
+
 
 
 
@@ -104,7 +136,7 @@ function Cart({ cartModal, handleCart, productId }) {
 
   return (
     <>
-      <section className='shopping-cart' >
+      <section className='shopping-cart' ref={cartRef}>
 
         {cartModal && product.filter(item => item._id === productId).map((item) => (
 
@@ -117,8 +149,10 @@ function Cart({ cartModal, handleCart, productId }) {
             aria-modal="true"
             role="dialog"
 
+           
+
           >
-            <div className="modal-dialog">
+            <div className="modal-dialog" ref={cartRef}>
               <div className="modal-content" style={{ border: '1px solid gainsboro' }}>
                 <button
                   type="button"
