@@ -68,8 +68,9 @@ import CategoryMenuDetails from './Pages/Frontend/CategoryMenuDetails'
 import SearchMenuDetails from './Pages/Frontend/SearchMenuDetails'
 import UserPrivate from './Pages/Frontend/UserPrivate'
 import Register from './Pages/Frontend/Register'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import EditAddress from './Pages/Frontend/user/EditAddress'
+import Cookies from "js-cookie";
 
 
 //backend css import
@@ -96,6 +97,7 @@ if (currentPath.startsWith('/admin')) {
 function App() {
 
   const { customer } = useSelector((state) => ({ ...state }))
+  const dispatch = useDispatch();
   const [productId, setProductId] = useState({})
 
   const [cartModal, setCartModal] = useState(false);
@@ -103,7 +105,44 @@ function App() {
   const handleCart = (id) => {
     setCartModal(!cartModal)
     setProductId(id)
-  }
+  } 
+
+  //All Cart Data
+
+  const [cart, setCart] = useState({})
+
+
+  const allCart = async () => {
+
+    try {
+      const res = await fetch(`http://localhost:8000/all-cart`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${customer.token}`,
+        },
+      });
+
+
+      const data = await res.json();
+
+      setCart(data);
+
+        dispatch({ type: "STORE", payload: data });
+        Cookies.set("cart", JSON.stringify(data));
+
+    } catch (error) {
+      console.log(error)
+
+    }
+
+  };
+
+  useEffect(() => {
+    allCart();
+  }, []);
+
+  
 
 
 
@@ -112,7 +151,7 @@ function App() {
 
       <Routes>
         {/* Frontend route */}
-        <Route path='/' element={<Layout  cartModal={cartModal} handleCart={handleCart} productId={productId} />}>
+        <Route path='/' element={<Layout allCart={allCart}  cartModal={cartModal} handleCart={handleCart} productId={productId} />}>
           <Route path='/' element={<Home handleCart={handleCart} />} />
           <Route path='/menu' element={<Menu />} />
           <Route path='/menu/:title' element={<MenuDetails />} />

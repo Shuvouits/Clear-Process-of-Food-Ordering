@@ -16,7 +16,7 @@ import Cart from '../../components/Frontend/Cart'
 const HandleClickContext = createContext();
 
 
-function Layout({handleCart, cartModal, productId}) {
+function Layout({handleCart, cartModal, productId, allCart}) {
 
   const [sidebar, setSidebar] = useState(false)
   const handleClick = () => {
@@ -32,11 +32,11 @@ function Layout({handleCart, cartModal, productId}) {
 
       <div>
         <ScrollTop />
-        <Header />
+        <Header allCart={allCart} />
         <MobileHeader handleClick={handleClick} sidebar={sidebar} />
         <Outlet handleCart={handleCart}  />
         <Footer />
-        <Cart cartModal={cartModal} handleCart={handleCart} productId={productId} />
+        <Cart cartModal={cartModal} handleCart={handleCart} productId={productId} allCart={allCart}/>
       </div>
 
 

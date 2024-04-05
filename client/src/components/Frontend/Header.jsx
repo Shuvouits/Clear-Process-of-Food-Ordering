@@ -5,18 +5,19 @@ import Swal from 'sweetalert2'
 import Cookies from "js-cookie"
 
 
-function Header() {
+function Header({ allCart }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const { wishlist } = useSelector((state) => ({ ...state }))
+  const { cart } = useSelector((state) => ({ ...state }))
 
-  const [cart, setCart] = useState(false)
+  const [cartModal, setCartModal] = useState(false)
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const { customer } = useSelector((state) => ({ ...state }))
 
   const handleCartClick = () => {
-    setCart(!cart)
+    setCartModal(!cartModal)
   }
 
 
@@ -145,36 +146,152 @@ function Header() {
 
 
 
-   //Wishlist Data
-   const [wishlistData, setWishlistData] = useState([])
-   const allWishlist = async () => {
+  //Wishlist Data
+  const [wishlistData, setWishlistData] = useState([])
+  const allWishlist = async () => {
 
-       try {
-           const res = await fetch(`http://localhost:8000/all-wishlist`, {
-               method: 'GET',
-               headers: {
-                   'Content-Type': 'application/json',
-                   'Authorization': `Bearer ${customer.token}`,
-               },
-           });
+    try {
+      const res = await fetch(`http://localhost:8000/all-wishlist`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${customer.token}`,
+        },
+      });
 
 
-           const data = await res.json();
-           setWishlistData(data);
+      const data = await res.json();
+      setWishlistData(data);
 
-           dispatch({ type: "WISHLIST", payload: data });
-          Cookies.set("wishlist", JSON.stringify(data));
+      dispatch({ type: "WISHLIST", payload: data });
+      Cookies.set("wishlist", JSON.stringify(data));
 
-       } catch (error) {
-           return (error)
+    } catch (error) {
+      return (error)
 
-       }
+    }
 
-   };
+  };
 
-   useEffect(() => {
-       allWishlist();
-   }, []); 
+  useEffect(() => {
+    allWishlist();
+  }, []);
+
+
+  //all product
+
+  const [product, setProduct] = useState([])
+  const allProduct = async () => {
+
+    try {
+      const res = await fetch(`http://localhost:8000/all-product`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+
+      const data = await res.json();
+      setProduct(data);
+
+    } catch (error) {
+      return (error)
+
+    }
+
+  };
+
+  useEffect(() => {
+    allProduct();
+  }, []);
+
+
+  const handleCartRemove = async (id) => {
+
+    try {
+
+      const result = await Swal.fire({
+        toast: false,
+        title: 'Delete Cart?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        customClass: {
+          container: 'custom-toast-container',
+          popup: 'custom-toast-popup',
+          title: 'custom-toast-title',
+          icon: 'custom-toast-icon',
+        },
+      });
+
+      if (result.isConfirmed) {
+        const res = await fetch(`http://localhost:8000/delete-cart/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${customer.token}`
+          },
+        });
+
+        const data = await res.json();
+
+        if (res.status === 200) {
+          Swal.fire({
+            toast: false,
+            animation: true,
+            text: `Cart Deleted Successfully`,
+            icon: 'success',
+            showConfirmButton: true,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: {
+              container: 'custom-toast-container',
+              popup: 'custom-toast-popup',
+              title: 'custom-toast-title',
+              icon: 'custom-toast-icon',
+            },
+          })
+
+          dispatch({ type: "STORE", payload: data });
+          Cookies.set("cart", JSON.stringify(data));
+        }
+      }
+
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+
+  let totalCart = 0; // Initialize as a number
+
+  if (cart != null) {
+
+    const calculateTotal = () => {
+      product.forEach((item) => {
+        cart.filter(data => data.productId === item._id).forEach((data) => {
+          if (Array.isArray(data.productSize)) {
+            data.productSize.forEach((psize) => {
+              item.productSize.forEach((value) => {
+                if (psize.id === value.id) {
+                  totalCart += parseInt(value.price);
+
+                }
+              });
+            });
+          }
+        });
+      });
+    };
+
+    calculateTotal();
+
+  }
 
 
 
@@ -325,22 +442,22 @@ function Header() {
                     </form>
                     <div className="nav-btn-two">
                       <Link to="/user/wishlist">
-                       
+
                         <div className='love' >
-                         
+
                           <span >
-                            
+
                             <svg width={28} height={28} viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M19.833 7.584C21.1216 7.584 22.1663 8.62867 22.1663 9.91733M13.9997 6.65363L14.7989 5.834C17.285 3.2845 21.3157 3.2845 23.8018 5.834C26.2211 8.31503 26.2954 12.3134 23.9701 14.8872L17.2893 22.2819C15.5145 24.2463 12.4848 24.2463 10.71 22.2819L4.02926 14.8873C1.70392 12.3135 1.77826 8.31506 4.19757 5.83402C6.68365 3.28451 10.7144 3.28452 13.2005 5.83402L13.9997 6.65363Z" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
-                           
+
                           </span>
 
-                        
-                          
+
+
 
                           <span className='count'>{wishlist ? wishlist.length : '0'}</span>
-                          
+
                         </div>
                       </Link>
 
@@ -360,7 +477,9 @@ function Header() {
 
                         {/* Shopping Cart */}
 
-                        <div className={`cart-dropdown header-dropdown ${cart ? 'active-dropdown' : ''}`} id="cart-dropdown">
+
+
+                        <div className={`cart-dropdown header-dropdown ${cartModal ? 'active-dropdown' : ''}`} id="cart-dropdown">
                           <div className="cart-dropdown-text">
                             <div className="text">
                               <h3>My Cart</h3>
@@ -387,45 +506,89 @@ function Header() {
                               </button>
                             </div>
                           </div>
-                          <div className="cart-dropdown-item-box">
-                            <div className="cart-dropdown-item">
-                              <div className="cart-dropdown-item-img">
-                                <img
-                                  src="https://reservq.minionionbd.com/uploads/custom-images/fish-tacos-2024-01-31-11-19-33-7126.png"
-                                  alt="img"
-                                />
-                              </div>
-                              <div className="cart-dropdown-item-text">
-                                <a href="https://reservq.minionionbd.com/menu/fish-tacos">
-                                  <h3>Fish Tacos</h3>
-                                </a>
-                                <p>$75</p>
-                              </div>
-                            </div>
-                            <div className="cart-dropdown-inner">
-                              <div className="cart-dropdown-inner-btn">
-                                <a href="https://reservq.minionionbd.com/cart/remove/13">
-                                  <span>
-                                    <svg
-                                      width={18}
-                                      height={18}
-                                      viewBox="0 0 18 18"
-                                      fill="none"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                      <path
-                                        d="M3.75 6V13.5C3.75 15.1569 5.09315 16.5 6.75 16.5H11.25C12.9069 16.5 14.25 15.1569 14.25 13.5V6M10.5 8.25V12.75M7.5 8.25L7.5 12.75M12 3.75L10.9453 2.16795C10.6671 1.75065 10.1988 1.5 9.69722 1.5H8.30278C7.80125 1.5 7.3329 1.75065 7.0547 2.16795L6 3.75M12 3.75H6M12 3.75H15.75M6 3.75H2.25"
-                                        stroke="#F01543"
-                                        strokeWidth="1.5"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                      />
-                                    </svg>
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
+
+                          {cart != null && (
+                            <>
+
+                              {product.map((item) => (
+
+                                <>
+                                  {cart.filter(data => data.productId === item._id).map((data) => (
+
+                                    <div className="cart-dropdown-item-box">
+                                      <div className="cart-dropdown-item">
+                                        <div className="cart-dropdown-item-img">
+                                          <img
+                                            src={item.avatar}
+                                            alt="img"
+                                          />
+                                        </div>
+                                        <div className="cart-dropdown-item-text">
+                                          <a href="https://reservq.minionionbd.com/menu/fish-tacos">
+                                            <h3>{item.productName}</h3>
+                                          </a>
+
+                                          {Array.isArray(data.productSize) && data.productSize.map((psize) => (
+                                            <>
+                                              {item.productSize.map((value) => (
+                                                <>
+                                                  {value.id === psize.id && (
+                                                    <p>{value.price} Tk</p>
+
+                                                  )}
+                                                </>
+
+                                              ))}
+                                            </>
+                                          ))}
+
+
+
+                                        </div>
+                                      </div>
+                                      <div className="cart-dropdown-inner" onClick={() => handleCartRemove(item._id)}>
+                                        <div className="cart-dropdown-inner-btn">
+                                          <Link to="#">
+                                            <span>
+                                              <svg
+                                                width={18}
+                                                height={18}
+                                                viewBox="0 0 18 18"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                              >
+                                                <path
+                                                  d="M3.75 6V13.5C3.75 15.1569 5.09315 16.5 6.75 16.5H11.25C12.9069 16.5 14.25 15.1569 14.25 13.5V6M10.5 8.25V12.75M7.5 8.25L7.5 12.75M12 3.75L10.9453 2.16795C10.6671 1.75065 10.1988 1.5 9.69722 1.5H8.30278C7.80125 1.5 7.3329 1.75065 7.0547 2.16795L6 3.75M12 3.75H6M12 3.75H15.75M6 3.75H2.25"
+                                                  stroke="#F01543"
+                                                  strokeWidth="1.5"
+                                                  strokeLinecap="round"
+                                                  strokeLinejoin="round"
+                                                />
+                                              </svg>
+                                            </span>
+                                          </Link>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                  ))}
+
+                                </>
+
+
+
+                              ))}
+
+                            </>
+                          )}
+
+
+
+                          {cart === null && (
+                            <h4 style={{ marginTop: '20px' }}>No Product Found</h4>
+                          )}
+
+
                           <div className="cart-dropdown-sub-total">
                             <div className="cart-dropdown-sub-total-item">
                               <div className="text">
@@ -433,7 +596,7 @@ function Header() {
                               </div>
                               <div className="text">
                                 <h3>
-                                  <a href="javascript:;">$75</a>
+                                  <a href="javascript:;">${totalCart}</a>
                                 </h3>
                               </div>
                             </div>
@@ -447,6 +610,10 @@ function Header() {
                             </div>
                           </div>
                         </div>
+
+
+
+
 
 
 

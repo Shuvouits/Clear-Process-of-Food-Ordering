@@ -1,11 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2'
+import Cookies from "js-cookie";
 
-function Cart({cartModal, handleCart, productId }) {
+function Cart({ cartModal, handleCart, productId, allCart }) {
   const { customer } = useSelector((state) => ({ ...state }))
   const [product, setProduct] = useState({})
+  const dispatch = useDispatch();
 
-  
+  console.log(cartModal)
+
+
 
   const allProduct = async () => {
 
@@ -71,7 +76,7 @@ function Cart({cartModal, handleCart, productId }) {
 
     if (isChecked) {
 
-      setProductSize(prevSizes => [...prevSizes, selectedSize]);
+      setProductSize([selectedSize]);
     } else {
 
       setProductSize(prevSizes => prevSizes.filter(size => size !== selectedSize));
@@ -97,38 +102,119 @@ function Cart({cartModal, handleCart, productId }) {
   const [formData, setFormData] = useState({})
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   
+
+    if(!customer){
+      Swal.fire({
+        toast: false,
+        animation: true,
+        text: `You Are Not Authorized, Please Login First`,
+        icon: 'warning',
+        showConfirmButton: true,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          container: 'custom-toast-container',
+          popup: 'custom-toast-popup',
+          title: 'custom-toast-title',
+          icon: 'custom-toast-icon',
+        },
+      })
+
+      handleCart();
+
+    }
+
 
     const updatedFormData = {
       ...formData,
-      productSize : productSize,
-      optData : optData
+      productSize: productSize,
+      optData: optData,
+      productId: productId
     }
 
-    console.log(updatedFormData)
-    handleCart();
+    try {
+
+
+      // Make the API request with updated formData
+      const res = await fetch('http://localhost:8000/add-cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${customer.token}`,
+        },
+        body: JSON.stringify(updatedFormData),
+      });
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+
+
+        handleCart();
+
+        Swal.fire({
+          toast: false,
+          animation: true,
+          text: `Product Inserted To The Cart`,
+          icon: 'success',
+          showConfirmButton: true,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            container: 'custom-toast-container',
+            popup: 'custom-toast-popup',
+            title: 'custom-toast-title',
+            icon: 'custom-toast-icon',
+          },
+        })
+
+        allCart();
+
+
+      }
+
+      if (res.status === 400) {
+
+
+        handleCart();
+
+        Swal.fire({
+          toast: false,
+          animation: true,
+          text: `This product has already your cart`,
+          icon: 'warning',
+          showConfirmButton: true,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            container: 'custom-toast-container',
+            popup: 'custom-toast-popup',
+            title: 'custom-toast-title',
+            icon: 'custom-toast-icon',
+          },
+        })
+
+
+      }
+
+
+
+    } catch (error) {
+
+      console.log(error)
+    }
+
 
 
   }
 
 
-  const cartRef = useRef(null);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (cartRef.current && !cartRef.current.contains(event.target)) {
-        handleCart();
-      }
-    };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [cartRef]);
 
+  console.log(productId)
 
 
 
@@ -136,7 +222,8 @@ function Cart({cartModal, handleCart, productId }) {
 
   return (
     <>
-      <section className='shopping-cart' ref={cartRef}>
+      <section className='shopping-cart' >
+
 
         {cartModal && product.filter(item => item._id === productId).map((item) => (
 
@@ -149,10 +236,10 @@ function Cart({cartModal, handleCart, productId }) {
             aria-modal="true"
             role="dialog"
 
-           
+
 
           >
-            <div className="modal-dialog" ref={cartRef}>
+            <div className="modal-dialog">
               <div className="modal-content" style={{ border: '1px solid gainsboro' }}>
                 <button
                   type="button"
@@ -197,12 +284,6 @@ function Cart({cartModal, handleCart, productId }) {
                           </div>
                         </div>
                       ))}
-
-
-
-
-
-
 
 
 
@@ -289,17 +370,6 @@ function Cart({cartModal, handleCart, productId }) {
             </div>
           </div>
         ))}
-
-
-
-
-
-
-
-
-
-
-
 
 
       </section>

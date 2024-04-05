@@ -13,6 +13,8 @@ const Blog = require('../models/blog.js')
 const Customer = require('../models/customer.js')
 const Address = require('../models/address.js')
 const Wishlist = require ('../models/wishlist.js')
+const Cart = require ('../models/cart.js');
+const cart = require('../models/cart.js');
 
 
 
@@ -1601,6 +1603,192 @@ exports.specificProduct = async(req,res)=> {
 }  
 
 
+exports.addCart = async (req, res) => {
+    try {
+        
+        const {productId, productSize, optData} = req.body;
+
+        const checkProduct = await Cart.findOne({productId: productId})
+
+        if(checkProduct){
+            return res.status(400).json({
+                message: 'This product has already your cart'
+            })
+        }
+
+        const productData = await Product.findById(productId);
+
+        const productName = productData.productName;
+        const avatar = productData.avatar; 
+        let productSizePrice = 0;
+        let productSizeName = null;
+
+        const sizeData = productSize.map(size => ({ id: size }))
+
+        //productSizePrice && Name
+
+        sizeData.forEach(size => {
+            productData.productSize.forEach(data => {
+                if (size.id === data.id) {
+                     productSizePrice = data.price;
+                     productSizeName = data.size
+                }
+            });
+        });
+
+        //optionalData
+
+        
+        let optionName = '';
+        let optionPrice = 0;
+
+        let totalOptionPrice = 0
+
+        const optDataWithId = optData.map(option => ({ id: option }));
+
+        let optionalData = [];
+
+        // Use a for...of loop or map function with async/await to handle promises
+        for (const opt of optDataWithId) {
+             const option = await Optional.findById(opt.id);
+             optionalData.push(option);
+        }
+
+        let totalOptional = 0;
+
+        optionalData.forEach((optData)=>{
+            totalOptional += parseInt(optData.price)
+        })
+
+        console.log(totalOptional)
+
+        const subTotal = parseInt(totalOptional) + parseInt(productSizePrice);
+
+
+        const data = await new Cart({
+           
+            productId,
+            productSize: productSize.map(size => ({ id: size })),
+            optData: optData.map(option=> ({id: option})),
+            productName,
+            avatar,
+            productSizePrice,
+            productSizeName,
+            optInfo: optionalData.map(info=> ({name: info.name, price: info.price, status: info.status})),
+            subTotal: subTotal
+            
+           
+        }).save();
+
+
+
+     
+        return res.status(200).json(data);
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+} 
+
+
+exports.cartPriceInc = async (req, res) => {
+    try {
+        
+        const cartId = req.params.id
+
+        const checkProduct = await Cart.findById(cartId)
+
+        if(!checkProduct){
+            return res.status(400).json({
+                "message" : 'No Product Found'
+            })
+        }
+
+
+        const productSizePrice = checkProduct.productSizePrice;
+        const subTotal = checkProduct.subTotal
+        const updatePrice = parseInt(productSizePrice) + parseInt(subTotal)
+        const updateData = await Cart.findByIdAndUpdate(cartId, {subTotal : updatePrice}, { new: true })
+        
+
+        const data = await Cart.find();
+
+        return res.status(200).json(data);
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+} 
+
+
+exports.cartPriceDec = async (req, res) => {
+    try {
+        
+        const cartId = req.params.id
+
+        const checkProduct = await Cart.findById(cartId)
+
+        if(!checkProduct){
+            return res.status(400).json({
+                "message" : 'No Product Found'
+            })
+        }
+
+
+        const productSizePrice = checkProduct.productSizePrice;
+        const subTotal = checkProduct.subTotal
+        const updatePrice = parseInt(subTotal) - parseInt(productSizePrice)
+        const updateData = await Cart.findByIdAndUpdate(cartId, {subTotal : updatePrice}, { new: true })
+        
+
+        const data = await Cart.find();
+
+        return res.status(200).json(data);
+        
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+} 
+
+exports.allCart = async (req, res) => {
+    try {
+        
+        const data = await Cart.find();
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+} 
+
+
+exports. deleteCart = async(req, res)=> {
+    try{
+       
+        const cartId = req.params.id;
+        
+
+        const data = await Cart.findOneAndDelete({productId : cartId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        const cartData = await Cart.find();
+        console.log(cartData)
+
+        return res.status(200).json(cartData)
+
+    }catch(error){
+        return (error)
+    }
+}  
 
 
 

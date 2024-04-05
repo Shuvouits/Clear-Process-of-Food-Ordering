@@ -229,3 +229,8 @@ input[type="text"], input[type="email"], input[type="url"], input[type="password
 }
 
 
+.header .menu-bg .nav-btn-main .nav-btn-two .cart .cart-dropdown {
+
+  left: -125px !important;
+  
+}

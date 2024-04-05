@@ -10,7 +10,7 @@ const {
     addBlog, allBlog, editBlog, updateBlog, blogStatus, deleteBlog, specificMenu, customerRegister,
     customerLogin, customerLogout, customerAddress, allAddress, deleteAddress, editAddress,
     updateUserAddress, updateCustomerProfile, customerPasswordChange, wishlist, allWishlist,
-    specificProduct
+    specificProduct, addCart, allCart, deleteCart, cartPriceInc, cartPriceDec
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -100,6 +100,11 @@ router.get('/all-wishlist/', authUser, allWishlist);
 
 
 router.get('/specific-product/:id', authUser, specificProduct);
+router.post('/add-cart', authUser, addCart);
+router.get('/all-cart', authUser, allCart);
+router.get('/delete-cart/:id', authUser, deleteCart);
+router.post('/cart-price-inc/:id', authUser, cartPriceInc);
+router.post('/cart-price-dec/:id', authUser, cartPriceDec);
 
 
 
