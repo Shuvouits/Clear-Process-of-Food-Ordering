@@ -1594,7 +1594,7 @@ exports.specificProduct = async(req,res)=> {
     try{
         const productId = req.params.id;
         const data = await Product.findById(productId);
-        console.log(data)
+    
         return res.status(200).json(data)
 
     }catch(error){
@@ -1622,6 +1622,7 @@ exports.addCart = async (req, res) => {
         const avatar = productData.avatar; 
         let productSizePrice = 0;
         let productSizeName = null;
+        let productSizeId = null;
 
         const sizeData = productSize.map(size => ({ id: size }))
 
@@ -1631,7 +1632,8 @@ exports.addCart = async (req, res) => {
             productData.productSize.forEach(data => {
                 if (size.id === data.id) {
                      productSizePrice = data.price;
-                     productSizeName = data.size
+                     productSizeName = data.size;
+                     productSizeId = data.id
                 }
             });
         });
@@ -1660,7 +1662,7 @@ exports.addCart = async (req, res) => {
             totalOptional += parseInt(optData.price)
         })
 
-        console.log(totalOptional)
+        
 
         const subTotal = parseInt(totalOptional) + parseInt(productSizePrice);
 
@@ -1675,7 +1677,9 @@ exports.addCart = async (req, res) => {
             productSizePrice,
             productSizeName,
             optInfo: optionalData.map(info=> ({name: info.name, price: info.price, status: info.status})),
-            subTotal: subTotal
+            subTotal: subTotal,
+            allProductSize: productData.productSize.map(item=> ({id: item.id, size: item.size, price: item.price})),
+            productSizeId
             
            
         }).save();
@@ -1781,7 +1785,6 @@ exports. deleteCart = async(req, res)=> {
         }
 
         const cartData = await Cart.find();
-        console.log(cartData)
 
         return res.status(200).json(cartData)
 

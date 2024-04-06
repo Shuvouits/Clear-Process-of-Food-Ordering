@@ -12,8 +12,12 @@ function Cart() {
   const { cart } = useSelector((state) => ({ ...state }))
   const dispatch = useDispatch();
 
-  const handleViewClick = () => {
+  const [viewId, setViewId] = useState('')
+
+  const handleViewClick = (id) => {
     setViewCart(!viewCart)
+    setViewId(id)
+
   }
 
   console.log(cart)
@@ -22,15 +26,64 @@ function Cart() {
 
   const [cartValue, setCartValue] = useState(1)
 
-  const handleCartInc = async(id) => {
+  const handleCartInc = async (id) => {
 
     setCartValue(cartValue + 1);
 
     try {
 
-     
+
 
       const res = await fetch(`http://localhost:8000/cart-price-inc/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${customer.token}`,
+        }
+      });
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+
+
+        Swal.fire({
+          toast: false,
+          animation: true,
+          text: 'Your cart updated',
+          icon: 'success',
+          showConfirmButton: true,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            container: 'custom-toast-container',
+            popup: 'custom-toast-popup',
+            title: 'custom-toast-title',
+            icon: 'custom-toast-icon',
+          },
+        })
+
+        dispatch({ type: "STORE", payload: data });
+        Cookies.set("cart", JSON.stringify(data));
+
+      }
+
+
+
+    } catch (error) {
+      console.log(error)
+
+    }
+  }
+
+  const handleCartDec = async (id) => {
+
+    if (cartValue > 1) {
+      setCartValue(cartValue - 1)
+
+      try {
+
+        const res = await fetch(`http://localhost:8000/cart-price-dec/${id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -41,7 +94,7 @@ function Cart() {
         const data = await res.json();
 
         if (res.status === 200) {
-         
+
 
           Swal.fire({
             toast: false,
@@ -62,66 +115,17 @@ function Cart() {
           dispatch({ type: "STORE", payload: data });
           Cookies.set("cart", JSON.stringify(data));
 
+
         }
 
 
 
-    } catch (error) {
-      console.log(error)
-
-    }
-  }
-
-  const handleCartDec = async(id) => {
-
-    if(cartValue > 1){
-      setCartValue(cartValue - 1)
-
-      try {
-
-        const res = await fetch(`http://localhost:8000/cart-price-dec/${id}`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${customer.token}`,
-            }
-          });
-  
-          const data = await res.json();
-  
-          if (res.status === 200) {
-           
-  
-            Swal.fire({
-              toast: false,
-              animation: true,
-              text: 'Your cart updated',
-              icon: 'success',
-              showConfirmButton: true,
-              timer: 3000,
-              timerProgressBar: true,
-              customClass: {
-                container: 'custom-toast-container',
-                popup: 'custom-toast-popup',
-                title: 'custom-toast-title',
-                icon: 'custom-toast-icon',
-              },
-            })
-  
-            dispatch({ type: "STORE", payload: data });
-            Cookies.set("cart", JSON.stringify(data));
-            
-  
-          }
-  
-  
-  
       } catch (error) {
         console.log(error)
-  
+
       }
 
-    }else{
+    } else {
       Swal.fire({
         toast: false,
         animation: true,
@@ -138,8 +142,8 @@ function Cart() {
         },
       })
     }
-  
-   
+
+
   }
 
   //Delete Product
@@ -204,6 +208,20 @@ function Cart() {
 
   }
 
+  //Product Size Managed
+
+  const [productSize, setProductSize] = useState([]);
+
+  const handleProductSize = (e) => {
+    const selectedSize = e.target.value;
+    setProductSize(prevSize => prevSize === selectedSize ? '' : selectedSize);
+  };
+
+
+
+
+
+
 
 
 
@@ -234,286 +252,270 @@ function Cart() {
                         aria-label="Close"
                         onClick={handleViewClick}
                       >
-                        {" "}
+
+
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                       </button>
                       <div className="modal-body">
-                        <div className="featured-item  ">
-                          <div className="featured-item-img">
-                            <img
-                              src="https://reservq.minionionbd.com/uploads/custom-images/pork-chop-with-apple-chutney-2024-01-25-10-49-09-4461.jpg"
-                              className="w-100"
-                              alt="featured-thumb"
-                            />
-                            <div className="featured-item-img-overlay">
-                              <div className="featured-item-img-over-text">
-                                <div className="right-text"></div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="modal-body-text">
-                          <h3>Pork Chop with Apple Chutney </h3>
-                        </div>
-                        <form
-                          action="https://reservq.minionionbd.com/cart/update/4"
-                          method="POST"
-                        />
-                        <input
-                          type="hidden"
-                          name="_token"
-                          defaultValue="fWyjlQbNEZ8pIcUaJ0fNt4MgZjUHTDlQ7xAmJxDk"
-                        />{" "}
-                        <div className="modal-body-item-box pb-2">
-                          <div className="together-box-text">
-                            <h5>Select Size</h5>
-                          </div>
-                          <div className="together-box-item">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="size"
-                                defaultValue="Small,30"
-                                id="size_0"
-                                data-price={30}
-                                defaultChecked=""
-                              />
-                              <label className="form-check-label" htmlFor="size_0">
-                                Small
-                              </label>
-                            </div>
-                            <div className="form-check-btn">
-                              <div className="grid">$30</div>
-                            </div>
-                          </div>
-                          <div className="together-box-item">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="size"
-                                defaultValue="Mediam,50"
-                                id="size_1"
-                                data-price={50}
-                              />
-                              <label className="form-check-label" htmlFor="size_1">
-                                Mediam
-                              </label>
-                            </div>
-                            <div className="form-check-btn">
-                              <div className="grid">$50</div>
-                            </div>
-                          </div>
-                          <div className="together-box-item">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="size"
-                                defaultValue="Large,70"
-                                id="size_2"
-                                data-price={70}
-                              />
-                              <label className="form-check-label" htmlFor="size_2">
-                                Large
-                              </label>
-                            </div>
-                            <div className="form-check-btn">
-                              <div className="grid">$70</div>
-                            </div>
-                          </div>
-                          <div className="together-box-text pb-2">
-                            <h5>Select Addon (Optional)</h5>
-                          </div>
-                          <div className="together-box-item">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="addons[]"
-                                defaultValue={1}
-                                id="addon_0_0"
-                              />
-                              <label className="form-check-label" htmlFor="flexCheckDefault">
-                                Chicken Leg ($40)
-                              </label>
-                            </div>
-                            <div className="form-check-btn">
-                              <div className="form-check-btn">
-                                <div className="grid">
-                                  <button className="btn btn-minus" data-addon-index="0_0">
-                                    <i className="fa-solid fa-minus" />
-                                  </button>
-                                  <div className="column product-qty" id="quantityUpdate_0_0">
-                                    0{" "}
+
+                        {cart.filter(data => data._id === viewId).map((data) => (
+                          <>
+                            <div className="featured-item  ">
+                              <div className="featured-item-img">
+                                <img
+                                  src={data.avatar}
+                                  className="w-100"
+                                  alt="featured-thumb"
+                                />
+                                <div className="featured-item-img-overlay">
+                                  <div className="featured-item-img-over-text">
+                                    <div className="right-text"></div>
                                   </div>
-                                  <input
-                                    type="hidden"
-                                    name="addons_qty[]"
-                                    id="qtyInput_0_0"
-                                    defaultValue={0}
-                                  />
-                                  <button className="btn btn-plus" data-addon-index="0_0">
-                                    <i className="fa-solid fa-plus" />
-                                  </button>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="together-box-item">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="addons[]"
-                                defaultValue={3}
-                                id="addon_1_0"
-                              />
-                              <label className="form-check-label" htmlFor="flexCheckDefault">
-                                Drinks ($25)
-                              </label>
+
+                            <div className="modal-body-text">
+                              <h3>{data.productName} </h3>
                             </div>
-                            <div className="form-check-btn">
-                              <div className="form-check-btn">
-                                <div className="grid">
-                                  <button className="btn btn-minus" data-addon-index="1_0">
-                                    <i className="fa-solid fa-minus" />
-                                  </button>
-                                  <div className="column product-qty" id="quantityUpdate_1_0">
-                                    0{" "}
+
+                            <form>
+                              <div className="modal-body-item-box pb-2">
+                                <div className="together-box-text">
+                                  <h5>Select Size</h5>
+                                </div>
+
+
+                                {data.allProductSize.map((item, index) => (
+                                  <div className="together-box-item" key={index}>
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input"
+                                        type="radio"
+                                        id={`size_${index}`}
+                                        value={item.id}
+                                        checked={productSize !='' ? productSize.includes(item.id) : data.productSizeId === item.id}
+                                        onChange={handleProductSize} // Use productSize state directly here
+                                      // Update productSize state directly
+                                      />
+                                      <label className="form-check-label" htmlFor={`size_${index}`}>
+                                        {item.size}
+                                      </label>
+                                    </div>
+                                    <div className="form-check-btn">
+                                      <div className="grid">{item.price} Tk.</div>
+                                    </div>
                                   </div>
-                                  <input
-                                    type="hidden"
-                                    name="addons_qty[]"
-                                    id="qtyInput_1_0"
-                                    defaultValue={0}
-                                  />
-                                  <button className="btn btn-plus" data-addon-index="1_0">
-                                    <i className="fa-solid fa-plus" />
+                                ))}
+
+
+
+
+
+
+                                <div className="together-box-text pb-2">
+                                  <h5>Select Addon (Optional)</h5>
+                                </div>
+                                <div className="together-box-item">
+                                  <div className="form-check">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name="addons[]"
+                                      defaultValue={1}
+                                      id="addon_0_0"
+                                    />
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                      Chicken Leg ($40)
+                                    </label>
+                                  </div>
+                                  <div className="form-check-btn">
+                                    <div className="form-check-btn">
+                                      <div className="grid">
+                                        <button className="btn btn-minus" data-addon-index="0_0">
+                                          <i className="fa-solid fa-minus" />
+                                        </button>
+                                        <div className="column product-qty" id="quantityUpdate_0_0">
+                                          0{" "}
+                                        </div>
+                                        <input
+                                          type="hidden"
+                                          name="addons_qty[]"
+                                          id="qtyInput_0_0"
+                                          defaultValue={0}
+                                        />
+                                        <button className="btn btn-plus" data-addon-index="0_0">
+                                          <i className="fa-solid fa-plus" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="together-box-item">
+                                  <div className="form-check">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name="addons[]"
+                                      defaultValue={3}
+                                      id="addon_1_0"
+                                    />
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                      Drinks ($25)
+                                    </label>
+                                  </div>
+                                  <div className="form-check-btn">
+                                    <div className="form-check-btn">
+                                      <div className="grid">
+                                        <button className="btn btn-minus" data-addon-index="1_0">
+                                          <i className="fa-solid fa-minus" />
+                                        </button>
+                                        <div className="column product-qty" id="quantityUpdate_1_0">
+                                          0{" "}
+                                        </div>
+                                        <input
+                                          type="hidden"
+                                          name="addons_qty[]"
+                                          id="qtyInput_1_0"
+                                          defaultValue={0}
+                                        />
+                                        <button className="btn btn-plus" data-addon-index="1_0">
+                                          <i className="fa-solid fa-plus" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="together-box-item">
+                                  <div className="form-check">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name="addons[]"
+                                      defaultValue={4}
+                                      id="addon_2_0"
+                                    />
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                      Nan ($10)
+                                    </label>
+                                  </div>
+                                  <div className="form-check-btn">
+                                    <div className="form-check-btn">
+                                      <div className="grid">
+                                        <button className="btn btn-minus" data-addon-index="2_0">
+                                          <i className="fa-solid fa-minus" />
+                                        </button>
+                                        <div className="column product-qty" id="quantityUpdate_2_0">
+                                          0{" "}
+                                        </div>
+                                        <input
+                                          type="hidden"
+                                          name="addons_qty[]"
+                                          id="qtyInput_2_0"
+                                          defaultValue={0}
+                                        />
+                                        <button className="btn btn-plus" data-addon-index="2_0">
+                                          <i className="fa-solid fa-plus" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="together-box-item">
+                                  <div className="form-check">
+                                    <input
+                                      className="form-check-input"
+                                      type="checkbox"
+                                      name="addons[]"
+                                      defaultValue={5}
+                                      id="addon_3_0"
+                                    />
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                      Extra Chess ($5)
+                                    </label>
+                                  </div>
+                                  <div className="form-check-btn">
+                                    <div className="form-check-btn">
+                                      <div className="grid">
+                                        <button className="btn btn-minus" data-addon-index="3_0">
+                                          <i className="fa-solid fa-minus" />
+                                        </button>
+                                        <div className="column product-qty" id="quantityUpdate_3_0">
+                                          0{" "}
+                                        </div>
+                                        <input
+                                          type="hidden"
+                                          name="addons_qty[]"
+                                          id="qtyInput_3_0"
+                                          defaultValue={0}
+                                        />
+                                        <button className="btn btn-plus" data-addon-index="3_0">
+                                          <i className="fa-solid fa-plus" />
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <input
+                                  className="column product-qty"
+                                  type="hidden"
+                                  name="qty"
+                                  id="qtyInput"
+                                  defaultValue={1}
+                                />
+                                <div className="together-box-inner-btn-btm">
+                                  <button type="submit" className="main-btn-six" tabIndex={-1}>
+                                    <span>
+                                      <svg
+                                        width={24}
+                                        height={24}
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2"
+                                          strokeWidth="1.5"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        ></path>
+                                        <path
+                                          d="M11 20.5C11 21.3284 10.3284 22 9.5 22C8.67157 22 8 21.3284 8 20.5C8 19.6716 8.67157 19 9.5 19C10.3284 19 11 19.6716 11 20.5Z"
+                                          strokeWidth="1.5"
+                                        />
+                                        <path
+                                          d="M20 20.5C20 21.3284 19.3284 22 18.5 22C17.6716 22 17 21.3284 17 20.5C17 19.6716 17.6716 19 18.5 19C19.3284 19 20 19.6716 20 20.5Z"
+                                          strokeWidth="1.5"
+                                        />
+                                        <path
+                                          d="M14 8L14 13"
+                                          strokeWidth="1.5"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        ></path>
+                                        <path
+                                          d="M16.5 10.5L11.5 10.5"
+                                          strokeWidth="1.5"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        ></path>
+                                      </svg>
+                                    </span>
+                                    Update Cart
                                   </button>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                          <div className="together-box-item">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="addons[]"
-                                defaultValue={4}
-                                id="addon_2_0"
-                              />
-                              <label className="form-check-label" htmlFor="flexCheckDefault">
-                                Nan ($10)
-                              </label>
-                            </div>
-                            <div className="form-check-btn">
-                              <div className="form-check-btn">
-                                <div className="grid">
-                                  <button className="btn btn-minus" data-addon-index="2_0">
-                                    <i className="fa-solid fa-minus" />
-                                  </button>
-                                  <div className="column product-qty" id="quantityUpdate_2_0">
-                                    0{" "}
-                                  </div>
-                                  <input
-                                    type="hidden"
-                                    name="addons_qty[]"
-                                    id="qtyInput_2_0"
-                                    defaultValue={0}
-                                  />
-                                  <button className="btn btn-plus" data-addon-index="2_0">
-                                    <i className="fa-solid fa-plus" />
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="together-box-item">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="checkbox"
-                                name="addons[]"
-                                defaultValue={5}
-                                id="addon_3_0"
-                              />
-                              <label className="form-check-label" htmlFor="flexCheckDefault">
-                                Extra Chess ($5)
-                              </label>
-                            </div>
-                            <div className="form-check-btn">
-                              <div className="form-check-btn">
-                                <div className="grid">
-                                  <button className="btn btn-minus" data-addon-index="3_0">
-                                    <i className="fa-solid fa-minus" />
-                                  </button>
-                                  <div className="column product-qty" id="quantityUpdate_3_0">
-                                    0{" "}
-                                  </div>
-                                  <input
-                                    type="hidden"
-                                    name="addons_qty[]"
-                                    id="qtyInput_3_0"
-                                    defaultValue={0}
-                                  />
-                                  <button className="btn btn-plus" data-addon-index="3_0">
-                                    <i className="fa-solid fa-plus" />
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <input
-                            className="column product-qty"
-                            type="hidden"
-                            name="qty"
-                            id="qtyInput"
-                            defaultValue={1}
-                          />
-                          <div className="together-box-inner-btn-btm">
-                            <button type="submit" className="main-btn-six" tabIndex={-1}>
-                              <span>
-                                <svg
-                                  width={24}
-                                  height={24}
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path
-                                    d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  ></path>
-                                  <path
-                                    d="M11 20.5C11 21.3284 10.3284 22 9.5 22C8.67157 22 8 21.3284 8 20.5C8 19.6716 8.67157 19 9.5 19C10.3284 19 11 19.6716 11 20.5Z"
-                                    strokeWidth="1.5"
-                                  />
-                                  <path
-                                    d="M20 20.5C20 21.3284 19.3284 22 18.5 22C17.6716 22 17 21.3284 17 20.5C17 19.6716 17.6716 19 18.5 19C19.3284 19 20 19.6716 20 20.5Z"
-                                    strokeWidth="1.5"
-                                  />
-                                  <path
-                                    d="M14 8L14 13"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  ></path>
-                                  <path
-                                    d="M16.5 10.5L11.5 10.5"
-                                    strokeWidth="1.5"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                  ></path>
-                                </svg>
-                              </span>
-                              Update Cart
-                            </button>
-                          </div>
-                        </div>
+                            </form>
+
+
+
+
+                          </>
+
+                        ))}
+
+
+
                       </div>
                     </div>
                   </div>
@@ -827,11 +829,11 @@ function Cart() {
                                 <i className="fa-solid fa fa-minus" />
                               </Link>
                               <div className="column product-qty">{cartValue}</div>
-                             
+
                               <Link
                                 to="#"
                                 className="btn btn-plus-custom"
-                                onClick={()=>handleCartInc(data._id)}
+                                onClick={() => handleCartInc(data._id)}
                               >
                                 <i className="fa-solid fa fa-plus" />
                               </Link>
@@ -841,7 +843,7 @@ function Cart() {
                         <td>
                           <div className="tabel-text">
 
-                           
+
 
 
                             <h6>{data.subTotal} Tk.</h6>
@@ -856,7 +858,7 @@ function Cart() {
                               className="view-btn"
                               data-bs-toggle="modal"
                               data-bs-target="#exampleModal13"
-                              onClick={handleViewClick}
+                              onClick={() => handleViewClick(data._id)}
                             >
                               <span>
                                 <svg
@@ -876,7 +878,7 @@ function Cart() {
                               </span>{" "}
                               View
                             </button>
-                            <Link to="#" onClick={()=>handleCartRemove(data.productId)}>
+                            <Link to="#" onClick={() => handleCartRemove(data.productId)}>
                               <span>
                                 <svg
                                   width={17}

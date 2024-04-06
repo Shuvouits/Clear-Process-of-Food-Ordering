@@ -6,7 +6,26 @@ const optionSchema = new mongoose.Schema({
         type: String,
     },
   
+  
 }, { _id: false });
+
+const allProductSizeSchema = new mongoose.Schema({
+    id: {
+        type: String,
+    },
+
+    size: {
+        type: String,
+    },
+
+    price: {
+        type: Number,
+    },
+  
+  
+}, { _id: false });
+
+
 
 const sizeSchema = new mongoose.Schema({
     id: {
@@ -52,7 +71,11 @@ const cartSchema = new mongoose.Schema({
     },
 
     productSizePrice: {
-        type: Number
+        type: Number,
+    },
+
+    productSizeId: {
+        type: String,
     },
 
     optionName: {
@@ -78,6 +101,11 @@ const cartSchema = new mongoose.Schema({
 
     optInfo: {
         type: [optionInfoSchema], // Change the type to an array of strings
+        default: undefined,
+    },
+
+    allProductSize: {
+        type: [allProductSizeSchema], // Change the type to an array of strings
         default: undefined,
     },
    
