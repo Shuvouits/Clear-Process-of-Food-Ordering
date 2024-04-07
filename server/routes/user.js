@@ -10,7 +10,8 @@ const {
     addBlog, allBlog, editBlog, updateBlog, blogStatus, deleteBlog, specificMenu, customerRegister,
     customerLogin, customerLogout, customerAddress, allAddress, deleteAddress, editAddress,
     updateUserAddress, updateCustomerProfile, customerPasswordChange, wishlist, allWishlist,
-    specificProduct, addCart, allCart, deleteCart, cartPriceInc, cartPriceDec
+    specificProduct, addCart, allCart, deleteCart, cartPriceInc, cartPriceDec, cartOptionalData,
+    updateCart
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -105,6 +106,8 @@ router.get('/all-cart', authUser, allCart);
 router.get('/delete-cart/:id', authUser, deleteCart);
 router.post('/cart-price-inc/:id', authUser, cartPriceInc);
 router.post('/cart-price-dec/:id', authUser, cartPriceDec);
+router.get('/cart-optional-data/:id',  cartOptionalData);
+router.post('/update-cart', authUser, updateCart);
 
 
 

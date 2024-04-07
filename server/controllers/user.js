@@ -1678,7 +1678,7 @@ exports.addCart = async (req, res) => {
             avatar,
             productSizePrice,
             productSizeName,
-            optInfo: optionalData.map(info=> ({name: info.name, price: info.price, status: info.status})),
+            optInfo: optionalData.map(info=> ({id:info._id, name: info.name, price: info.price, status: info.status})),
             subTotal: subTotal,
             allProductSize: productData.productSize.map(item=> ({id: item.id, size: item.size, price: item.price})),
             productSizeId,
@@ -1697,6 +1697,106 @@ exports.addCart = async (req, res) => {
         return res.status(500).json({ message: 'Internal server error' });
     }
 } 
+
+exports.cartOptionalData = async (req, res) => {
+    try {
+        const optionalId = req.params.id.toString();
+
+        const cartData = await Cart.find({ "optData.id": optionalId });
+        
+
+        if (cartData && cartData.length > 0) {
+            // Remove the optData with the matching optionalId
+            const updatedCart = await Cart.findOneAndUpdate(
+                { "optData.id": optionalId },
+                { $pull: { optData: { id: optionalId } } },
+                { new: true }
+            );
+
+           
+
+            const updatedCart2 = await Cart.findOneAndUpdate(
+                { "optInfo.id": optionalId },
+                { $pull: { optInfo: { id: optionalId } } },
+                { new: true }
+            );
+
+
+            const cart = await Cart.find();
+            return res.status(200).json(cart);
+        } else {
+            // Add the new optData with the matching optionalId
+            const updatedCart = await Cart.findOneAndUpdate(
+                {},
+                { $push: { optData: { id: optionalId } } }, // Push the new optData
+                { new: true }
+            );
+
+            const allOptionalData = await Optional.find();
+
+            allOptionalData.forEach(async (item) => {
+                // Check if the id of the current item matches optionalId
+                if (item.id === optionalId) {
+                    // If there is a match, update the Cart with the entire object from allOptionalData
+                    const updatedInfoCart = await Cart.findOneAndUpdate(
+                        {},
+                        { $push: { optInfo: item } },
+                        { new: true }
+                    );
+                    // You can return the updatedInfoCart or do any additional processing here
+                    console.log(updatedInfoCart);
+                }
+            });
+
+
+            const cart = await Cart.find();
+            return res.status(200).json(cart);
+        }
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+exports.updateCart = async (req, res) => {
+    try{
+        const {productSize, cartId} = req.body
+
+        const cartData = await Cart.findById(cartId);
+
+        let productSizePrice = 0;
+        let productSizeName = null;
+        let productSizeId = null;
+
+
+        cartData.allProductSize.forEach(data => {
+            if (data.id === productSize) {
+                productSizePrice = data.price;
+                productSizeName = data.size;
+                productSizeId = data.id
+           }
+        });
+
+        let totalOptional = 0;
+
+        cartData.optInfo.forEach((optData)=>{
+            totalOptional += parseInt(optData.price)
+        })  
+
+        const subTotal = parseInt(totalOptional) + parseInt(productSizePrice);
+
+        const updateUser = await Cart.findByIdAndUpdate(cartId, { productSizePrice: productSizePrice, productSizeName: productSizeName, productSizeId : productSizeId, subTotal : subTotal}, { new: true })
+
+        const totalData = await Cart.find();
+
+        res.status(200).json(totalData)
+                
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
 
 
 exports.cartPriceInc = async (req, res) => {

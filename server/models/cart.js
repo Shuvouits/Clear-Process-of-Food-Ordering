@@ -54,6 +54,11 @@ const sizeSchema = new mongoose.Schema({
 }, { _id: false });
 
 const optionInfoSchema = new mongoose.Schema({
+
+    id: {
+        type: String,
+    }, 
+    
     name: {
         type: String,
     },

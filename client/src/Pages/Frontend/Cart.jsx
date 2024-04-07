@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import InnerBanner from '../../components/Frontend/InnerBanner'
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +20,6 @@ function Cart() {
 
   }
 
-  console.log(cart)
 
   let optionalPrice = 0;
 
@@ -217,31 +216,110 @@ function Cart() {
     setProductSize(prevSize => prevSize === selectedSize ? '' : selectedSize);
   };
 
+  
+
   //Additional Size managed..
 
-  const [selectedOptionals, setSelectedOptionals] = useState([]);
+  const [optionalItem, setOptionalItem] = useState([]);
 
-  const handleOptionalChange = (optionalId) => {
-    setSelectedOptionals(prevSelectedOptionals => {
-        const isSelected = prevSelectedOptionals.includes(optionalId);
-        if (isSelected) {
-            // If the optionalId is already selected, remove it
-            return prevSelectedOptionals.filter(id => id !== optionalId);
-        } else {
-            // If the optionalId is not selected, add it
-            return [...prevSelectedOptionals, optionalId];
-        }
-    });
-};
+  const handleOptionalChange = async (id) => {
+
+    try {
+      const res = await fetch(`http://localhost:8000/cart-optional-data/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+
+        },
+      });
 
 
+      const data = await res.json();
+
+      dispatch({ type: "STORE", payload: data });
+      Cookies.set("cart", JSON.stringify(data));
 
 
-  console.log(selectedOptionals)
+    } catch (error) {
+      console.log(error)
+
+    }
+  };
+
+
+  //form Submit
+  const [formData, setFormData] = useState([])
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+
+    })
+
+  }
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const updatedFormData = {
+      ...formData,
+      cartId : viewId,
+      productSize : productSize
+    }
+
+
+    try {
+
+      const res = await fetch(`http://localhost:8000/update-cart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${customer.token}`,
+        },
+        body: JSON.stringify(updatedFormData),
+
+      });
+
+      const data = await res.json();
+
+      if (res.status === 200) {
+
+        Swal.fire({
+          toast: false,
+          animation: true,
+          text: `Your Cart is Updated`,
+          icon: 'success',
+          showConfirmButton: true,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            container: 'custom-toast-container',
+            popup: 'custom-toast-popup',
+            title: 'custom-toast-title',
+            icon: 'custom-toast-icon',
+          },
+        })
+
+        dispatch({ type: "STORE", payload: data });
+        Cookies.set("cart", JSON.stringify(data));
+
+
+        setViewCart(false)
 
 
 
 
+      }
+
+
+
+    } catch (error) {
+
+      console.log(error)
+    }
+  };
 
 
 
@@ -250,7 +328,7 @@ function Cart() {
   return (
     <main>
       <InnerBanner />
-      <section className="shopping-cart">
+      <section className="shopping-cart" >
         <div className="container">
           <div className="row pt-5 pb-5">
             <div className="col-lg-12">
@@ -264,6 +342,7 @@ function Cart() {
                   style={{ display: `${viewCart ? 'block' : ''}`, paddingRight: `${viewCart ? 23 : ''}` }}
                   aria-modal="true"
                   role="dialog"
+
                 >
                   <div className="modal-dialog">
                     <div className="modal-content">
@@ -301,7 +380,11 @@ function Cart() {
                               <h3>{data.productName} </h3>
                             </div>
 
-                            <form>
+
+                            <form onSubmit={handleSubmit}>
+
+                              <input type='hidden' id='cartId' onChange={handleChange} value={data._id} />
+
                               <div className="modal-body-item-box pb-2">
                                 <div className="together-box-text">
                                   <h5>Select Size</h5>
@@ -340,24 +423,25 @@ function Cart() {
                                 </div>
 
                                 {data.allOptionalData.map((item, index) => (
-    <div className="together-box-item" key={index}>
-        <div className="form-check">
-            <input
-                className="form-check-input"
-                type="checkbox"
-                id={`optional_${index}`}
-                checked={ selectedOptionals != '' ? selectedOptionals.includes(item.id) : data.optData.some(optItem => optItem.id === item.id)}
-                onChange={() => handleOptionalChange(item.id)}
-            />
-            <label className="form-check-label" htmlFor={`optional_${index}`}>
-                {item.name} ({item.price})Tk
-            </label>
-        </div>
-        <div className="form-check-btn">
-            {/* Add your quantity buttons here */}
-        </div>
-    </div>
-))}
+                                  <div className="together-box-item" key={index}>
+                                    <div className="form-check">
+                                      <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id={`optional_${index}`}
+                                        value={item.id}
+                                        checked={data.optData.some(optItem => optItem.id === item.id)}
+                                        onChange={() => handleOptionalChange(item.id)}
+                                      />
+                                      <label className="form-check-label" htmlFor={`optional_${index}`}>
+                                        {item.name} ({item.price})Tk
+                                      </label>
+                                    </div>
+                                    <div className="form-check-btn">
+                                      {/* Add your quantity buttons here */}
+                                    </div>
+                                  </div>
+                                ))}
 
 
 
@@ -412,7 +496,10 @@ function Cart() {
                                   </button>
                                 </div>
                               </div>
+
                             </form>
+
+
 
 
 
