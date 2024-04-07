@@ -1666,6 +1666,8 @@ exports.addCart = async (req, res) => {
 
         const subTotal = parseInt(totalOptional) + parseInt(productSizePrice);
 
+        const allOptionalData = await Optional.find({status: 'Active'});
+
 
         const data = await new Cart({
            
@@ -1679,7 +1681,8 @@ exports.addCart = async (req, res) => {
             optInfo: optionalData.map(info=> ({name: info.name, price: info.price, status: info.status})),
             subTotal: subTotal,
             allProductSize: productData.productSize.map(item=> ({id: item.id, size: item.size, price: item.price})),
-            productSizeId
+            productSizeId,
+            allOptionalData: allOptionalData.map(item=> ({id: item._id, name: item.name, price: item.price}))
             
            
         }).save();

@@ -217,6 +217,28 @@ function Cart() {
     setProductSize(prevSize => prevSize === selectedSize ? '' : selectedSize);
   };
 
+  //Additional Size managed..
+
+  const [selectedOptionals, setSelectedOptionals] = useState([]);
+
+  const handleOptionalChange = (optionalId) => {
+    setSelectedOptionals(prevSelectedOptionals => {
+        const isSelected = prevSelectedOptionals.includes(optionalId);
+        if (isSelected) {
+            // If the optionalId is already selected, remove it
+            return prevSelectedOptionals.filter(id => id !== optionalId);
+        } else {
+            // If the optionalId is not selected, add it
+            return [...prevSelectedOptionals, optionalId];
+        }
+    });
+};
+
+
+
+
+  console.log(selectedOptionals)
+
 
 
 
@@ -294,8 +316,8 @@ function Cart() {
                                         type="radio"
                                         id={`size_${index}`}
                                         value={item.id}
-                                        checked={productSize !='' ? productSize.includes(item.id) : data.productSizeId === item.id}
-                                        onChange={handleProductSize} // Use productSize state directly here
+                                        checked={productSize != '' ? productSize.includes(item.id) : data.productSizeId === item.id}
+                                        onChange={handleProductSize}
                                       // Update productSize state directly
                                       />
                                       <label className="form-check-label" htmlFor={`size_${index}`}>
@@ -316,146 +338,31 @@ function Cart() {
                                 <div className="together-box-text pb-2">
                                   <h5>Select Addon (Optional)</h5>
                                 </div>
-                                <div className="together-box-item">
-                                  <div className="form-check">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      name="addons[]"
-                                      defaultValue={1}
-                                      id="addon_0_0"
-                                    />
-                                    <label className="form-check-label" htmlFor="flexCheckDefault">
-                                      Chicken Leg ($40)
-                                    </label>
-                                  </div>
-                                  <div className="form-check-btn">
-                                    <div className="form-check-btn">
-                                      <div className="grid">
-                                        <button className="btn btn-minus" data-addon-index="0_0">
-                                          <i className="fa-solid fa-minus" />
-                                        </button>
-                                        <div className="column product-qty" id="quantityUpdate_0_0">
-                                          0{" "}
-                                        </div>
-                                        <input
-                                          type="hidden"
-                                          name="addons_qty[]"
-                                          id="qtyInput_0_0"
-                                          defaultValue={0}
-                                        />
-                                        <button className="btn btn-plus" data-addon-index="0_0">
-                                          <i className="fa-solid fa-plus" />
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="together-box-item">
-                                  <div className="form-check">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      name="addons[]"
-                                      defaultValue={3}
-                                      id="addon_1_0"
-                                    />
-                                    <label className="form-check-label" htmlFor="flexCheckDefault">
-                                      Drinks ($25)
-                                    </label>
-                                  </div>
-                                  <div className="form-check-btn">
-                                    <div className="form-check-btn">
-                                      <div className="grid">
-                                        <button className="btn btn-minus" data-addon-index="1_0">
-                                          <i className="fa-solid fa-minus" />
-                                        </button>
-                                        <div className="column product-qty" id="quantityUpdate_1_0">
-                                          0{" "}
-                                        </div>
-                                        <input
-                                          type="hidden"
-                                          name="addons_qty[]"
-                                          id="qtyInput_1_0"
-                                          defaultValue={0}
-                                        />
-                                        <button className="btn btn-plus" data-addon-index="1_0">
-                                          <i className="fa-solid fa-plus" />
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="together-box-item">
-                                  <div className="form-check">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      name="addons[]"
-                                      defaultValue={4}
-                                      id="addon_2_0"
-                                    />
-                                    <label className="form-check-label" htmlFor="flexCheckDefault">
-                                      Nan ($10)
-                                    </label>
-                                  </div>
-                                  <div className="form-check-btn">
-                                    <div className="form-check-btn">
-                                      <div className="grid">
-                                        <button className="btn btn-minus" data-addon-index="2_0">
-                                          <i className="fa-solid fa-minus" />
-                                        </button>
-                                        <div className="column product-qty" id="quantityUpdate_2_0">
-                                          0{" "}
-                                        </div>
-                                        <input
-                                          type="hidden"
-                                          name="addons_qty[]"
-                                          id="qtyInput_2_0"
-                                          defaultValue={0}
-                                        />
-                                        <button className="btn btn-plus" data-addon-index="2_0">
-                                          <i className="fa-solid fa-plus" />
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="together-box-item">
-                                  <div className="form-check">
-                                    <input
-                                      className="form-check-input"
-                                      type="checkbox"
-                                      name="addons[]"
-                                      defaultValue={5}
-                                      id="addon_3_0"
-                                    />
-                                    <label className="form-check-label" htmlFor="flexCheckDefault">
-                                      Extra Chess ($5)
-                                    </label>
-                                  </div>
-                                  <div className="form-check-btn">
-                                    <div className="form-check-btn">
-                                      <div className="grid">
-                                        <button className="btn btn-minus" data-addon-index="3_0">
-                                          <i className="fa-solid fa-minus" />
-                                        </button>
-                                        <div className="column product-qty" id="quantityUpdate_3_0">
-                                          0{" "}
-                                        </div>
-                                        <input
-                                          type="hidden"
-                                          name="addons_qty[]"
-                                          id="qtyInput_3_0"
-                                          defaultValue={0}
-                                        />
-                                        <button className="btn btn-plus" data-addon-index="3_0">
-                                          <i className="fa-solid fa-plus" />
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
+
+                                {data.allOptionalData.map((item, index) => (
+    <div className="together-box-item" key={index}>
+        <div className="form-check">
+            <input
+                className="form-check-input"
+                type="checkbox"
+                id={`optional_${index}`}
+                checked={ selectedOptionals != '' ? selectedOptionals.includes(item.id) : data.optData.some(optItem => optItem.id === item.id)}
+                onChange={() => handleOptionalChange(item.id)}
+            />
+            <label className="form-check-label" htmlFor={`optional_${index}`}>
+                {item.name} ({item.price})Tk
+            </label>
+        </div>
+        <div className="form-check-btn">
+            {/* Add your quantity buttons here */}
+        </div>
+    </div>
+))}
+
+
+
+
+
                                 <input
                                   className="column product-qty"
                                   type="hidden"

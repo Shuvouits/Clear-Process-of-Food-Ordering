@@ -9,6 +9,25 @@ const optionSchema = new mongoose.Schema({
   
 }, { _id: false });
 
+
+const allOptionalDataSchema = new mongoose.Schema({
+
+    id: {
+        type: String
+    }, 
+    
+    name: {
+        type: String,
+    },
+
+    price: {
+        type: Number
+    }
+  
+  
+}, { _id: false });
+
+
 const allProductSizeSchema = new mongoose.Schema({
     id: {
         type: String,
@@ -106,6 +125,11 @@ const cartSchema = new mongoose.Schema({
 
     allProductSize: {
         type: [allProductSizeSchema], // Change the type to an array of strings
+        default: undefined,
+    },
+
+    allOptionalData: {
+        type: [allOptionalDataSchema], // Change the type to an array of strings
         default: undefined,
     },
    
