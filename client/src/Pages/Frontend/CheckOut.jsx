@@ -1,15 +1,49 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import InnerBanner from '../../components/Frontend/InnerBanner'
 import Resturent from '../../components/Frontend/Resturent'
+import { useSelector } from 'react-redux';
 
 function CheckOut() {
 
     const [address, setAddress] = useState(false)
+    const { customer } = useSelector((state) => ({ ...state }))
 
     const handleAddress = () => {
         setAddress(!address)
 
     }
+
+    //category Data fetch
+
+    const [addressData, setAddressData] = useState([])
+
+    const allAddressData = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-address/${customer.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${customer.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setAddressData(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allAddressData();
+    }, []);
+
+
     return (
         <main>
             <InnerBanner />
@@ -29,6 +63,7 @@ function CheckOut() {
                                         <div className="shopping-cart-address-btn-main">
                                             <div className="shopping-cart-address-taitel">
                                                 <h4>Select Address</h4>
+
                                             </div>
 
 
@@ -61,138 +96,81 @@ function CheckOut() {
                                     </div>
                                 </div>
                                 <div className="row">
-                                    <div className="col-lg-6">
-                                        <div className="shopping-cart-address-one">
-                                            <div className="shopping-cart-address-one-item">
-                                                <div className="text">
-                                                    <h4>
-                                                        <input
-                                                            className="form-check-input"
-                                                            type="radio"
-                                                            defaultValue={1}
-                                                            id="flexCheckDefault"
-                                                            name="address_id"
-                                                        />
-                                                        Address #1
-                                                    </h4>
+
+                                    {addressData.map((data) => (
+
+                                        <div className="col-lg-6">
+                                            <div className="shopping-cart-address-one">
+                                                <div className="shopping-cart-address-one-item">
+                                                    <div className="text">
+                                                        <h4>
+                                                            <input
+                                                                className="form-check-input"
+                                                                type="radio"
+                                                                defaultValue={1}
+                                                                id="flexCheckDefault"
+                                                                name="address_id"
+                                                            />
+                                                            Address #1
+                                                        </h4>
+                                                    </div>
+                                                    <div className="delet-btn">
+                                                        <a
+                                                            href="javascript:;"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#exampleModal1"
+                                                        >
+                                                            <span>
+                                                                <svg
+                                                                    width={24}
+                                                                    height={24}
+                                                                    viewBox="0 0 24 24"
+                                                                    fill="none"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                >
+                                                                    <path
+                                                                        d="M5 8V18C5 20.2091 6.79086 22 9 22H15C17.2091 22 19 20.2091 19 18V8M14 11V17M10 11L10 17M16 5L14.5937 2.8906C14.2228 2.3342 13.5983 2 12.9296 2H11.0704C10.4017 2 9.7772 2.3342 9.40627 2.8906L8 5M16 5H8M16 5H21M8 5H3"
+                                                                        stroke="#F01543"
+                                                                        strokeWidth="1.5"
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                    />
+                                                                </svg>
+                                                            </span>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div className="delet-btn">
-                                                    <a
-                                                        href="javascript:;"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModal1"
-                                                    >
-                                                        <span>
-                                                            <svg
-                                                                width={24}
-                                                                height={24}
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M5 8V18C5 20.2091 6.79086 22 9 22H15C17.2091 22 19 20.2091 19 18V8M14 11V17M10 11L10 17M16 5L14.5937 2.8906C14.2228 2.3342 13.5983 2 12.9296 2H11.0704C10.4017 2 9.7772 2.3342 9.40627 2.8906L8 5M16 5H8M16 5H21M8 5H3"
-                                                                    stroke="#F01543"
-                                                                    strokeWidth="1.5"
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                />
-                                                            </svg>
-                                                        </span>
+                                                <address>
+                                                    First Name &amp; Last Name :<b>David Warner</b>
+                                                    <br />
+                                                    Email :
+                                                    <a href="mailto:user@gmail.com">
+                                                        <b>user@gmail.com</b>
                                                     </a>
-                                                </div>
-                                            </div>
-                                            <address>
-                                                First Name &amp; Last Name :<b>David Warner</b>
-                                                <br />
-                                                Email :
-                                                <a href="mailto:user@gmail.com">
-                                                    <b>user@gmail.com</b>
-                                                </a>
-                                                <br />
-                                                Phone :
-                                                <a href="tel:123-343-4444">
-                                                    <b>123-343-4444</b>
-                                                </a>
-                                                <br />
-                                                Delivery Area :
-                                                <a href="javascript:;">
-                                                    <b>Reach 11 Recreation Area</b>
-                                                </a>
-                                                <br />
-                                                Address :
-                                                <a href="javascript:;">
-                                                    <b>Mirpur 11, Dhaka</b>
-                                                </a>
-                                            </address>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-6">
-                                        <div className="shopping-cart-address-one">
-                                            <div className="shopping-cart-address-one-item">
-                                                <div className="text">
-                                                    <h4>
-                                                        <input
-                                                            className="form-check-input"
-                                                            type="radio"
-                                                            defaultValue={2}
-                                                            id="flexCheckDefault"
-                                                            name="address_id"
-                                                        />
-                                                        Address #2
-                                                    </h4>
-                                                </div>
-                                                <div className="delet-btn">
-                                                    <a
-                                                        href="javascript:;"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModal2"
-                                                    >
-                                                        <span>
-                                                            <svg
-                                                                width={24}
-                                                                height={24}
-                                                                viewBox="0 0 24 24"
-                                                                fill="none"
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                            >
-                                                                <path
-                                                                    d="M5 8V18C5 20.2091 6.79086 22 9 22H15C17.2091 22 19 20.2091 19 18V8M14 11V17M10 11L10 17M16 5L14.5937 2.8906C14.2228 2.3342 13.5983 2 12.9296 2H11.0704C10.4017 2 9.7772 2.3342 9.40627 2.8906L8 5M16 5H8M16 5H21M8 5H3"
-                                                                    stroke="#F01543"
-                                                                    strokeWidth="1.5"
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                />
-                                                            </svg>
-                                                        </span>
+                                                    <br />
+                                                    Phone :
+                                                    <a href="tel:123-343-4444">
+                                                        <b>123-343-4444</b>
                                                     </a>
-                                                </div>
+                                                    <br />
+                                                    Delivery Area :
+                                                    <a href="javascript:;">
+                                                        <b>Reach 11 Recreation Area</b>
+                                                    </a>
+                                                    <br />
+                                                    Address :
+                                                    <a href="javascript:;">
+                                                        <b>Mirpur 11, Dhaka</b>
+                                                    </a>
+                                                </address>
                                             </div>
-                                            <address>
-                                                First Name &amp; Last Name :<b>John Doe</b>
-                                                <br />
-                                                Email :
-                                                <a href="mailto:user@gmail.com">
-                                                    <b>user@gmail.com</b>
-                                                </a>
-                                                <br />
-                                                Phone :
-                                                <a href="tel:123-874-6548">
-                                                    <b>123-874-6548</b>
-                                                </a>
-                                                <br />
-                                                Delivery Area :
-                                                <a href="javascript:;">
-                                                    <b>Cave Creek Regional Park</b>
-                                                </a>
-                                                <br />
-                                                Address :
-                                                <a href="javascript:;">
-                                                    <b>California, Rajshahi</b>
-                                                </a>
-                                            </address>
                                         </div>
-                                    </div>
+
+
+                                    ))}
+
+
+
                                 </div>
                                 <div className="row mt-30px">
                                     <div className="col-lg-12">
@@ -543,8 +521,8 @@ function CheckOut() {
                                                 <div className="shopping-cart-new-address-top-btn">
                                                     <a href='#' onClick={handleAddress}>
                                                         <span>
-                                                           
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                                         </span>
                                                         Close
                                                     </a>

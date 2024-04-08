@@ -1744,7 +1744,7 @@ exports.cartOptionalData = async (req, res) => {
                         { new: true }
                     );
                     // You can return the updatedInfoCart or do any additional processing here
-                    console.log(updatedInfoCart);
+                    
                 }
             });
 
