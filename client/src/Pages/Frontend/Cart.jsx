@@ -23,11 +23,7 @@ function Cart() {
 
   let optionalPrice = 0;
 
-  const [cartValue, setCartValue] = useState(1)
-
   const handleCartInc = async (id) => {
-
-    setCartValue(cartValue + 1);
 
     try {
 
@@ -77,69 +73,70 @@ function Cart() {
 
   const handleCartDec = async (id) => {
 
-    if (cartValue > 1) {
-      setCartValue(cartValue - 1)
+    try {
 
-      try {
-
-        const res = await fetch(`http://localhost:8000/cart-price-dec/${id}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${customer.token}`,
-          }
-        });
-
-        const data = await res.json();
-
-        if (res.status === 200) {
-
-
-          Swal.fire({
-            toast: false,
-            animation: true,
-            text: 'Your cart updated',
-            icon: 'success',
-            showConfirmButton: true,
-            timer: 3000,
-            timerProgressBar: true,
-            customClass: {
-              container: 'custom-toast-container',
-              popup: 'custom-toast-popup',
-              title: 'custom-toast-title',
-              icon: 'custom-toast-icon',
-            },
-          })
-
-          dispatch({ type: "STORE", payload: data });
-          Cookies.set("cart", JSON.stringify(data));
-
-
+      const res = await fetch(`http://localhost:8000/cart-price-dec/${id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${customer.token}`,
         }
+      });
+
+      const data = await res.json();
+
+      if (res.status === 200) {
 
 
+        Swal.fire({
+          toast: false,
+          animation: true,
+          text: 'Your cart updated',
+          icon: 'success',
+          showConfirmButton: true,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            container: 'custom-toast-container',
+            popup: 'custom-toast-popup',
+            title: 'custom-toast-title',
+            icon: 'custom-toast-icon',
+          },
+        })
 
-      } catch (error) {
-        console.log(error)
+        dispatch({ type: "STORE", payload: data });
+        Cookies.set("cart", JSON.stringify(data));
+
+
+      } 
+
+
+      if (res.status === 400) {
+
+
+        Swal.fire({
+          toast: false,
+          animation: true,
+          text: 'Your Cart At Least One Item',
+          icon: 'warning',
+          showConfirmButton: true,
+          timer: 3000,
+          timerProgressBar: true,
+          customClass: {
+            container: 'custom-toast-container',
+            popup: 'custom-toast-popup',
+            title: 'custom-toast-title',
+            icon: 'custom-toast-icon',
+          },
+        })
+
 
       }
 
-    } else {
-      Swal.fire({
-        toast: false,
-        animation: true,
-        text: 'At least One Product Needed',
-        icon: 'warning',
-        showConfirmButton: true,
-        timer: 3000,
-        timerProgressBar: true,
-        customClass: {
-          container: 'custom-toast-container',
-          popup: 'custom-toast-popup',
-          title: 'custom-toast-title',
-          icon: 'custom-toast-icon',
-        },
-      })
+
+    } catch (error) {
+      console.log(error)
+
     }
 
 
@@ -822,7 +819,7 @@ function Cart() {
                               >
                                 <i className="fa-solid fa fa-minus" />
                               </Link>
-                              <div className="column product-qty">{cartValue}</div>
+                              <div className="column product-qty">{data.productQty}</div>
 
                               <Link
                                 to="#"

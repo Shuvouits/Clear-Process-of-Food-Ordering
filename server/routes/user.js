@@ -11,7 +11,7 @@ const {
     customerLogin, customerLogout, customerAddress, allAddress, deleteAddress, editAddress,
     updateUserAddress, updateCustomerProfile, customerPasswordChange, wishlist, allWishlist,
     specificProduct, addCart, allCart, deleteCart, cartPriceInc, cartPriceDec, cartOptionalData,
-    updateCart
+    updateCart, processOrder, allOrder
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -98,6 +98,7 @@ router.post('/update-customer-profile/:id', authUser, updateCustomerProfile);
 router.post('/customer-password-change', authUser, customerPasswordChange);
 router.post('/wishlist-product/:productId/:customerId', authUser, wishlist);
 router.get('/all-wishlist/', authUser, allWishlist);
+router.get('/process-order', authUser, processOrder);
 
 
 router.get('/specific-product/:id', authUser, specificProduct);
@@ -108,6 +109,9 @@ router.post('/cart-price-inc/:id', authUser, cartPriceInc);
 router.post('/cart-price-dec/:id', authUser, cartPriceDec);
 router.get('/cart-optional-data/:id',  cartOptionalData);
 router.post('/update-cart', authUser, updateCart);
+router.post ('/process-order', authUser, processOrder);
+router.post ('/process-order', authUser, processOrder);
+router.get('/all-order', authUser, allOrder);
 
 
 

@@ -1,9 +1,45 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux'
+import { format } from 'date-fns';
 
 
 function AllOrder() {
+
+    const { user } = useSelector((state) => ({ ...state }))
+
+    //Category Data
+    const [order, setOrder] = useState([])
+    const allOrder = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/all-order`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setOrder(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allOrder();
+    }, []);  
+
+    console.log(order)
+
+
 
     const columns = [
         {
@@ -50,13 +86,13 @@ function AllOrder() {
             name: 'Action',
             selector: row => (
                 <div class="sherah-table__status__group">
-                    <Link to="/admin/order-details" class="sherah-table__action sherah-color2 sherah-color3__bg--opactity bg-view">
+                    <Link to="/admin/order/details" class="sherah-table__action sherah-color2 sherah-color3__bg--opactity bg-view">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6084 11.7904C18.5748 10.7737 18.5748 9.22894 17.6084 8.21222C15.9786 6.49741 13.1794 4.16797 9.99984 4.16797C6.82024 4.16797 4.02108 6.49741 2.39126 8.21222C1.42492 9.22894 1.42492 10.7737 2.39126 11.7904C4.02108 13.5052 6.82024 15.8346 9.99984 15.8346C13.1794 15.8346 15.9786 13.5052 17.6084 11.7904ZM9.99984 12.5013C11.3805 12.5013 12.4998 11.382 12.4998 10.0013C12.4998 8.62059 11.3805 7.5013 9.99984 7.5013C8.61913 7.5013 7.49984 8.62059 7.49984 10.0013C7.49984 11.382 8.61913 12.5013 9.99984 12.5013Z"
                                 fill="white" />
                         </svg>
                     </Link>
-                    <a href="https://reservq.minionionbd.com/order/delete/10" onclick="confirmation(event)"
+                    <Link to="#" onclick="confirmation(event)"
                         class="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete">
                         <svg class="sherah-color2__fill" xmlns="http://www.w3.org/2000/svg" width="16.247"
                             height="18.252" viewBox="0 0 16.247 18.252">
@@ -71,7 +107,7 @@ function AllOrder() {
                                     transform="translate(-97.561 -78.509)" />
                             </g>
                         </svg>
-                    </a>
+                    </Link>
                 </div>
             )
         },
@@ -83,7 +119,7 @@ function AllOrder() {
 
     ]
 
-    const data = [
+    /*const data = [
         {
             order_id: '#21',
             type: 'delivery',
@@ -96,17 +132,42 @@ function AllOrder() {
             action: 'action'
 
         }
-    ]
+    ]  */
 
-    const [record, setRecord] = useState(data);
-    console.log(record)
+    const [record, setRecord] = useState([])
+
+    useEffect(() => {
+        const data = order.map((item, index) => ({
+            order_id: item._id,
+            type: 'delivery',
+            customer_name: item.customerId.name,
+            date: format(item.createdAt, 'MMM-dd-yyyy'),
+            payment_status: 'Stripe',
+            payment_method: 'Bank Payment',
+            total: item.grandTotal,
+            order_status: 'Pending',
+            action: 'action'
+        }));
+        setRecord(data);
+    }, [order]);
+
+
 
     const handleFilter = (event) => {
-        const newData = data.filter(row => {
-            return row.customer_name.toLowerCase().includes(event.target.value.toLowerCase())
+        const searchQuery = event.target.value.toLowerCase();
+        const newData = order.filter(row => {
+            return row.name.toLowerCase().includes(searchQuery);
         });
-        setRecord(newData);
+
+        // Update the record state if search query is present, else reset it to display all data
+        if (searchQuery) {
+            setRecord(newData);
+        } else {
+            setRecord(order);
+        }
     };
+
+    
 
 
     return (

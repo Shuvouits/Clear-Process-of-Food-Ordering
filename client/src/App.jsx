@@ -71,6 +71,8 @@ import Register from './Pages/Frontend/Register'
 import { useDispatch, useSelector } from 'react-redux'
 import EditAddress from './Pages/Frontend/user/EditAddress'
 import Cookies from "js-cookie";
+import Success from './Pages/Stripe/Success'
+import Cancel from './Pages/Stripe/Cancel'
 
 
 //backend css import
@@ -160,6 +162,7 @@ function App() {
           <Route path='/blog' element={<Blog />} />
           <Route path='/blog/:title' element={<BlogDetails />} />
           <Route path='/cartlist' element={<Cart />} />
+          <Route path='/user/cartlist' element={<Cart />} />
           <Route path='/checkout' element={<CheckOut />} />
           <Route path='/menu/category/:title' element={<CategoryMenuDetails />} />
           <Route path='/menu/search/:title' element={<SearchMenuDetails />} />
@@ -194,6 +197,12 @@ function App() {
         <Route path='/register' element={<Register />} />
 
         <Route path='/admin/login' element={<AdminLogin />} />
+
+        <Route path='/payment-success' element={<Success />} />
+        <Route path='/payment-cancel' element={<Cancel />} />
+
+
+
         <Route element={<AdminPrivate />}>
 
           <Route path='/admin/' element={<AdminLayout />}>

@@ -110,6 +110,11 @@ const cartSchema = new mongoose.Schema({
         type: Number
     },
 
+    productQty: {
+        type: Number,
+        default: 1
+    },
+
     subTotal: {
         type: Number
     },

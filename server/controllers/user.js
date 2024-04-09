@@ -14,7 +14,8 @@ const Customer = require('../models/customer.js')
 const Address = require('../models/address.js')
 const Wishlist = require ('../models/wishlist.js')
 const Cart = require ('../models/cart.js');
-const cart = require('../models/cart.js');
+const Stripe = require('stripe');
+const Order = require ('../models/order.js');
 
 
 
@@ -1606,7 +1607,7 @@ exports.specificProduct = async(req,res)=> {
 exports.addCart = async (req, res) => {
     try {
         
-        const {productId, productSize, optData} = req.body;
+        const {productId, productSize, optData, productQty} = req.body;
 
         const checkProduct = await Cart.findOne({productId: productId})
 
@@ -1682,7 +1683,8 @@ exports.addCart = async (req, res) => {
             subTotal: subTotal,
             allProductSize: productData.productSize.map(item=> ({id: item.id, size: item.size, price: item.price})),
             productSizeId,
-            allOptionalData: allOptionalData.map(item=> ({id: item._id, name: item.name, price: item.price}))
+            allOptionalData: allOptionalData.map(item=> ({id: item._id, name: item.name, price: item.price})),
+            productQty
             
            
         }).save();
@@ -1806,6 +1808,9 @@ exports.cartPriceInc = async (req, res) => {
 
         const checkProduct = await Cart.findById(cartId)
 
+        let productQty = checkProduct.productQty;
+        productQty = productQty + 1
+
         if(!checkProduct){
             return res.status(400).json({
                 "message" : 'No Product Found'
@@ -1816,7 +1821,7 @@ exports.cartPriceInc = async (req, res) => {
         const productSizePrice = checkProduct.productSizePrice;
         const subTotal = checkProduct.subTotal
         const updatePrice = parseInt(productSizePrice) + parseInt(subTotal)
-        const updateData = await Cart.findByIdAndUpdate(cartId, {subTotal : updatePrice}, { new: true })
+        const updateData = await Cart.findByIdAndUpdate(cartId, {subTotal : updatePrice, productQty : productQty}, { new: true })
         
 
         const data = await Cart.find();
@@ -1837,6 +1842,17 @@ exports.cartPriceDec = async (req, res) => {
 
         const checkProduct = await Cart.findById(cartId)
 
+        let productQty = checkProduct.productQty;
+
+        if (productQty === 1){
+            return res.status(400).json({
+                message : 'Product At Least One Item'
+            })
+        }
+
+        productQty = productQty - 1
+
+        
         if(!checkProduct){
             return res.status(400).json({
                 "message" : 'No Product Found'
@@ -1847,7 +1863,7 @@ exports.cartPriceDec = async (req, res) => {
         const productSizePrice = checkProduct.productSizePrice;
         const subTotal = checkProduct.subTotal
         const updatePrice = parseInt(subTotal) - parseInt(productSizePrice)
-        const updateData = await Cart.findByIdAndUpdate(cartId, {subTotal : updatePrice}, { new: true })
+        const updateData = await Cart.findByIdAndUpdate(cartId, {subTotal : updatePrice, productQty : productQty}, { new: true })
         
 
         const data = await Cart.find();
@@ -1895,6 +1911,88 @@ exports. deleteCart = async(req, res)=> {
         return (error)
     }
 }  
+
+
+exports.processOrder = async (req, res) => {
+    try {
+
+        const {address, cart, customer, grandTotal, subTotal, deliveryFee} = req.body
+
+        const lineItems = Array.isArray(cart) ? cart.map(item => ({
+            price_data: {
+                currency:'BDT',
+                product_data: {
+                    name: item.productName,
+                    images: [item.avatar],
+                },
+                unit_amount: Math.round(item.subTotal * 100),
+                 // Stripe requires amount in cents
+            },
+            quantity: item.productQty, // Assuming each item is one unit
+        })) : []; 
+
+            
+
+        const stripe = new Stripe(process.env.STRIPE_SECRET);
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            success_url: `${process.env.CLIENT_SITE_URL}/payment-success`,
+            cancel_url: `${req.protocol}://${req.get('host')}/payment-cancel`,
+            customer_email: customer.email,
+            client_reference_id: customer.id,
+            mode : 'payment',
+            line_items: lineItems  
+
+        });
+
+
+        if (!session) {
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to create Stripe session',
+            });
+        }
+
+        const order = await new Order({
+            customerId : customer.id,
+            address : address,
+            grandTotal : grandTotal,
+            session: session.id,
+            deliveryFee : deliveryFee,
+            cartData: cart.map(item=> ({id: item._id, productName: item.productName, avatar: item.avatar})),
+        }).save();
+
+        const removeCart = await Cart.deleteMany({});
+
+        return res.status(200).json({
+            order,
+            session
+        });
+
+
+       
+       
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal Server Error',
+        });
+    }
+};  
+
+
+exports.allOrder = async (req, res) => {
+    try {
+        
+        const data = await Order.find().populate('customerId');
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+} 
 
 
 
