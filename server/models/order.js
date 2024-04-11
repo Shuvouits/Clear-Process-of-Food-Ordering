@@ -9,8 +9,28 @@ const cartSchema = new mongoose.Schema({
     },
     avatar: {
         type: String,
-    }
+    },
+    productQty: {
+        type: Number
+    },
+
+    subTotal: {
+        type: Number
+    },
+
+    productSizePrice: {
+        type: Number
+    },
+
+    productSizeName: {
+        type: String
+    } 
+
 }, { _id: false });
+
+
+
+
 
 
 const orderSchema = new mongoose.Schema({
@@ -38,7 +58,16 @@ const orderSchema = new mongoose.Schema({
 
     deliveryFee: {
         type: Number
-    }
+    }, 
+
+   
+
+    orderStatus : {
+        type: String,
+        default : "Pending" // Correction made here
+    }, 
+
+
     
    
 }, { timestamps: true });

@@ -152,22 +152,29 @@ function Sidebar({handleSidebar, sidebar}) {
                                             <li className="">
                                                 <Link to="/admin/all-order">
                                                     <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">All Order</span>
+                                                        <span className={location.pathname === '/admin/all-order' ? 'menu-bar__name subactive' : 'menu-bar__name'}>All Order</span>
                                                     </span>
                                                 </Link>
                                             </li>
+
                                             <li className="">
                                                 <Link to="/admin/delivery/order">
-                                                    <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">Delivery Order</span>
+                                                   
+                                                <span className="menu-bar__text">
+                                                        <span className={location.pathname === '/admin/delivery/order' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Delivery Order</span>
                                                     </span>
+                                                    
                                                 </Link>
                                             </li>
+
+
                                             <li className="">
                                                 <Link to="/admin/pickup/order">
-                                                    <span className="menu-bar__text">
-                                                        <span className="menu-bar__name">PickUp Order</span>
+                                                   
+                                                <span className="menu-bar__text">
+                                                        <span className={location.pathname === '/admin/pickup/order' ? 'menu-bar__name subactive' : 'menu-bar__name'}>Pickup Order</span>
                                                     </span>
+                                                    
                                                 </Link>
                                             </li>
                                            

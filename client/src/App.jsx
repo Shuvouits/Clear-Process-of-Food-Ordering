@@ -208,7 +208,7 @@ function App() {
           <Route path='/admin/' element={<AdminLayout />}>
             <Route path='dashboard' element={<AdminDashboard />} />
             <Route path='all-order' element={<AllOrder />} />
-            <Route path='order/details' element={<OrderDetails />} />
+            <Route path='order/details/:id' element={<OrderDetails />} />
             <Route path='delivery/order' element={<DeliveryOrder />} />
             <Route path='pickup/order' element={<PickUpOrder />} />
 

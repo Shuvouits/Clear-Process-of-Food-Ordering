@@ -11,7 +11,8 @@ const {
     customerLogin, customerLogout, customerAddress, allAddress, deleteAddress, editAddress,
     updateUserAddress, updateCustomerProfile, customerPasswordChange, wishlist, allWishlist,
     specificProduct, addCart, allCart, deleteCart, cartPriceInc, cartPriceDec, cartOptionalData,
-    updateCart, processOrder, allOrder
+    updateCart, processOrder, allOrder, orderDetails, deleteOrder, allCustomerAddress, allCustomer,
+    orderStatus
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -111,8 +112,14 @@ router.get('/cart-optional-data/:id',  cartOptionalData);
 router.post('/update-cart', authUser, updateCart);
 router.post ('/process-order', authUser, processOrder);
 router.post ('/process-order', authUser, processOrder);
+
+
+//Order Route
 router.get('/all-order', authUser, allOrder);
-
-
+router.get ('/order-details/:id', authUser, orderDetails);
+router.get('/delete-order/:id', authUser, deleteOrder);
+router.get('/all-customer-address', authUser, allCustomerAddress);
+router.get('/all-customer', authUser, allCustomer);
+router.post('/order-status/:id', authUser, orderStatus);
 
 module.exports = router;

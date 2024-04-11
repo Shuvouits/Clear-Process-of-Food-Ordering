@@ -3,13 +3,14 @@ import DataTable from 'react-data-table-component';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import { format } from 'date-fns';
+import Swal from 'sweetalert2'
 
 
 function AllOrder() {
 
     const { user } = useSelector((state) => ({ ...state }))
 
-    //Category Data
+    //Order Data
     const [order, setOrder] = useState([])
     const allOrder = async () => {
 
@@ -37,11 +38,88 @@ function AllOrder() {
         allOrder();
     }, []);  
 
-    console.log(order)
+    
+     //Delete Data
+
+     const handleClick = async (id) => {
+
+
+        try {
+
+            const result = await Swal.fire({
+                toast: false,
+                title: 'Delete Order?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            });
+
+            if (result.isConfirmed) {
+                const res = await fetch(`http://localhost:8000/delete-order/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${user.token}`
+                    },
+                });
+
+                const data = await res.json();
+
+
+                if (res.status === 200) {
+                    allOrder();
+
+                    Swal.fire({
+                        toast: false,
+                        animation: true,
+                        text: `Order Deleted Successfully`,
+                        icon: 'success',
+                        showConfirmButton: true,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        customClass: {
+                            container: 'custom-toast-container',
+                            popup: 'custom-toast-popup',
+                            title: 'custom-toast-title',
+                            icon: 'custom-toast-icon',
+                        },
+                    })
+                    
+                } 
+
+
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+
+
+    }
+
+
+
 
 
 
     const columns = [
+
+        {
+            name: 'Id',
+            selector: row => row.id,
+            sortable: true
+        },
+
+
         {
             name: 'Order Id',
             selector: row => row.order_id
@@ -86,13 +164,13 @@ function AllOrder() {
             name: 'Action',
             selector: row => (
                 <div class="sherah-table__status__group">
-                    <Link to="/admin/order/details" class="sherah-table__action sherah-color2 sherah-color3__bg--opactity bg-view">
+                    <Link to={`/admin/order/details/${row.order_id}`} class="sherah-table__action sherah-color2 sherah-color3__bg--opactity bg-view">
                         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6084 11.7904C18.5748 10.7737 18.5748 9.22894 17.6084 8.21222C15.9786 6.49741 13.1794 4.16797 9.99984 4.16797C6.82024 4.16797 4.02108 6.49741 2.39126 8.21222C1.42492 9.22894 1.42492 10.7737 2.39126 11.7904C4.02108 13.5052 6.82024 15.8346 9.99984 15.8346C13.1794 15.8346 15.9786 13.5052 17.6084 11.7904ZM9.99984 12.5013C11.3805 12.5013 12.4998 11.382 12.4998 10.0013C12.4998 8.62059 11.3805 7.5013 9.99984 7.5013C8.61913 7.5013 7.49984 8.62059 7.49984 10.0013C7.49984 11.382 8.61913 12.5013 9.99984 12.5013Z"
                                 fill="white" />
                         </svg>
                     </Link>
-                    <Link to="#" onclick="confirmation(event)"
+                    <Link to="#" onClick={() => handleClick(row.order_id)}
                         class="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete">
                         <svg class="sherah-color2__fill" xmlns="http://www.w3.org/2000/svg" width="16.247"
                             height="18.252" viewBox="0 0 16.247 18.252">
@@ -137,16 +215,18 @@ function AllOrder() {
     const [record, setRecord] = useState([])
 
     useEffect(() => {
-        const data = order.map((item, index) => ({
+        const data = order.filter(item=> item.orderStatus === 'Pending').map((item, index) => ({
+            id: index + 1,
             order_id: item._id,
             type: 'delivery',
             customer_name: item.customerId.name,
             date: format(item.createdAt, 'MMM-dd-yyyy'),
             payment_status: 'Stripe',
             payment_method: 'Bank Payment',
-            total: item.grandTotal,
-            order_status: 'Pending',
-            action: 'action'
+            total: `${item.grandTotal} Tk`, 
+            order_status: item.orderStatus,
+            
+        
         }));
         setRecord(data);
     }, [order]);

@@ -1953,13 +1953,15 @@ exports.processOrder = async (req, res) => {
             });
         }
 
+        
+
         const order = await new Order({
             customerId : customer.id,
             address : address,
             grandTotal : grandTotal,
             session: session.id,
             deliveryFee : deliveryFee,
-            cartData: cart.map(item=> ({id: item._id, productName: item.productName, avatar: item.avatar})),
+            cartData: cart.map(item=> ({id: item._id, productName: item.productName, avatar: item.avatar, productQty: item.productQty, subTotal: item.subTotal, productSizePrice: item.productSizePrice, productSizeName: item.productSizeName})),
         }).save();
 
         const removeCart = await Cart.deleteMany({});
@@ -1991,6 +1993,80 @@ exports.allOrder = async (req, res) => {
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal server error' });
+    }
+} 
+
+
+exports.orderDetails = async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const data = await Order.findById(id);
+
+        return res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal server error' });
+    }
+}   
+
+
+exports. deleteOrder = async(req, res)=> {
+    try{
+       
+        const orderId = req.params.id;
+        
+        const data = await Order.findOneAndDelete({_id : orderId})
+
+        if(!data){
+            return res.status(401).json({
+                message: 'No data found'
+            })
+        }
+
+        return res.status(200).json({
+            message: 'Data deleted successfully'
+        })
+
+    }catch(error){
+        return (error)
+    }
+}  
+
+exports. allCustomerAddress = async(req, res)=> {
+    try{
+       
+        const data = await Address.find();
+        res.status(200).json(data)
+       
+    }catch(error){
+        return (error)
+    }
+}  
+
+exports. allCustomer = async(req, res)=> {
+    try{
+       
+        const data = await Customer.find();
+        res.status(200).json(data)
+       
+    }catch(error){
+        return (error)
+    }
+}  
+
+exports. orderStatus = async(req, res)=> {
+    try{
+        const orderId = req.params.id
+        const {orderStatus} = req.body
+        console.log(orderStatus)
+
+        const data = await Order.findByIdAndUpdate(orderId, { orderStatus : orderStatus}, { new: true })
+       
+        res.status(200).json(data)
+       
+    }catch(error){
+        return (error)
     }
 } 
 
