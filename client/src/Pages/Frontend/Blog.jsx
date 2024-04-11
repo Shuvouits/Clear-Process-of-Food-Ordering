@@ -38,7 +38,7 @@ function Blog() {
 
   return (
     <main>
-      <InnerBanner />
+      <InnerBanner title={"Our Blog"}  />
       <section className="blog s-padding">
         <div className="container">
           <div className="row">

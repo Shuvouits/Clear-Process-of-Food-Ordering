@@ -273,7 +273,7 @@ function MenuDetails({ allCart }) {
 
     return (
         <div>
-            <InnerBanner />
+            <InnerBanner title={"Menu Details"} />
 
             <section className="food-details-section s-padding">
                 <div className="container">

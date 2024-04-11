@@ -9,7 +9,7 @@ import Resturent from '../../components/Frontend/Resturent'
 function About() {
   return (
     <main>
-      <InnerBanner />
+      <InnerBanner title={"About Us"} />
 
       <section className="about-us s-padding">
         <div className="container">

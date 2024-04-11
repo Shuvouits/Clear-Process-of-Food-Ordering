@@ -1,6 +1,12 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function Footer() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
+
+  
   return (
     <>
 
@@ -10,10 +16,10 @@ function Footer() {
             <div className="col-lg-4 col-md-12" data-aos="fade-right">
               <div className="footer-logo">
                 <div className="logo">
-                  <img
-                    src="https://reservq.minionionbd.com/uploads/website-images/image-2023-10-25-09-40-00-8712.png"
-                    alt="logo"
-                  />
+                  <Link to={'/'}>
+                  <h1 style={{color: "rgb(254, 114, 76)", fontWeight: "bold"}}>FoodOrder</h1>
+                  </Link>
+                
                 </div>
               </div>
               <div className="footer-text">
@@ -53,19 +59,19 @@ function Footer() {
                     <div className="quick-line-menu">
                       <ul>
                         <li>
-                          <a href="https://reservq.minionionbd.com/user/dashboard">
+                          <Link to="/user/dashboard">
                             My Profile
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="https://reservq.minionionbd.com/about-us">
+                          <Link to="/about">
                             About Us
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="https://reservq.minionionbd.com/contact-us">
+                          <Link to="/contact">
                             Contact Us
-                          </a>
+                          </Link>
                         </li>
                       </ul>
                     </div>
@@ -83,14 +89,14 @@ function Footer() {
                     <div className="quick-line-menu">
                       <ul>
                         <li>
-                          <a href="https://reservq.minionionbd.com/privacy-policy">
+                          <Link to="/privacy-policy">
                             Privacy &amp; Policy
-                          </a>
+                          </Link>
                         </li>
                         <li>
-                          <a href="https://reservq.minionionbd.com/terms-of-service">
+                          <Link to="/terms-condition">
                             Terms of Service
-                          </a>
+                          </Link>
                         </li>
                       </ul>
                     </div>
@@ -106,14 +112,11 @@ function Footer() {
                       <h3>Subscribe our Newsletter</h3>
                     </div>
                     <form
-                      action="https://reservq.minionionbd.com/newslatter"
-                      method="POST"
+
+                    onSubmit={handleSubmit}
+                     
                     >
-                      <input
-                        type="hidden"
-                        name="_token"
-                        defaultValue="wazyJe7vezQKXGcnQlHePS5U6mehUA7hqxxrzK0S"
-                      />
+                      
                       <div className="quick-line-btn">
                         <div className="icon"></div>
                         <input

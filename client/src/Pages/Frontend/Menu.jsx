@@ -102,7 +102,7 @@ function Menu({handleCart}) {
     <>
       <main>
 
-        <InnerBanner />
+        <InnerBanner title={"Our Menu"} />
 
         <section className="food-details">
           <div className="container">

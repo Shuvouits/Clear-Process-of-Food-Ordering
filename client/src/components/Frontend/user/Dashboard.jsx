@@ -37,6 +37,70 @@ function Dashboard() {
         allAddress();
     }, []);
 
+    //All order
+
+    const [order, setOrder] = useState([])
+
+    const allOrder = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/specific-customer-order/${customer.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${customer.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setOrder(data);
+
+        } catch (error) {
+            return (error)
+            console.log(error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allOrder();
+    }, []);
+
+    const [delivery, setDelivery] = useState([])
+
+    const allDelivery = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/specific-customer-delivery/${customer.id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${customer.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setDelivery(data);
+
+        } catch (error) {
+            return (error)
+            console.log(error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allDelivery();
+    }, []);
+
+    console.log(delivery)
+
+    
+
 
     const handleDelete = async (id) => {
 
@@ -143,7 +207,7 @@ function Dashboard() {
                                     </span>
                                 </div>
                                 <div className="dashboard-item-text">
-                                    <h3>10</h3>
+                                    <h3>{order.length}</h3>
                                     <p>Total orders</p>
                                 </div>
                             </div>
@@ -187,7 +251,7 @@ function Dashboard() {
                                     </span>
                                 </div>
                                 <div className="dashboard-item-text">
-                                    <h3>0</h3>
+                                    <h3>{delivery.length}</h3>
                                     <p>Delivery Completed</p>
                                 </div>
                             </div>

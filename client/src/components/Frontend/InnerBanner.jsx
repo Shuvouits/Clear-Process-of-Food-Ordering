@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
-function InnerBanner() {
+function InnerBanner({title}) {
     return (
         <>
 
@@ -9,11 +10,11 @@ function InnerBanner() {
                     <div className="row  ">
                         <div className="col-lg-12">
                             <div className="inner-banner-head">
-                                <h1>Our Menu</h1>
+                                <h1>{title}</h1>
                             </div>
                             <div className="inner-banner-item">
                                 <div className="left">
-                                    <a href="https://reservq.minionionbd.com">Home</a>
+                                    <Link href="/">Home</Link>
                                 </div>
                                 <div className="icon">
                                     <span>
@@ -35,7 +36,7 @@ function InnerBanner() {
                                     </span>
                                 </div>
                                 <div className="left">
-                                    <span>Our Menu</span>
+                                    <span>{title}</span>
                                 </div>
                             </div>
                         </div>

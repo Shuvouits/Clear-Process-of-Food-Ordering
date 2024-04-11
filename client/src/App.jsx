@@ -73,6 +73,8 @@ import EditAddress from './Pages/Frontend/user/EditAddress'
 import Cookies from "js-cookie";
 import Success from './Pages/Stripe/Success'
 import Cancel from './Pages/Stripe/Cancel'
+import PrivacyPolicy from './Pages/Frontend/PrivacyPolicy'
+import TermsCondition from './Pages/Frontend/TermsCondition'
 
 
 //backend css import
@@ -168,6 +170,8 @@ function App() {
           <Route path='/checkout' element={<CheckOut />} />
           <Route path='/menu/category/:title' element={<CategoryMenuDetails />} />
           <Route path='/menu/search/:title' element={<SearchMenuDetails />} />
+          <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+          <Route path='/terms-condition' element={<TermsCondition />} />
 
 
         </Route>

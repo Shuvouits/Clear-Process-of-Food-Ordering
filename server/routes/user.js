@@ -12,7 +12,7 @@ const {
     updateUserAddress, updateCustomerProfile, customerPasswordChange, wishlist, allWishlist,
     specificProduct, addCart, allCart, deleteCart, cartPriceInc, cartPriceDec, cartOptionalData,
     updateCart, processOrder, allOrder, orderDetails, deleteOrder, allCustomerAddress, allCustomer,
-    orderStatus
+    orderStatus, specificCustomerOrder, specificCustomerDelivery
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -121,5 +121,7 @@ router.get('/delete-order/:id', authUser, deleteOrder);
 router.get('/all-customer-address', authUser, allCustomerAddress);
 router.get('/all-customer', authUser, allCustomer);
 router.post('/order-status/:id', authUser, orderStatus);
+router.get('/specific-customer-order/:id', authUser, specificCustomerOrder);
+router.get('/specific-customer-delivery/:id', authUser, specificCustomerDelivery);
 
 module.exports = router;

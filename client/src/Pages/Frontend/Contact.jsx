@@ -6,7 +6,7 @@ import Resturent from '../../components/Frontend/Resturent'
 function Contact() {
   return (
     <main>
-        <InnerBanner />
+        <InnerBanner title={"Contact Us"} />
         <section className="contact-us s-padding">
   <div className="container">
     <div className="row">

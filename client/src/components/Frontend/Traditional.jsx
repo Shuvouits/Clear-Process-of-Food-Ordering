@@ -307,6 +307,8 @@ function Traditional({handleCart}) {
 
                             )}
 
+
+
                             {filterData !== null && (
 
                                 product.filter(item => item.category === filterData).map((item) => (
@@ -381,7 +383,7 @@ function Traditional({handleCart}) {
 
 
                                                     <div className="featured-item-btn">
-                                                        <button onClick={handleCart} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" className="main-btn-three">
+                                                        <button  onClick={() => handleCart(item._id)} type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" className="main-btn-three">
                                                             <span>
                                                                 <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                                     <path d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />

@@ -132,7 +132,7 @@ function SearchMenuDetails() {
 
             <main>
 
-                <InnerBanner />
+                <InnerBanner title={"Menu Details"} />
 
                 <section className="food-details">
                     <div className="container">

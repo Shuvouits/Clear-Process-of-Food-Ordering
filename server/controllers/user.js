@@ -2070,6 +2070,32 @@ exports. orderStatus = async(req, res)=> {
     }
 } 
 
+exports.specificCustomerOrder = async(req, res)=> {
+    try{
+        const customerId = req.params.id
+
+        const data = await Order.find({customerId : customerId})
+       
+        res.status(200).json(data)
+       
+    }catch(error){
+        return (error)
+    }
+} 
+
+exports.specificCustomerDelivery = async(req, res)=> {
+    try{
+        const customerId = req.params.id
+
+        const data = await Order.find({customerId : customerId, orderStatus: "Deliverd"})
+       
+        res.status(200).json(data)
+       
+    }catch(error){
+        return (error)
+    }
+} 
+
 
 
 
