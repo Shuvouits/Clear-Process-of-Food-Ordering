@@ -34,7 +34,7 @@ function Layout({handleCart, cartModal, productId, allCart}) {
         <ScrollTop />
         <Header allCart={allCart} />
         <MobileHeader handleClick={handleClick} sidebar={sidebar} />
-        <Outlet handleCart={handleCart}  />
+        <Outlet handleCart={handleCart}  allCart={allCart} />
         <Footer />
         <Cart cartModal={cartModal} handleCart={handleCart} productId={productId} allCart={allCart}/>
       </div>

@@ -109,6 +109,8 @@ function App() {
     setProductId(id)
   } 
 
+  console.log(productId)
+
   //All Cart Data
 
   const [cart, setCart] = useState({})
@@ -154,9 +156,9 @@ function App() {
       <Routes>
         {/* Frontend route */}
         <Route path='/' element={<Layout allCart={allCart}  cartModal={cartModal} handleCart={handleCart} productId={productId} />}>
-          <Route path='/' element={<Home handleCart={handleCart} />} />
-          <Route path='/menu' element={<Menu />} />
-          <Route path='/menu/:title' element={<MenuDetails />} />
+          <Route path='/' element={<Home allCart = {allCart} handleCart={handleCart} productId={productId} />} />
+          <Route path='/menu' element={<Menu handleCart={handleCart} />} />
+          <Route path='/menu/:title' element={<MenuDetails allCart={allCart} />} />
           <Route path='/about' element={<About />} />
           <Route path='/contact' element={<Contact />} />
           <Route path='/blog' element={<Blog />} />

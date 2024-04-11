@@ -5,9 +5,15 @@ import { useParams } from 'react-router-dom'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
+import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2'
+import Cookies from "js-cookie";
 
-function MenuDetails() {
+function MenuDetails({ allCart }) {
     const { title } = useParams()
+    const { customer } = useSelector((state) => ({ ...state }))
+    const [formData, setFormData] = useState({})
+
 
     const [menu, setMenu] = useState([])
 
@@ -21,12 +27,12 @@ function MenuDetails() {
 
     const handleSub = (id) => {
         setClickData(id)
-        
-        if(count > 0){
+
+        if (count > 0) {
             setCount(count - 1)
 
         }
-       
+
     }
 
     const specificMenu = async () => {
@@ -43,9 +49,10 @@ function MenuDetails() {
             const data = await res.json();
             setMenu(data);
 
-            setFormData({
-                productName: data.productName || '',
-            });
+            /* setFormData({
+                 productName: data.productName || '',
+                 productId: data.productId
+             }); */
 
         } catch (error) {
             return (error)
@@ -56,6 +63,7 @@ function MenuDetails() {
     useEffect(() => {
         specificMenu();
     }, []);
+
 
     const [optionalData, setOptionalData] = useState([])
 
@@ -129,8 +137,136 @@ function MenuDetails() {
 
     };
 
+    //Add to cart Functinality
+    const [productSize, setProductSize] = useState([])
+    const handleProductSize = (e) => {
+        const selectedSize = e.target.value;
+        const isChecked = e.target.checked;
+
+        if (isChecked) {
+
+            setProductSize([selectedSize]);
+        } else {
+
+            setProductSize(prevSizes => prevSizes.filter(size => size !== selectedSize));
+        }
+    };
+
+    const [optData, setOptData] = useState([])
+
+    const handleOptional = (e) => {
+        const selectedOption = e.target.value;
+        const isChecked = e.target.checked;
+
+        if (isChecked) {
+            // Add the selected option to the array
+            setOptData(prevOption => [...prevOption, selectedOption]);
+        } else {
+            // Remove the unselected option from the array
+            setOptData(prevOption => prevOption.filter(option => option !== selectedOption));
+        }
+    };
+
+
     const handleSubmit = async (e) => {
         e.preventDefault()
+
+        if (!customer) {
+            Swal.fire({
+                toast: false,
+                animation: true,
+                text: `You Are Not Authorized, Please Login First`,
+                icon: 'warning',
+                showConfirmButton: true,
+                timer: 3000,
+                timerProgressBar: true,
+                customClass: {
+                    container: 'custom-toast-container',
+                    popup: 'custom-toast-popup',
+                    title: 'custom-toast-title',
+                    icon: 'custom-toast-icon',
+                },
+            })
+
+
+
+        }
+
+
+        const updatedFormData = {
+            ...formData,
+            productSize: productSize,
+            optData: optData,
+            productId: menu._id
+        }
+
+        try {
+
+
+            // Make the API request with updated formData
+            const res = await fetch('http://localhost:8000/add-cart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${customer.token}`,
+                },
+                body: JSON.stringify(updatedFormData),
+            });
+
+            const data = await res.json();
+
+            if (res.status === 200) {
+
+
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: `Product Inserted To The Cart`,
+                    icon: 'success',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        container: 'custom-toast-container',
+                        popup: 'custom-toast-popup',
+                        title: 'custom-toast-title',
+                        icon: 'custom-toast-icon',
+                    },
+                })
+
+                allCart();
+
+
+            }
+
+            if (res.status === 400) {
+
+
+                Swal.fire({
+                    toast: false,
+                    animation: true,
+                    text: `This product has already your cart`,
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        container: 'custom-toast-container',
+                        popup: 'custom-toast-popup',
+                        title: 'custom-toast-title',
+                        icon: 'custom-toast-icon',
+                    },
+                })
+
+
+            }
+
+
+
+        } catch (error) {
+
+            console.log(error)
+        }
     }
 
 
@@ -445,8 +581,17 @@ function MenuDetails() {
                                     {Array.isArray(menu.productSize) && menu.productSize.map((item, index) => (
                                         <div className="together-box-item">
                                             <div className="form-check">
-                                                <input className="form-check-input" type="radio" name="size" defaultValue="Small,150"
-                                                    id="size_0" data-info="Small,150" />
+
+                                                <input
+                                                    className="form-check-input"
+                                                    type="checkbox"
+                                                    id={`size_${index}`}
+                                                    value={item.id} // Ensure data.id is unique for each size
+                                                    checked={productSize.includes(item.id)} // Check if the size is included in the selected sizes array
+                                                    onChange={handleProductSize}
+                                                />
+
+
                                                 <label className="form-check-label" htmlFor="size_0">
                                                     {item.size}
                                                 </label>
@@ -470,41 +615,29 @@ function MenuDetails() {
                                                 optItem._id === item.id && (
                                                     <div className="together-box-item" key={optIndex}>
                                                         <div className="form-check">
-                                                            <input className="form-check-input" type="checkbox" name="addons[]" defaultValue={1} id={`addon_${index}_${optIndex}`} />
+
+
+                                                            <input
+                                                                className="form-check-input"
+                                                                type="checkbox"
+                                                                id={`option_${index}`}
+                                                                value={optItem._id}
+                                                                // Check if the option is included in the selected options array
+                                                                onChange={handleOptional}
+                                                            />
+
+
+
+
                                                             <label className="form-check-label">
-                                                                {optItem.name} <span style={{ marginLeft: '25px' }}>(${optItem.price})</span>
+                                                                {optItem.name} <span style={{ marginLeft: '25px' }}>{optItem.price} Tk.</span>
                                                             </label>
                                                         </div>
-                                                        <div className="form-check-btn">
-                                                            <div className="form-check-btn">
-                                                                <div className="grid">
-                                                                    <button className="btn btn-minus"  onClick={() => handleSub(optItem._id)}>
-                                                                        <i className="fa fa-minus" />
-                                                                    </button>
-                                                                    <div className="column product-qty" >
-                                                                        {clickData === optItem._id && (
-                                                                            <>
-                                                                                {count}
-                                                                            </>
-
-                                                                        )}
-
-                                                                        {clickData != optItem._id &&(
-                                                                            <>
-                                                                                0
-                                                                            </>
-
-                                                                        )}
 
 
-                                                                    </div>
 
-                                                                    <button className="btn btn-plus" onClick={() => handleAdd(optItem._id)}>
-                                                                        <i className="fa fa-plus" />
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
+
                                                     </div>
                                                 )
                                             ))}

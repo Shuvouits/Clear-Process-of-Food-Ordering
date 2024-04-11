@@ -3,8 +3,9 @@ import InnerBanner from '../../components/Frontend/InnerBanner'
 import FAQ from '../../components/Frontend/FAQ'
 import Resturent from '../../components/Frontend/Resturent'
 import { Link, useParams } from 'react-router-dom'
+import Swal from 'sweetalert2'
 
-function Menu() {
+function Menu({handleCart}) {
   const [modalOpen, setModalOpen] = useState(false)
 
 
@@ -66,10 +67,6 @@ function Menu() {
 
 
 
-  const handleSubmit = (e) => {
-    
-    e.preventDefault()
-  }
 
   const [catId, setCatId] = useState('')
   const [formData, setFormData] = useState({})
@@ -90,7 +87,13 @@ function Menu() {
   const filteredProducts = product.filter(item =>
     item.productName &&
     item.productName.toLowerCase().includes((formData.menuFilter || '').toLowerCase())
-  );
+  );  
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  }
+
+
 
 
 
@@ -223,24 +226,69 @@ function Menu() {
                         filteredProducts.map(item => (
                           <>
 
-                              {catId === '' && (
+                            {catId === '' && (
 
-                            <div
-                              className=" col-xxl-3 col-xl-4  col-lg-4 col-md-6 featured-item-mt "
-                              data-aos="fade-up"
-                            >
-                              <div className="featured-item">
-                                <div className="featured-item-img-populer"></div>
-                                <div className="featured-item-img">
-                                  <img
-                                    src={item.avatar}
-                                    className="w-100"
-                                    alt="featured-thumb"
-                                  />
-                                  <div className="featured-item-img-overlay">
-                                    <div className="featured-item-img-over-text">
-                                      <div className="left-text">
-                                        <Link to={`/menu/${item.slug}`}>
+                              <div
+                                className=" col-xxl-3 col-xl-4  col-lg-4 col-md-6 featured-item-mt "
+                                data-aos="fade-up"
+                              >
+                                <div className="featured-item">
+                                  <div className="featured-item-img-populer"></div>
+                                  <div className="featured-item-img">
+                                    <img
+                                      src={item.avatar}
+                                      className="w-100"
+                                      alt="featured-thumb"
+                                    />
+                                    <div className="featured-item-img-overlay">
+                                      <div className="featured-item-img-over-text">
+                                        <div className="left-text">
+                                          <Link to={`/menu/${item.slug}`}>
+                                            <div className="icon">
+                                              <span>
+                                                <svg
+                                                  width={24}
+                                                  height={24}
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                  <path
+                                                    d="M4.31804 6.31804C3.90017 6.7359 3.5687 7.23198 3.34255 7.77795C3.1164 8.32392 3 8.90909 3 9.50004C3 10.091 3.1164 10.6762 3.34255 11.2221C3.5687 11.7681 3.90017 12.2642 4.31804 12.682L12 20.364L19.682 12.682C20.526 11.8381 21.0001 10.6935 21.0001 9.50004C21.0001 8.30656 20.526 7.16196 19.682 6.31804C18.8381 5.47412 17.6935 5.00001 16.5 5.00001C15.3066 5.00001 14.162 5.47412 13.318 6.31804L12 7.63604L10.682 6.31804C10.2642 5.90017 9.7681 5.5687 9.22213 5.34255C8.67616 5.1164 8.09099 5 7.50004 5C6.90909 5 6.32392 5.1164 5.77795 5.34255C5.23198 5.5687 4.7359 5.90017 4.31804 6.31804V6.31804Z"
+                                                    stroke="#F01543"
+                                                    strokeWidth={2}
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                  />
+                                                </svg>
+                                              </span>
+                                            </div>
+                                          </Link>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="featured-item-text">
+                                    <div className="text-item">
+                                      <div className="left">
+                                        <h3>{item.price}</h3>
+                                      </div>
+                                    </div>
+                                    <div className="text-item-center">
+                                      <h3>
+                                        <Link
+                                          title="Baked Chicken Wings and Legs"
+                                          className="line-clamp-1"
+                                          to={`/menu/${item.slug}`}
+                                        >
+                                          {item.productName}
+                                        </Link>
+                                      </h3>
+                                    </div>
+                                    <div className="text-item-center-item-box">
+                                      {item.specification.map((spec) => (
+
+                                        <div className="text-item-center-item">
                                           <div className="icon">
                                             <span>
                                               <svg
@@ -251,42 +299,33 @@ function Menu() {
                                                 xmlns="http://www.w3.org/2000/svg"
                                               >
                                                 <path
-                                                  d="M4.31804 6.31804C3.90017 6.7359 3.5687 7.23198 3.34255 7.77795C3.1164 8.32392 3 8.90909 3 9.50004C3 10.091 3.1164 10.6762 3.34255 11.2221C3.5687 11.7681 3.90017 12.2642 4.31804 12.682L12 20.364L19.682 12.682C20.526 11.8381 21.0001 10.6935 21.0001 9.50004C21.0001 8.30656 20.526 7.16196 19.682 6.31804C18.8381 5.47412 17.6935 5.00001 16.5 5.00001C15.3066 5.00001 14.162 5.47412 13.318 6.31804L12 7.63604L10.682 6.31804C10.2642 5.90017 9.7681 5.5687 9.22213 5.34255C8.67616 5.1164 8.09099 5 7.50004 5C6.90909 5 6.32392 5.1164 5.77795 5.34255C5.23198 5.5687 4.7359 5.90017 4.31804 6.31804V6.31804Z"
-                                                  stroke="#F01543"
-                                                  strokeWidth={2}
+                                                  d="M8 12L10.5347 14.2812C10.9662 14.6696 11.6366 14.6101 11.993 14.1519L16 9M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                  stroke="#FE724C"
+                                                  strokeWidth="1.5"
                                                   strokeLinecap="round"
                                                   strokeLinejoin="round"
                                                 />
                                               </svg>
                                             </span>
                                           </div>
-                                        </Link>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="featured-item-text">
-                                  <div className="text-item">
-                                    <div className="left">
-                                      <h3>{item.price}</h3>
-                                    </div>
-                                  </div>
-                                  <div className="text-item-center">
-                                    <h3>
-                                      <a
-                                        title="Baked Chicken Wings and Legs"
-                                        className="line-clamp-1"
-                                        href="https://reservq.minionionbd.com/menu/baked-chicken-wings-and-legs"
-                                      >
-                                        {item.productName}
-                                      </a>
-                                    </h3>
-                                  </div>
-                                  <div className="text-item-center-item-box">
-                                    {item.specification.map((spec) => (
+                                          <div className="text">
+                                            <h5>{spec.sname}</h5>
+                                          </div>
+                                        </div>
 
-                                      <div className="text-item-center-item">
-                                        <div className="icon">
+                                      ))}
+
+
+
+
+                                      <div className="featured-item-btn">
+                                        <button
+                                          type="button"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#exampleModal2"
+                                          className="main-btn-three"
+                                          onClick={() => handleCart(item._id)}
+                                        >
                                           <span>
                                             <svg
                                               width={24}
@@ -296,96 +335,106 @@ function Menu() {
                                               xmlns="http://www.w3.org/2000/svg"
                                             >
                                               <path
-                                                d="M8 12L10.5347 14.2812C10.9662 14.6696 11.6366 14.6101 11.993 14.1519L16 9M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                                stroke="#FE724C"
+                                                d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                              />
+                                              <path
+                                                d="M11 20.5C11 21.3284 10.3284 22 9.5 22C8.67157 22 8 21.3284 8 20.5C8 19.6716 8.67157 19 9.5 19C10.3284 19 11 19.6716 11 20.5Z"
+                                                strokeWidth="1.5"
+                                              />
+                                              <path
+                                                d="M20 20.5C20 21.3284 19.3284 22 18.5 22C17.6716 22 17 21.3284 17 20.5C17 19.6716 17.6716 19 18.5 19C19.3284 19 20 19.6716 20 20.5Z"
+                                                strokeWidth="1.5"
+                                              />
+                                              <path
+                                                d="M14 8L14 13"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                              />
+                                              <path
+                                                d="M16.5 10.5L11.5 10.5"
                                                 strokeWidth="1.5"
                                                 strokeLinecap="round"
                                                 strokeLinejoin="round"
                                               />
                                             </svg>
                                           </span>
-                                        </div>
-                                        <div className="text">
-                                          <h5>{spec.sname}</h5>
-                                        </div>
+                                          Add to Cart
+                                        </button>
                                       </div>
-
-                                    ))}
-
-
-
-
-                                    <div className="featured-item-btn">
-                                      <button
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal2"
-                                        className="main-btn-three"
-                                      >
-                                        <span>
-                                          <svg
-                                            width={24}
-                                            height={24}
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                          >
-                                            <path
-                                              d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2"
-                                              strokeWidth="1.5"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                            />
-                                            <path
-                                              d="M11 20.5C11 21.3284 10.3284 22 9.5 22C8.67157 22 8 21.3284 8 20.5C8 19.6716 8.67157 19 9.5 19C10.3284 19 11 19.6716 11 20.5Z"
-                                              strokeWidth="1.5"
-                                            />
-                                            <path
-                                              d="M20 20.5C20 21.3284 19.3284 22 18.5 22C17.6716 22 17 21.3284 17 20.5C17 19.6716 17.6716 19 18.5 19C19.3284 19 20 19.6716 20 20.5Z"
-                                              strokeWidth="1.5"
-                                            />
-                                            <path
-                                              d="M14 8L14 13"
-                                              strokeWidth="1.5"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                            />
-                                            <path
-                                              d="M16.5 10.5L11.5 10.5"
-                                              strokeWidth="1.5"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                            />
-                                          </svg>
-                                        </span>
-                                        Add to Cart
-                                      </button>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
 
-                          )}
+                            )}
 
-                          {catId === item.category && (
+                            {catId === item.category && (
 
-                            <div
-                              className=" col-xxl-3 col-xl-4  col-lg-4 col-md-6 featured-item-mt "
-                              data-aos="fade-up"
-                            >
-                              <div className="featured-item">
-                                <div className="featured-item-img-populer"></div>
-                                <div className="featured-item-img">
-                                  <img
-                                    src={item.avatar}
-                                    className="w-100"
-                                    alt="featured-thumb"
-                                  />
-                                  <div className="featured-item-img-overlay">
-                                    <div className="featured-item-img-over-text">
-                                      <div className="left-text">
-                                        <Link to={`/menu/${item.slug}`}>
+                              <div
+                                className=" col-xxl-3 col-xl-4  col-lg-4 col-md-6 featured-item-mt "
+                                data-aos="fade-up"
+                              >
+                                <div className="featured-item">
+                                  <div className="featured-item-img-populer"></div>
+                                  <div className="featured-item-img">
+                                    <img
+                                      src={item.avatar}
+                                      className="w-100"
+                                      alt="featured-thumb"
+                                    />
+                                    <div className="featured-item-img-overlay">
+                                      <div className="featured-item-img-over-text">
+                                        <div className="left-text">
+                                          <Link to={`/menu/${item.slug}`}>
+                                            <div className="icon">
+                                              <span>
+                                                <svg
+                                                  width={24}
+                                                  height={24}
+                                                  viewBox="0 0 24 24"
+                                                  fill="none"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                >
+                                                  <path
+                                                    d="M4.31804 6.31804C3.90017 6.7359 3.5687 7.23198 3.34255 7.77795C3.1164 8.32392 3 8.90909 3 9.50004C3 10.091 3.1164 10.6762 3.34255 11.2221C3.5687 11.7681 3.90017 12.2642 4.31804 12.682L12 20.364L19.682 12.682C20.526 11.8381 21.0001 10.6935 21.0001 9.50004C21.0001 8.30656 20.526 7.16196 19.682 6.31804C18.8381 5.47412 17.6935 5.00001 16.5 5.00001C15.3066 5.00001 14.162 5.47412 13.318 6.31804L12 7.63604L10.682 6.31804C10.2642 5.90017 9.7681 5.5687 9.22213 5.34255C8.67616 5.1164 8.09099 5 7.50004 5C6.90909 5 6.32392 5.1164 5.77795 5.34255C5.23198 5.5687 4.7359 5.90017 4.31804 6.31804V6.31804Z"
+                                                    stroke="#F01543"
+                                                    strokeWidth={2}
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                  />
+                                                </svg>
+                                              </span>
+                                            </div>
+                                          </Link>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="featured-item-text">
+                                    <div className="text-item">
+                                      <div className="left">
+                                        <h3>{item.price}</h3>
+                                      </div>
+                                    </div>
+                                    <div className="text-item-center">
+                                      <h3>
+                                        <a
+                                          title="Baked Chicken Wings and Legs"
+                                          className="line-clamp-1"
+                                          href="https://reservq.minionionbd.com/menu/baked-chicken-wings-and-legs"
+                                        >
+                                          {item.productName}
+                                        </a>
+                                      </h3>
+                                    </div>
+                                    <div className="text-item-center-item-box">
+                                      {item.specification.map((spec) => (
+
+                                        <div className="text-item-center-item">
                                           <div className="icon">
                                             <span>
                                               <svg
@@ -396,42 +445,32 @@ function Menu() {
                                                 xmlns="http://www.w3.org/2000/svg"
                                               >
                                                 <path
-                                                  d="M4.31804 6.31804C3.90017 6.7359 3.5687 7.23198 3.34255 7.77795C3.1164 8.32392 3 8.90909 3 9.50004C3 10.091 3.1164 10.6762 3.34255 11.2221C3.5687 11.7681 3.90017 12.2642 4.31804 12.682L12 20.364L19.682 12.682C20.526 11.8381 21.0001 10.6935 21.0001 9.50004C21.0001 8.30656 20.526 7.16196 19.682 6.31804C18.8381 5.47412 17.6935 5.00001 16.5 5.00001C15.3066 5.00001 14.162 5.47412 13.318 6.31804L12 7.63604L10.682 6.31804C10.2642 5.90017 9.7681 5.5687 9.22213 5.34255C8.67616 5.1164 8.09099 5 7.50004 5C6.90909 5 6.32392 5.1164 5.77795 5.34255C5.23198 5.5687 4.7359 5.90017 4.31804 6.31804V6.31804Z"
-                                                  stroke="#F01543"
-                                                  strokeWidth={2}
+                                                  d="M8 12L10.5347 14.2812C10.9662 14.6696 11.6366 14.6101 11.993 14.1519L16 9M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
+                                                  stroke="#FE724C"
+                                                  strokeWidth="1.5"
                                                   strokeLinecap="round"
                                                   strokeLinejoin="round"
                                                 />
                                               </svg>
                                             </span>
                                           </div>
-                                        </Link>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div className="featured-item-text">
-                                  <div className="text-item">
-                                    <div className="left">
-                                      <h3>{item.price}</h3>
-                                    </div>
-                                  </div>
-                                  <div className="text-item-center">
-                                    <h3>
-                                      <a
-                                        title="Baked Chicken Wings and Legs"
-                                        className="line-clamp-1"
-                                        href="https://reservq.minionionbd.com/menu/baked-chicken-wings-and-legs"
-                                      >
-                                        {item.productName}
-                                      </a>
-                                    </h3>
-                                  </div>
-                                  <div className="text-item-center-item-box">
-                                    {item.specification.map((spec) => (
+                                          <div className="text">
+                                            <h5>{spec.sname}</h5>
+                                          </div>
+                                        </div>
 
-                                      <div className="text-item-center-item">
-                                        <div className="icon">
+                                      ))}
+
+
+
+
+                                      <div className="featured-item-btn">
+                                        <button
+                                          type="button"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#exampleModal2"
+                                          className="main-btn-three"
+                                        >
                                           <span>
                                             <svg
                                               width={24}
@@ -441,78 +480,43 @@ function Menu() {
                                               xmlns="http://www.w3.org/2000/svg"
                                             >
                                               <path
-                                                d="M8 12L10.5347 14.2812C10.9662 14.6696 11.6366 14.6101 11.993 14.1519L16 9M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z"
-                                                stroke="#FE724C"
+                                                d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                              />
+                                              <path
+                                                d="M11 20.5C11 21.3284 10.3284 22 9.5 22C8.67157 22 8 21.3284 8 20.5C8 19.6716 8.67157 19 9.5 19C10.3284 19 11 19.6716 11 20.5Z"
+                                                strokeWidth="1.5"
+                                              />
+                                              <path
+                                                d="M20 20.5C20 21.3284 19.3284 22 18.5 22C17.6716 22 17 21.3284 17 20.5C17 19.6716 17.6716 19 18.5 19C19.3284 19 20 19.6716 20 20.5Z"
+                                                strokeWidth="1.5"
+                                              />
+                                              <path
+                                                d="M14 8L14 13"
+                                                strokeWidth="1.5"
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                              />
+                                              <path
+                                                d="M16.5 10.5L11.5 10.5"
                                                 strokeWidth="1.5"
                                                 strokeLinecap="round"
                                                 strokeLinejoin="round"
                                               />
                                             </svg>
                                           </span>
-                                        </div>
-                                        <div className="text">
-                                          <h5>{spec.sname}</h5>
-                                        </div>
+                                          Add to Cart
+                                        </button>
                                       </div>
-
-                                    ))}
-
-
-
-
-                                    <div className="featured-item-btn">
-                                      <button
-                                        type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal2"
-                                        className="main-btn-three"
-                                      >
-                                        <span>
-                                          <svg
-                                            width={24}
-                                            height={24}
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                          >
-                                            <path
-                                              d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2"
-                                              strokeWidth="1.5"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                            />
-                                            <path
-                                              d="M11 20.5C11 21.3284 10.3284 22 9.5 22C8.67157 22 8 21.3284 8 20.5C8 19.6716 8.67157 19 9.5 19C10.3284 19 11 19.6716 11 20.5Z"
-                                              strokeWidth="1.5"
-                                            />
-                                            <path
-                                              d="M20 20.5C20 21.3284 19.3284 22 18.5 22C17.6716 22 17 21.3284 17 20.5C17 19.6716 17.6716 19 18.5 19C19.3284 19 20 19.6716 20 20.5Z"
-                                              strokeWidth="1.5"
-                                            />
-                                            <path
-                                              d="M14 8L14 13"
-                                              strokeWidth="1.5"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                            />
-                                            <path
-                                              d="M16.5 10.5L11.5 10.5"
-                                              strokeWidth="1.5"
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                            />
-                                          </svg>
-                                        </span>
-                                        Add to Cart
-                                      </button>
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
 
 
-                          )}
+                            )}
 
                           </>
                         ))

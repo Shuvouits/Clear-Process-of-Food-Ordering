@@ -214,12 +214,6 @@ function Cart({ cartModal, handleCart, productId, allCart }) {
 
 
 
-  console.log(productId)
-
-
-
-
-
   return (
     <>
       <section className='shopping-cart' >

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
-function Popular() {
+function Popular({handleCart}) {
 
   //Product Data
   const [product, setProduct] = useState([])
@@ -100,8 +100,8 @@ function Popular() {
                           $ {item.price}
                         </h3>
                       </div>
-                      <div className="popular-inner-item-btn">
-                        <a type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" className="main-btn-five">
+                      <div className="popular-inner-item-btn" onClick={() => handleCart(item._id)}>
+                        <Link  to='#'  type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2" className="main-btn-five">
                           <span>
                             <svg width={24} height={24} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <path d="M6 4H18C20.2091 4 22 5.79086 22 8V13C22 15.2091 20.2091 17 18 17H10C7.79086 17 6 15.2091 6 13V4ZM6 4C6 2.89543 5.10457 2 4 2H2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -117,7 +117,7 @@ function Popular() {
                             </svg>
                           </span>
                           Add
-                        </a>
+                        </Link>
                       </div>
                     </div>
 

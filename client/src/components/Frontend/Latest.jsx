@@ -94,13 +94,13 @@ function Latest() {
                                         <div className="news-img-overlay">
                                             <div className="news-img-overlay-text">
                                                 <h3>
-                                                    <Link to="#">
+                                                    <Link to={`/blog/${item.slug}`}>
                                                         {item.title}
                                                     </Link>
                                                 </h3>
                                             </div>
                                             <div className="news-img-overlay-btn">
-                                                <a href="https://reservq.minionionbd.com/blog/flavorful-fusion-exploring-the-art-of-culinary-blending">
+                                                <Link to="#">
                                                     Read More
                                                     <span>
                                                         <svg
@@ -117,7 +117,7 @@ function Latest() {
                                                             />
                                                         </svg>
                                                     </span>
-                                                </a>
+                                                </Link>
                                             </div>
                                         </div>
                                     </div>

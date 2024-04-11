@@ -475,6 +475,8 @@ function Header({ allCart }) {
                           </svg>
                         </span>
 
+                         <span className='count'>{cart ? cart.length : '0'}</span>
+
                         {/* Shopping Cart */}
 
 

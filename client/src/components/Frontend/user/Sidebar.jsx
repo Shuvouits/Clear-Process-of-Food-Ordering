@@ -106,7 +106,8 @@ function Sidebar() {
                             <li>
                                 <Link
                                     to="/user/dashboard"
-                                    className="active"
+                                  
+                                    className = {location.pathname === '/user/dashboard' ? 'active' : ''}
                                 >
                                     <span>
                                         <svg
@@ -146,7 +147,7 @@ function Sidebar() {
                             <li>
                                 <Link
                                     to="/user/edit-profile"
-                                    className=""
+                                    className={location.pathname === '/user/edit-profile' ? 'active' : ''}
                                 >
                                     <span>
                                         <svg
@@ -172,7 +173,7 @@ function Sidebar() {
                             <li>
                                 <Link
                                     to="/user/address"
-                                    className=""
+                                    className={location.pathname === '/user/address' ? 'active' : ''}
                                 >
                                     <span>
                                         <svg
@@ -201,7 +202,7 @@ function Sidebar() {
                             <li>
                                 <Link
                                     to="/user/order"
-                                    className=""
+                                    className={location.pathname === '/user/order' ? 'active' : ''}
                                 >
                                     <span>
                                         <svg
@@ -238,7 +239,7 @@ function Sidebar() {
                             <li>
                                 <Link
                                     to="/user/wishlist"
-                                    className=""
+                                    className={location.pathname === '/user/wishlist' ? 'active' : ''}
                                 >
                                     <span>
                                         <svg
@@ -287,7 +288,7 @@ function Sidebar() {
                             <li>
                                 <Link
                                     to="/user/change-password"
-                                    className=""
+                                    className={location.pathname === '/user/change-password' ? 'active' : ''}
                                 >
                                     <span>
                                         <svg

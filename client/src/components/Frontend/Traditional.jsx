@@ -10,8 +10,7 @@ function Traditional({handleCart}) {
     const { customer } = useSelector((state) => ({ ...state }))
     const dispatch = useDispatch();
 
-   
-
+    
     //Category Data
     const [category, setCategory] = useState([])
     const allCategory = async () => {
