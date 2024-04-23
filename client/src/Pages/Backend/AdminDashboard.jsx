@@ -1,7 +1,47 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 
 function AdminDashboard() {
+
+    const { user } = useSelector((state) => ({ ...state }))
+
+    //Category Data
+    const [dashboardData, setDashboardData] = useState([])
+
+    const allData = async () => {
+
+        try {
+            const res = await fetch(`http://localhost:8000/order-history`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.token}`,
+                },
+            });
+
+
+            const data = await res.json();
+            setDashboardData(data);
+
+        } catch (error) {
+            return (error)
+
+        }
+
+    };
+
+    useEffect(() => {
+        allData();
+    }, []);
+
+    console.log(dashboardData)
+
+
+
+
+
     return (
         <section className="sherah-adashboard sherah-show sherah-close">
             <div className="container">
@@ -126,7 +166,7 @@ function AdminDashboard() {
                                                 <div className="sherah-progress-card__heading">
                                                     <span className="sherah-pcolor">Total Sales</span>
                                                     <h4 className="sherah-progress-card__title">
-                                                        <b className="count-animate">$2156.5</b>
+                                                        <b className="count-animate">Tk. {dashboardData.total}</b>
                                                     </h4>
                                                 </div>
                                                 <div className="sherah-progress-card__button">
@@ -181,7 +221,7 @@ function AdminDashboard() {
                                                 <div className="sherah-progress-card__heading">
                                                     <span className="sherah-pcolor">Total Orders</span>
                                                     <h4 className="sherah-progress-card__title">
-                                                        <b className="count-animate">10</b>
+                                                        <b className="count-animate">{dashboardData.order}</b>
                                                     </h4>
                                                 </div>
                                                 <div className="sherah-progress-card__button">
@@ -212,7 +252,7 @@ function AdminDashboard() {
                                                 <div className="sherah-progress-card__heading">
                                                     <span className="sherah-pcolor">Total Customers</span>
                                                     <h4 className="sherah-progress-card__title">
-                                                        <b className="count-animate">3</b>
+                                                        <b className="count-animate">{dashboardData.customer}</b>
                                                     </h4>
                                                 </div>
                                                 <div className="sherah-progress-card__button">
@@ -279,7 +319,7 @@ function AdminDashboard() {
                                                 <div className="sherah-progress-card__heading">
                                                     <span className="sherah-pcolor">Total Menu Items</span>
                                                     <h4 className="sherah-progress-card__title">
-                                                        <b className="count-animate">8</b>
+                                                        <b className="count-animate">{dashboardData.product}</b>
                                                     </h4>
                                                 </div>
                                                 <div className="sherah-progress-card__button">
@@ -334,570 +374,71 @@ function AdminDashboard() {
                                                 </thead>
                                                 {/* sherah Table Body */}
                                                 <tbody className="sherah-table__body">
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/21"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #21
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 27, 2024 12:09 PM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
+
+                                                    {Array.isArray(dashboardData.orderData) && dashboardData.orderData.map((item, index) => (
+                                                        <tr key={index}>
+                                                            <td className="sherah-table__column-1 sherah-table__data-1">
+                                                                <div className="sherah-language-form__input">
+                                                                    <p className="crany-table__product--number">
+                                                                        <Link to='#'  className="sherah-color1">
+                                                                            #{item._id}
+                                                                        </Link>
+                                                                    </p>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    Bank payment
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">$51.5</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/20"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #20
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 27, 2024 11:42 AM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
+                                                            </td>
+                                                            <td className="sherah-table__column-2 sherah-table__data-2">
+                                                                <div className="sherah-table__product-content">
+                                                                    <p className="sherah-table__product-desc">
+                                                                        {item.orderStatus}
+                                                                    </p>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    Bank payment
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">$156.5</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/12"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #12
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 19, 2024 02:37 PM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
+                                                            </td>
+                                                            <td className="sherah-table__column-3 sherah-table__data-3">
+                                                                <div className="sherah-table__product-content">
+                                                                    <p className="sherah-table__product-desc">
+                                                                        {item.customerId}
+                                                                    </p>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">Paypal</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">$157.5</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/11"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #11
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
+                                                            </td>
+                                                            <td className="sherah-table__column-4 sherah-table__data-4">
                                                                 <p className="sherah-table__product-desc">
-                                                                    delivery
+                                                                    {item.createdAt}
                                                                 </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 19, 2024 01:45 PM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
+                                                            </td>
+                                                            <td className="sherah-table__column-5 sherah-table__data-5">
+                                                                <div className="sherah-table__product-content">
+                                                                    <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
+                                                                        Success
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">Paypal</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">$142.5</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/10"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #10
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 16, 2024 06:37 AM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
+                                                            </td>
+                                                            <td className="sherah-table__column-6 sherah-table__data-6">
+                                                                <div className="sherah-table__product-content">
+                                                                    <p className="sherah-table__product-desc">
+                                                                        Stripe
+                                                                    </p>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    Bank payment
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    $120.75
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/8"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #8
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 14, 2024 06:52 AM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
+                                                            </td>
+                                                            <td className="sherah-table__column-7 sherah-table__data-7">
+                                                                <div className="sherah-table__product-content">
+                                                                    <p className="sherah-table__product-desc">${item.grandTotal}</p>
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    Flutterwave
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">$304.5</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/4"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #4
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 14, 2024 05:49 AM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
+                                                            </td>
+                                                            <td className="sherah-table__column-8 sherah-table__data-8">
+                                                                <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
+                                                                    {item.orderStatus}
                                                                 </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">Mollie</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    $162.75
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/3"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #3
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 14, 2024 05:47 AM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    Razorpay
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">$210</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color4 sherah-color4__bg--opactity">
-                                                                Confirmed
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/2"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #2
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 14, 2024 05:34 AM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">Paypal</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">$262.5</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td className="sherah-table__column-1 sherah-table__data-1">
-                                                            <div className="sherah-language-form__input">
-                                                                <p className="crany-table__product--number">
-                                                                    <a
-                                                                        href="https://reservq.minionionbd.com/order/detils/1"
-                                                                        className="sherah-color1"
-                                                                    >
-                                                                        #1
-                                                                    </a>
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-2 sherah-table__data-2">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    delivery
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-3 sherah-table__data-3">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">
-                                                                    John Doe
-                                                                </p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-4 sherah-table__data-4">
-                                                            <p className="sherah-table__product-desc">
-                                                                Jan 13, 2024 05:11 AM
-                                                            </p>
-                                                        </td>
-                                                        <td className="sherah-table__column-5 sherah-table__data-5">
-                                                            <div className="sherah-table__product-content">
-                                                                <div className="sherah-table__status sherah-color3 sherah-color3__bg--opactity">
-                                                                    Success
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-6 sherah-table__data-6">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">Stripe</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-7 sherah-table__data-7">
-                                                            <div className="sherah-table__product-content">
-                                                                <p className="sherah-table__product-desc">$588</p>
-                                                            </div>
-                                                        </td>
-                                                        <td className="sherah-table__column-8 sherah-table__data-8">
-                                                            <div className="sherah-table__status sherah-color2 sherah-color2__bg--opactity">
-                                                                Pending
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+
+
+
+
+
+
+
+
                                                 </tbody>
                                                 {/* End sherah Table Body */}
                                             </table>

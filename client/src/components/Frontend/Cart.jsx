@@ -131,7 +131,8 @@ function Cart({ cartModal, handleCart, productId, allCart }) {
       ...formData,
       productSize: productSize,
       optData: optData,
-      productId: productId
+      productId: productId,
+      customerName : customer.name
     }
 
     try {

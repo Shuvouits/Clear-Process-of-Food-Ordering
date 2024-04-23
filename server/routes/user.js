@@ -12,7 +12,7 @@ const {
     updateUserAddress, updateCustomerProfile, customerPasswordChange, wishlist, allWishlist,
     specificProduct, addCart, allCart, deleteCart, cartPriceInc, cartPriceDec, cartOptionalData,
     updateCart, processOrder, allOrder, orderDetails, deleteOrder, allCustomerAddress, allCustomer,
-    orderStatus, specificCustomerOrder, specificCustomerDelivery
+    orderStatus, specificCustomerOrder, specificCustomerDelivery, orderHistory
     } = require('../controllers/user.js');
 const { authUser } = require('../middleware/auth.js');
 
@@ -123,5 +123,8 @@ router.get('/all-customer', authUser, allCustomer);
 router.post('/order-status/:id', authUser, orderStatus);
 router.get('/specific-customer-order/:id', authUser, specificCustomerOrder);
 router.get('/specific-customer-delivery/:id', authUser, specificCustomerDelivery);
+
+//Dashboard order history
+router.get('/order-history',  orderHistory);
 
 module.exports = router;

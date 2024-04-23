@@ -119,6 +119,10 @@ const cartSchema = new mongoose.Schema({
         type: Number
     },
 
+    custmerName: {
+        type: String
+    },
+
     productSize: {
         type: [sizeSchema],
         required: true
