@@ -7,7 +7,7 @@ function AdminDashboard() {
 
     const { user } = useSelector((state) => ({ ...state }))
 
-    //Category Data
+    //Order Data
     const [dashboardData, setDashboardData] = useState([])
 
     const allData = async () => {
@@ -36,7 +36,6 @@ function AdminDashboard() {
         allData();
     }, []);
 
-    console.log(dashboardData)
 
 
 
@@ -380,7 +379,7 @@ function AdminDashboard() {
                                                             <td className="sherah-table__column-1 sherah-table__data-1">
                                                                 <div className="sherah-language-form__input">
                                                                     <p className="crany-table__product--number">
-                                                                        <Link to='#'  className="sherah-color1">
+                                                                        <Link to='#' className="sherah-color1">
                                                                             #{item._id}
                                                                         </Link>
                                                                     </p>
@@ -396,7 +395,9 @@ function AdminDashboard() {
                                                             <td className="sherah-table__column-3 sherah-table__data-3">
                                                                 <div className="sherah-table__product-content">
                                                                     <p className="sherah-table__product-desc">
-                                                                        {item.customerId}
+                                                                        {item.cartData.map((cartItem, cartIndex) => (
+                                                                            <p key={cartIndex}>{cartItem.customerName}</p>
+                                                                        ))}
                                                                     </p>
                                                                 </div>
                                                             </td>
@@ -431,13 +432,6 @@ function AdminDashboard() {
                                                             </td>
                                                         </tr>
                                                     ))}
-
-
-
-
-
-
-
 
                                                 </tbody>
                                                 {/* End sherah Table Body */}

@@ -135,6 +135,8 @@ function Cart({ cartModal, handleCart, productId, allCart }) {
       customerName : customer.name
     }
 
+    console.log(updatedFormData)
+
     try {
 
 

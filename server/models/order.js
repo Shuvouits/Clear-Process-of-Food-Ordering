@@ -10,6 +10,12 @@ const cartSchema = new mongoose.Schema({
     avatar: {
         type: String,
     },
+
+    customerName: {
+        type: String,
+
+    }, 
+
     productQty: {
         type: Number
     },

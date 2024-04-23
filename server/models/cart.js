@@ -119,7 +119,7 @@ const cartSchema = new mongoose.Schema({
         type: Number
     },
 
-    custmerName: {
+    customerName: {
         type: String
     },
 
