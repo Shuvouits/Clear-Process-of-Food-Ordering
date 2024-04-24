@@ -83,10 +83,15 @@ function AdminLogin() {
               style={{
                 backgroundImage:
                   "url(https://reservq.minionionbd.com/uploads/website-images/login-page-bg-2023-11-16-05-56-07-9130.png)"
+                 
               }}
             >
               {/* Logo */}
               <div className="sherah-wc__logo">
+                <Link to={'/'}>
+                <img src='https://reservq.minionionbd.com/uploads/website-images/stiky-logo-2023-10-29-09-42-50-6269.png' />
+                </Link>
+                
                 
               </div>
               {/* Middle Image */}

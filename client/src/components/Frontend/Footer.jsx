@@ -17,7 +17,8 @@ function Footer() {
               <div className="footer-logo">
                 <div className="logo">
                   <Link to={'/'}>
-                  <h1 style={{color: "rgb(254, 114, 76)", fontWeight: "bold"}}>FoodOrder</h1>
+                  <img src="https://reservq.minionionbd.com/uploads/website-images/stiky-logo-2023-10-29-09-42-50-6269.png"
+                alt="logo" />
                   </Link>
                 
                 </div>

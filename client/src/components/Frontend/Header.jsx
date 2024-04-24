@@ -382,7 +382,8 @@ function Header({ allCart }) {
                   <div className="nav-main">
                     <div className="logo">
                       <Link to="/">
-                        <h1 style={{ color: '#fe724c', fontWeight: 'bold' }}>FoodOrder</h1>
+                      <img src="https://reservq.minionionbd.com/uploads/website-images/stiky-logo-2023-10-29-09-42-50-6269.png"
+                alt="logo" />
                       </Link>
                     </div>
                     <div className="menu">
@@ -788,10 +789,10 @@ function Header({ allCart }) {
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
           </button>
           <div class="logo">
-            <a href="https://reservq.minionionbd.com">
+            <Link to="/">
               <img src="https://reservq.minionionbd.com/uploads/website-images/stiky-logo-2023-10-29-09-42-50-6269.png"
                 alt="logo" />
-            </a>
+            </Link>
           </div>
           <ul class="nav-links">
             <li>
@@ -800,24 +801,24 @@ function Header({ allCart }) {
               </Link>
             </li>
             <li>
-              <a href="https://reservq.minionionbd.com/menu">
+              <Link to="/menu">
                 Menu
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://reservq.minionionbd.com/about-us">
+              <Link href="/about-us">
                 About Us
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://reservq.minionionbd.com/contact-us">
+              <Link to="/contact-us">
                 Contact
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="https://reservq.minionionbd.com/blog">
+              <Link to="/blog">
                 Blog
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

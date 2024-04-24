@@ -123,7 +123,8 @@ function Login() {
       <div className="sign-up-main">
         <div className="sign-up-logo">
           <Link to="/">
-           <h2 style={{fontWeight: 'bold', color: '#fe724c'}}>Food Order</h2>
+          <img src="https://reservq.minionionbd.com/uploads/website-images/login-page-logo-2023-10-29-08-09-50-3973.png"
+                alt="logo" />
           </Link>
         </div>
         <div className="sign-up-text">
