@@ -9,9 +9,12 @@ import Customer from '../../components/Frontend/Customer'
 import Latest from '../../components/Frontend/Latest'
 import Resturent from '../../components/Frontend/Resturent'
 import Video from '../../components/Frontend/Video'
+import AnotherLoader from '../../components/loader/AnotherLoader'
 
 
-function Home({handleCart, allCart}) {
+
+
+function Home({handleCart, allCart, loading, setLoading}) {
   const [vopen, setVopen] = useState(false);
 
   const handleVideo = () => {
@@ -20,9 +23,22 @@ function Home({handleCart, allCart}) {
 
 
   return (
-    <main>
+
+    <>
+
+    {loading && (
+
+<div style={{position : 'absolute', top: '50%', left: '50%'}}>
+<AnotherLoader />
+</div>
+
+    )}
+
+  
+
+<main style={{opacity: `${loading ? '0.4' : ''}`}}>
       <Banner handleVideo={handleVideo} />
-      <Category />
+      <Category setLoading={setLoading} />
 
       <Traditional handleCart={handleCart} />
       <Process />
@@ -40,6 +56,9 @@ function Home({handleCart, allCart}) {
 
 
     </main>
+    
+    </>
+   
   )
 }
 

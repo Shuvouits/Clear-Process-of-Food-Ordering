@@ -77,6 +77,7 @@ import PrivacyPolicy from './Pages/Frontend/PrivacyPolicy'
 import TermsCondition from './Pages/Frontend/TermsCondition'
 
 
+
 //backend css import
 const currentPath = window.location.pathname;
 
@@ -117,6 +118,8 @@ function App() {
 
   const [cart, setCart] = useState({})
 
+  const [loading, setLoading] = useState(true)
+
 
   const allCart = async () => {
 
@@ -131,6 +134,7 @@ function App() {
 
 
       const data = await res.json();
+
 
       setCart(data);
 
@@ -155,10 +159,12 @@ function App() {
   return (
     <>
 
+     
+
       <Routes>
         {/* Frontend route */}
         <Route path='/' element={<Layout allCart={allCart}  cartModal={cartModal} handleCart={handleCart} productId={productId} />}>
-          <Route path='/' element={<Home allCart = {allCart} handleCart={handleCart} productId={productId} />} />
+          <Route path='/' element={<Home allCart = {allCart} handleCart={handleCart} productId={productId} loading={loading} setLoading={setLoading} />} />
           <Route path='/menu' element={<Menu handleCart={handleCart} />} />
           <Route path='/menu/:title' element={<MenuDetails allCart={allCart} />} />
           <Route path='/about' element={<About />} />

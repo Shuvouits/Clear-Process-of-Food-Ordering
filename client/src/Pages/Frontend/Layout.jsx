@@ -23,9 +23,6 @@ function Layout({handleCart, cartModal, productId, allCart}) {
     setSidebar(!sidebar)
   }
 
-  
-
- 
 
   return (
     

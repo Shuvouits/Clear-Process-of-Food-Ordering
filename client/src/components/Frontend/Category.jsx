@@ -7,11 +7,11 @@ import Loader from '../loader/Loader';
 
 
 
-function Category() {
+function Category({setLoading}) {
 
     //Category Data
     const [category, setCategory] = useState([])
-    const [loading, setLoading] = useState(true)
+   
     const allCategory = async () => {
 
         try {
@@ -26,6 +26,7 @@ function Category() {
             const data = await res.json();
             setCategory(data);
             setLoading(false)
+            
 
         } catch (error) {
             return (error)
@@ -66,6 +67,8 @@ function Category() {
     return (
         <>
 
+                  
+
             <section className="categories row-categories-home  s-padding">
                 <div className="container">
                     <div className="row align-items-center">
@@ -79,12 +82,7 @@ function Category() {
                         </div>
                     </div>
 
-                    {loading && (
-                        <div style={{textAlign : 'center'}}>
-                            <br></br>
-                          <Loader />
-                        </div>
-                    )}
+                   
 
                     <Slider {...settings} className='row'>
 
