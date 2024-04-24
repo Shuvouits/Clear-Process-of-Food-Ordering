@@ -121,7 +121,7 @@ function App() {
   const allCart = async () => {
 
     try {
-      const res = await fetch(`http://localhost:8000/all-cart`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/all-cart`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

@@ -25,7 +25,7 @@ function Footer() {
               <div className="footer-text">
                 <h4>
                   <p>
-                    At ReservQ, we invite you to embark on a journey of taste and
+                    We invite you to embark on a journey of taste and
                     delight.Our tables are more than just places.
                   </p>
                 </h4>
@@ -179,7 +179,7 @@ function Footer() {
           <div className="row">
             <div className="col-lg-12">
               <div className="copyright-text">
-                <h4>Copyright 2024, QuomodoSoft. All Rights Reserved.</h4>
+                <h4>Copyright 2024, Stack-Developer. All Rights Reserved.</h4>
               </div>
             </div>
           </div>
