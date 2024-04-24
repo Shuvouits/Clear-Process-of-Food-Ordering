@@ -319,8 +319,8 @@ function Header({ allCart }) {
                     </span>
                   </div>
                   <div className="text">
-                    <a href="tel:+1 707 797 0462">
-                      +1 707 797 0462
+                    <a href="tel:+88 01751720590">
+                      +88 01751720590
                     </a>
                   </div>
                 </div>
@@ -334,7 +334,7 @@ function Header({ allCart }) {
                   </div>
                   <div className="text">
                     <a href="mailto:Quomodosoft@gmail.com">
-                      shuvo21.xpertseoservice@hotmail.com
+                      shuvobhowmik_cse11uits@yahoo.com
                     </a>
                   </div>
                 </div>

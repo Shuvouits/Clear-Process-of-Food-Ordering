@@ -3,6 +3,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
+import Loader from '../loader/Loader';
 
 
 
@@ -10,6 +11,7 @@ function Category() {
 
     //Category Data
     const [category, setCategory] = useState([])
+    const [loading, setLoading] = useState(true)
     const allCategory = async () => {
 
         try {
@@ -23,6 +25,7 @@ function Category() {
 
             const data = await res.json();
             setCategory(data);
+            setLoading(false)
 
         } catch (error) {
             return (error)
@@ -70,15 +73,22 @@ function Category() {
                             <div className="categories-head">
                                 <h2>
                                     Our Categories
+
                                 </h2>
                             </div>
                         </div>
                     </div>
 
-
+                    {loading && (
+                        <div style={{textAlign : 'center'}}>
+                            <br></br>
+                          <Loader />
+                        </div>
+                    )}
 
                     <Slider {...settings} className='row'>
 
+                      
                         {category.map((item) => (
                             <div class="categories-main-box mt-48px customer-item-slick-row">
                                 <Link class="categories-item" data-aos="fade-up" to={`/menu/category/${item.slug}`}>
