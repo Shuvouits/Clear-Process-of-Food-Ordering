@@ -17,7 +17,7 @@ function Menu({handleCart}) {
   const allCategory = async () => {
 
     try {
-      const res = await fetch(`http://localhost:8000/all-category`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/all-category`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ function Menu({handleCart}) {
   const allProduct = async () => {
 
     try {
-      const res = await fetch(`http://localhost:8000/all-product`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/all-product`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

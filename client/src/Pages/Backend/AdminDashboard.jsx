@@ -13,7 +13,7 @@ function AdminDashboard() {
     const allData = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/order-history`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/order-history`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

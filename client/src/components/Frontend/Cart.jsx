@@ -15,7 +15,7 @@ function Cart({ cartModal, handleCart, productId, allCart }) {
   const allProduct = async () => {
 
     try {
-      const res = await fetch(`http://localhost:8000/all-product`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/all-product`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function Cart({ cartModal, handleCart, productId, allCart }) {
   const allOptional = async () => {
 
     try {
-      const res = await fetch(`http://localhost:8000/all-optional`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/all-optional`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ function Cart({ cartModal, handleCart, productId, allCart }) {
 
 
       // Make the API request with updated formData
-      const res = await fetch('http://localhost:8000/add-cart', {
+      const res = await fetch('https://food-order-rest-api.onrender.com/add-cart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

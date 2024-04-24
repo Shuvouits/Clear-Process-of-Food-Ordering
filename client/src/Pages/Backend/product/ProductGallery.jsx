@@ -20,7 +20,7 @@ function ProductGallery() {
 
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-product/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-product/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ function ProductGallery() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-product/${id}/image/${imageId}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-product/${id}/image/${imageId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

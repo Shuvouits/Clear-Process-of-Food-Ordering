@@ -99,7 +99,7 @@ function Header({ allCart }) {
 
       if (result.isConfirmed) {
 
-        const res = await fetch('http://localhost:8000/customer-logout', {
+        const res = await fetch('https://food-order-rest-api.onrender.com/customer-logout', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ function Header({ allCart }) {
   const allWishlist = async () => {
 
     try {
-      const res = await fetch(`http://localhost:8000/all-wishlist`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/all-wishlist`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -184,7 +184,7 @@ function Header({ allCart }) {
   const allProduct = async () => {
 
     try {
-      const res = await fetch(`http://localhost:8000/all-product`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/all-product`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -228,7 +228,7 @@ function Header({ allCart }) {
       });
 
       if (result.isConfirmed) {
-        const res = await fetch(`http://localhost:8000/delete-cart/${id}`, {
+        const res = await fetch(`https://food-order-rest-api.onrender.com/delete-cart/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -304,7 +304,7 @@ function Header({ allCart }) {
         {/* menu part start */} <div className="container">
           <div className="header-main">
             <div className="header-left-center">
-              <a href="https://reservq.minionionbd.com/menu">
+              <a href="/menu">
                 It's the last day to save. The skills for now — now on sale.
               </a>
             </div>

@@ -26,7 +26,7 @@ function AddTimeSlot() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-time', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/add-time', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ function AddTimeSlot() {
                                             <h2 className="sherah-breadcrumb__title">Create Time Slot</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
-                                                    <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                    <a href="/admin-dashboard">
                                                         Dashboard
                                                     </a>
                                                 </li>

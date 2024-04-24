@@ -43,7 +43,7 @@ function AdminProfile() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/password-change', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/password-change', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

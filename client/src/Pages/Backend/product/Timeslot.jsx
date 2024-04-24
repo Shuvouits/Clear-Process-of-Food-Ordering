@@ -14,7 +14,7 @@ function Timeslot() {
     const allTime = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-time`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-time`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ function Timeslot() {
     const handleStatus = async(id)=>{
         try{
 
-            const res = await fetch(`http://localhost:8000/time-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/time-status/${id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ function Timeslot() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-time/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-time/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

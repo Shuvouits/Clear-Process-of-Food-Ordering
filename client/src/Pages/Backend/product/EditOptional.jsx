@@ -14,7 +14,7 @@ function EditOptional() {
     const specificOption = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-optional/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-optional/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ function EditOptional() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch(`http://localhost:8000/update-optional/${option._id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/update-optional/${option._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -121,7 +121,7 @@ function EditOptional() {
                                             <h2 className="sherah-breadcrumb__title">Optional Items</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
-                                                    <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                    <a href="/admin-dashboard">
                                                         Dashboard
                                                     </a>
                                                 </li>

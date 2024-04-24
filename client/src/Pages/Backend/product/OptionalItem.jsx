@@ -12,7 +12,7 @@ function OptionalItem() {
     const allOption = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-optional`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-optional`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ function OptionalItem() {
     const handleStatus = async (id) => {
         try {
 
-            const res = await fetch(`http://localhost:8000/optional-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/optional-status/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ function OptionalItem() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-optional/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-optional/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

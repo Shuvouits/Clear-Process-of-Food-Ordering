@@ -104,7 +104,7 @@ function AddCategory() {
 
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-category', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/add-category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -180,12 +180,12 @@ function AddCategory() {
                                                 <h2 className="sherah-breadcrumb__title">Create Category</h2>
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
-                                                        <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                        <a href="/admin-dashboard">
                                                             Dashboard
                                                         </a>
                                                     </li>
                                                     <li className="active">
-                                                        <a href="https://reservq.minionionbd.com/category-create">
+                                                        <a href="/category-create">
                                                             Create Category
                                                         </a>
                                                     </li>

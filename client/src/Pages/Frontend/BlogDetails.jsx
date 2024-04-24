@@ -13,7 +13,7 @@ function BlogDetails() {
     const allBlog = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-blog`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-blog`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

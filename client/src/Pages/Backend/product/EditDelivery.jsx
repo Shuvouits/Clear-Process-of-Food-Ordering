@@ -14,7 +14,7 @@ function EditDelivery() {
     const specificDelivery = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-delivery/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-delivery/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ function EditDelivery() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch(`http://localhost:8000/update-delivery/${delivery._id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/update-delivery/${delivery._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -124,7 +124,7 @@ function EditDelivery() {
                                             <h2 className="sherah-breadcrumb__title"> Edit Delivery Area</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
-                                                    <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                    <a href="/admin-dashboard">
                                                         Dashboard
                                                     </a>
                                                 </li>

@@ -24,7 +24,7 @@ function EditBlog() {
     const allCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-blog-category`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-blog-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ function EditBlog() {
     const specificBlog = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-blog/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-blog/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ function EditBlog() {
 
 
             // Make the API request with updated formData
-            const res = await fetch(`http://localhost:8000/update-blog/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/update-blog/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ function EditBlog() {
                                                 <h2 className="sherah-breadcrumb__title">Edit Blog</h2>
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
-                                                        <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                        <a href="/admin-dashboard">
                                                             Dashboard
                                                         </a>
                                                     </li>

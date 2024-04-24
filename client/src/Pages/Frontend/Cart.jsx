@@ -29,7 +29,7 @@ function Cart() {
 
 
 
-      const res = await fetch(`http://localhost:8000/cart-price-inc/${id}`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/cart-price-inc/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ function Cart() {
 
     try {
 
-      const res = await fetch(`http://localhost:8000/cart-price-dec/${id}`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/cart-price-dec/${id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -165,7 +165,7 @@ function Cart() {
       });
 
       if (result.isConfirmed) {
-        const res = await fetch(`http://localhost:8000/delete-cart/${id}`, {
+        const res = await fetch(`https://food-order-rest-api.onrender.com/delete-cart/${id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -222,7 +222,7 @@ function Cart() {
   const handleOptionalChange = async (id) => {
 
     try {
-      const res = await fetch(`http://localhost:8000/cart-optional-data/${id}`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/cart-optional-data/${id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -269,7 +269,7 @@ function Cart() {
 
     try {
 
-      const res = await fetch(`http://localhost:8000/update-cart`, {
+      const res = await fetch(`https://food-order-rest-api.onrender.com/update-cart`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

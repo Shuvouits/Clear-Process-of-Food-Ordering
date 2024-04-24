@@ -24,7 +24,7 @@ function AdminLogin() {
     try {
 
       // Make the API request with updated formData
-      const res = await fetch('http://localhost:8000/login', {
+      const res = await fetch('https://food-order-rest-api.onrender.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

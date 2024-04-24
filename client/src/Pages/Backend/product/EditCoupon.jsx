@@ -14,7 +14,7 @@ function EditCoupon() {
     const specificCoupon = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-coupon/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-coupon/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ function EditCoupon() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch(`http://localhost:8000/update-coupon/${coupon._id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/update-coupon/${coupon._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

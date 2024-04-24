@@ -14,7 +14,7 @@ function DeliveryArea() {
     const allDelivery = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-delivery`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-delivery`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ function DeliveryArea() {
         
         try{
 
-            const res = await fetch(`http://localhost:8000/delivery-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/delivery-status/${id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ function DeliveryArea() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-delivery/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-delivery/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

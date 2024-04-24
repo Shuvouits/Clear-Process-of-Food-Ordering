@@ -31,7 +31,7 @@ function CustomerList() {
             selector: row => (
                 <div className="sherah-table__status__group">
                     <a
-                        href="https://reservq.minionionbd.com/edit-product-item/2"
+                        href="/edit-product-item/2"
                         className="sherah-table__action sherah-color2 sherah-color3__bg--opactity"
                     >
                         <svg
@@ -71,7 +71,7 @@ function CustomerList() {
                         </svg>
                     </a>
                     <a
-                        href="https://reservq.minionionbd.com/product-item-destroy/2"
+                        href="/product-item-destroy/2"
                         onclick="confirmation(event)"
                         className="sherah-table__action sherah-color2 sherah-color2__bg--offset blog_comment_delete"
                     >

@@ -113,7 +113,7 @@ function ProfileModal({ handleProfile }) {
 
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/profile-update', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/profile-update', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

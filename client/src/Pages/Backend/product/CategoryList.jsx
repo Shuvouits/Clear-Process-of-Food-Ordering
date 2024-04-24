@@ -13,7 +13,7 @@ function CategoryList() {
     const allCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-category`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function CategoryList() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-category/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-category/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -106,7 +106,7 @@ function CategoryList() {
     const handleStatus = async(id)=>{
         try{
 
-            const res = await fetch(`http://localhost:8000/category-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/category-status/${id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ function Blogs() {
      const allBlog = async () => {
  
          try {
-             const res = await fetch(`http://localhost:8000/all-blog`, {
+             const res = await fetch(`https://food-order-rest-api.onrender.com/all-blog`, {
                  method: 'GET',
                  headers: {
                      'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ function Blogs() {
     const handleStatus = async (id) => {
         try {
 
-            const res = await fetch(`http://localhost:8000/blog-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/blog-status/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ function Blogs() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-blog/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-blog/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

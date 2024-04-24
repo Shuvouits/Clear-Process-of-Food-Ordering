@@ -14,7 +14,7 @@ function BlogCategory() {
     const allCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-blog-category`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-blog-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function BlogCategory() {
     const handleStatus = async (id) => {
         try {
 
-            const res = await fetch(`http://localhost:8000/blog-category-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/blog-category-status/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -103,7 +103,7 @@ function BlogCategory() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-blog-category/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-blog-category/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

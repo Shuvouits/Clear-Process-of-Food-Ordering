@@ -19,7 +19,7 @@ function CheckOut() {
     const allDelivery = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-delivery`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-delivery`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function CheckOut() {
     const allAddressData = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-address/${customer.id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-address/${customer.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ function CheckOut() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-address', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/add-address', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ function CheckOut() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-address/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-address/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -247,7 +247,7 @@ function CheckOut() {
             try {
 
                 // Make the API request with updated formData
-                const res = await fetch('http://localhost:8000/process-order', {
+                const res = await fetch('https://food-order-rest-api.onrender.com/process-order', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

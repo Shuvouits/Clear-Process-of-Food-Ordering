@@ -26,7 +26,7 @@ function AddCoupon() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-coupon', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/add-coupon', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -83,12 +83,12 @@ function AddCoupon() {
                                             <h2 className="sherah-breadcrumb__title">Create Coupon</h2>
                                             <ul className="sherah-breadcrumb__list">
                                                 <li>
-                                                    <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                    <a href="/admin-dashboard">
                                                         Dashboard
                                                     </a>
                                                 </li>
                                                 <li className="active">
-                                                    <a href="https://reservq.minionionbd.com/coupon/create">
+                                                    <a href="/coupon/create">
                                                         Create Coupon
                                                     </a>
                                                 </li>

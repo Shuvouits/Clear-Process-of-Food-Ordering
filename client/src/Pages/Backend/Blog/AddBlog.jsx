@@ -27,7 +27,7 @@ function AddBlog() {
     const allCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-blog-category`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-blog-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -137,7 +137,7 @@ function AddBlog() {
 
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-blog', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/add-blog', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -220,7 +220,7 @@ function AddBlog() {
                                                 <h2 className="sherah-breadcrumb__title">Create Blog</h2>
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
-                                                        <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                        <a href="/admin-dashboard">
                                                             Dashboard
                                                         </a>
                                                     </li>

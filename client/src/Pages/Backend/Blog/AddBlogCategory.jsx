@@ -41,7 +41,7 @@ function AddBlogCategory() {
 
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-blog-category', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/add-blog-category', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ function AddBlogCategory() {
                                                 </h2>
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
-                                                        <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                        <a href="/admin-dashboard">
                                                             Dashboard
                                                         </a>
                                                     </li>

@@ -15,7 +15,7 @@ function OrderDetails() {
     const specificOrderDetails = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/order-details/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/order-details/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function OrderDetails() {
     const allAddress = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-customer-address`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-customer-address`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -74,7 +74,7 @@ function OrderDetails() {
     const allCustomer = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-customer`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-customer`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ function OrderDetails() {
         e.preventDefault()
         
         try {
-            const res = await fetch(`http://localhost:8000/order-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/order-status/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

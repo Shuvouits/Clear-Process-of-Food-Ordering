@@ -33,7 +33,7 @@ function Navbar({ handleSidebar }) {
 
             if (result.isConfirmed) {
 
-                const res = await fetch('http://localhost:8000/logout', {
+                const res = await fetch('https://food-order-rest-api.onrender.com/logout', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

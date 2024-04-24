@@ -28,7 +28,7 @@ function Register() {
         try {
     
           // Make the API request with updated formData
-          const res = await fetch('http://localhost:8000/customer-register', {
+          const res = await fetch('https://food-order-rest-api.onrender.com/customer-register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

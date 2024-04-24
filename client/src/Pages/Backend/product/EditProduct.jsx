@@ -20,7 +20,7 @@ function EditProduct() {
     const specificProduct = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-product/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-product/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ function EditProduct() {
     const allCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-category`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -175,7 +175,7 @@ function EditProduct() {
     const allOption = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-optional`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-optional`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -358,7 +358,7 @@ function EditProduct() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch(`http://localhost:8000/update-product/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/update-product/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

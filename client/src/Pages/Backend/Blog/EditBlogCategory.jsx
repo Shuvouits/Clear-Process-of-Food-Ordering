@@ -19,7 +19,7 @@ function EditBlogCategory() {
     const specificCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-blog-category/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-blog-category/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ function EditBlogCategory() {
 
 
             // Make the API request with updated formData
-            const res = await fetch(`http://localhost:8000/update-blog-category/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/update-blog-category/${id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -160,7 +160,7 @@ function EditBlogCategory() {
                                                 </h2>
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
-                                                        <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                        <a href="/admin-dashboard">
                                                             Dashboard
                                                         </a>
                                                     </li>

@@ -13,7 +13,7 @@ function ProductList() {
     const allProduct = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-product`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-product`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ function ProductList() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-product/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-product/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ function ProductList() {
 
         try{
 
-            const res = await fetch(`http://localhost:8000/product-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/product-status/${id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

@@ -15,7 +15,7 @@ function AllOrder() {
     const allOrder = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-order`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-order`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ function AllOrder() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-order/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-order/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

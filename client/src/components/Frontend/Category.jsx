@@ -15,7 +15,7 @@ function Category() {
     const allCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-category`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

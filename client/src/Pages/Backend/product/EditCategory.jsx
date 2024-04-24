@@ -25,7 +25,7 @@ function EditCategory() {
     const specificCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-category/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-category/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,7 +146,7 @@ function EditCategory() {
 
 
             // Make the API request with updated formData
-            const res = await fetch(`http://localhost:8000/update-category/${category._id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/update-category/${category._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -222,12 +222,12 @@ function EditCategory() {
                                                 <h2 className="sherah-breadcrumb__title">Edit Category</h2>
                                                 <ul className="sherah-breadcrumb__list">
                                                     <li>
-                                                        <a href="https://reservq.minionionbd.com/admin-dashboard">
+                                                        <a href="/admin-dashboard">
                                                             Dashboard
                                                         </a>
                                                     </li>
                                                     <li className="active">
-                                                        <a href="https://reservq.minionionbd.com/category-create">
+                                                        <a href="/category-create">
                                                             Edit Category
                                                         </a>
                                                     </li>

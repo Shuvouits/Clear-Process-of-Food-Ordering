@@ -13,7 +13,7 @@ function Coupon() {
     const allCoupon = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-coupon`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-coupon`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ function Coupon() {
      const handleStatus = async(id)=>{
         try{
 
-            const res = await fetch(`http://localhost:8000/coupon-status/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/coupon-status/${id}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ function Coupon() {
             });
 
             if (result.isConfirmed) {
-                const res = await fetch(`http://localhost:8000/delete-coupon/${id}`, {
+                const res = await fetch(`https://food-order-rest-api.onrender.com/delete-coupon/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

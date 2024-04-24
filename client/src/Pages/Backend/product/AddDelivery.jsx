@@ -26,7 +26,7 @@ function AddDelivery() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-delivery', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/add-delivery', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

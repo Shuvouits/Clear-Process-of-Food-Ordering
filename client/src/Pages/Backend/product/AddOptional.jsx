@@ -25,7 +25,7 @@ function AddOptional() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch('http://localhost:8000/add-optional-item', {
+            const res = await fetch('https://food-order-rest-api.onrender.com/add-optional-item', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

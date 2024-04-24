@@ -34,7 +34,7 @@ function Login() {
     try {
 
       // Make the API request with updated formData
-      const res = await fetch('http://localhost:8000/customer-login', {
+      const res = await fetch('https://food-order-rest-api.onrender.com/customer-login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

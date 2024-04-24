@@ -14,7 +14,7 @@ function EditTime() {
     const specificTime = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/edit-time/${id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/edit-time/${id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ function EditTime() {
         try {
 
             // Make the API request with updated formData
-            const res = await fetch(`http://localhost:8000/update-time/${time._id}`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/update-time/${time._id}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

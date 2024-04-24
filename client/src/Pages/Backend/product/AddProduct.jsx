@@ -83,7 +83,7 @@ function AddProduct() {
     const allCategory = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-category`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-category`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -114,7 +114,7 @@ function AddProduct() {
     const allOption = async () => {
 
         try {
-            const res = await fetch(`http://localhost:8000/all-optional`, {
+            const res = await fetch(`https://food-order-rest-api.onrender.com/all-optional`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
